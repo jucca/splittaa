@@ -4,6 +4,10 @@ import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
 import { assertGroupMember } from "./_lib/authorize";
 import { validateSplits } from "./_lib/money";
+import {
+  applyExpenseToBalances,
+  getNetBalanceBetweenUsers,
+} from "./_lib/balances";
 
 // Create a new expense
 export const createExpense = mutation({
@@ -50,6 +54,16 @@ export const createExpense = mutation({
       groupId: args.groupId,
       createdBy: user._id,
     });
+
+    await applyExpenseToBalances(
+      ctx,
+      {
+        paidByUserId: args.paidByUserId,
+        groupId: args.groupId,
+        splits: args.splits,
+      },
+      1
+    );
 
     return expenseId;
   },
@@ -120,23 +134,7 @@ export const getExpensesBetweenUsers = query({
     settlements.sort((a, b) => b.date - a.date);
 
     /* ───── 4. Compute running balance ──────────────────────────────── */
-    let balance = 0;
-
-    for (const e of expenses) {
-      if (e.paidByUserId === me._id) {
-        const split = e.splits.find((s) => s.userId === userId && !s.paid);
-        if (split) balance += split.amount; // they owe me
-      } else {
-        const split = e.splits.find((s) => s.userId === me._id && !s.paid);
-        if (split) balance -= split.amount; // I owe them
-      }
-    }
-
-    for (const s of settlements) {
-      if (s.paidByUserId === me._id)
-        balance += s.amount; // I paid them back
-      else balance -= s.amount; // they paid me back
-    }
+    const balance = await getNetBalanceBetweenUsers(ctx, me._id, userId);
 
     /* ───── 5. Return payload ───────────────────────────────────────── */
     const other = await ctx.db.get(userId);
@@ -234,6 +232,16 @@ export const deleteExpense = mutation({
         });
       }
     }
+
+    await applyExpenseToBalances(
+      ctx,
+      {
+        paidByUserId: expense.paidByUserId,
+        groupId: expense.groupId,
+        splits: expense.splits,
+      },
+      -1
+    );
 
     // Delete the expense
     await ctx.db.delete(args.expenseId);

@@ -46,4 +46,32 @@ describe("settlements", () => {
 
     expect(id).toBeTruthy();
   });
+
+  it("reduces personal snapshot balance when settlement is recorded", async () => {
+    const { asUser: asA, userId: userA } = await createTestUser(t, "olivia");
+    const { asUser: asB, userId: userB } = await createTestUser(t, "peter");
+
+    await asA.mutation(api.expenses.createExpense, {
+      description: "Concert tickets",
+      amount: 80,
+      date: Date.now(),
+      paidByUserId: userA,
+      splitType: "exact",
+      splits: [
+        { userId: userA, amount: 40, paid: true },
+        { userId: userB, amount: 40, paid: false },
+      ],
+    });
+
+    await asB.mutation(api.settlements.createSettlement, {
+      amount: 15,
+      paidByUserId: userB,
+      receivedByUserId: userA,
+    });
+
+    const aBalances = await asA.query(api.balances.getPersonalBalances, {});
+    const bBalances = await asB.query(api.balances.getPersonalBalances, {});
+    expect(aBalances.find((x) => x.userId === userB)?.netBalance).toBe(25);
+    expect(bBalances.find((x) => x.userId === userA)?.netBalance).toBe(-25);
+  });
 });

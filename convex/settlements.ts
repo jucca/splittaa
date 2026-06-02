@@ -3,6 +3,10 @@ import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
 import { assertGroupMember, assertGroupMembers } from "./_lib/authorize";
+import {
+  applySettlementToBalances,
+  getNetBalanceBetweenUsers,
+} from "./_lib/balances";
 
 /* ============================================================================
  *  MUTATION: createSettlement
@@ -42,7 +46,7 @@ export const createSettlement = mutation({
     }
 
     /* ── insert ──────────────────────────────────────────────────────────── */
-    return await ctx.db.insert("settlements", {
+    const settlementId = await ctx.db.insert("settlements", {
       amount: args.amount,
       note: args.note,
       date: Date.now(), // server‑side timestamp
@@ -52,6 +56,19 @@ export const createSettlement = mutation({
       relatedExpenseIds: args.relatedExpenseIds,
       createdBy: caller._id,
     });
+
+    await applySettlementToBalances(
+      ctx,
+      {
+        paidByUserId: args.paidByUserId,
+        receivedByUserId: args.receivedByUserId,
+        amount: args.amount,
+        groupId: args.groupId,
+      },
+      1
+    );
+
+    return settlementId;
   },
 });
 
@@ -76,75 +93,9 @@ export const getSettlementData = query({
       const other = await ctx.db.get(args.entityId as Id<"users">);
       if (!other) throw new Error("Käyttäjää ei löytynyt");
 
-      // ---------- gather expenses where either of us paid or appears in splits
-      const myExpenses = await ctx.db
-        .query("expenses")
-        .withIndex("by_user_and_group", (q) =>
-          q.eq("paidByUserId", me._id).eq("groupId", undefined)
-        )
-        .collect();
-
-      const otherUserExpenses = await ctx.db
-        .query("expenses")
-        .withIndex("by_user_and_group", (q) =>
-          q.eq("paidByUserId", other._id).eq("groupId", undefined)
-        )
-        .collect();
-
-      const expenses = [...myExpenses, ...otherUserExpenses];
-
-      let owed = 0; // they owe me
-      let owing = 0; // I owe them
-
-      for (const exp of expenses) {
-        const involvesMe =
-          exp.paidByUserId === me._id ||
-          exp.splits.some((s) => s.userId === me._id);
-        const involvesThem =
-          exp.paidByUserId === other._id ||
-          exp.splits.some((s) => s.userId === other._id);
-        if (!involvesMe || !involvesThem) continue;
-
-        // case 1: I paid
-        if (exp.paidByUserId === me._id) {
-          const split = exp.splits.find(
-            (s) => s.userId === other._id && !s.paid
-          );
-          if (split) owed += split.amount;
-        }
-
-        // case 2: They paid
-        if (exp.paidByUserId === other._id) {
-          const split = exp.splits.find((s) => s.userId === me._id && !s.paid);
-          if (split) owing += split.amount;
-        }
-      }
-
-      const mySettlements = await ctx.db
-        .query("settlements")
-        .withIndex("by_user_and_group", (q) =>
-          q.eq("paidByUserId", me._id).eq("groupId", undefined)
-        )
-        .collect();
-
-      const otherUserSettlements = await ctx.db
-        .query("settlements")
-        .withIndex("by_user_and_group", (q) =>
-          q.eq("paidByUserId", other._id).eq("groupId", undefined)
-        )
-        .collect();
-
-      const settlements = [...mySettlements, ...otherUserSettlements];
-
-      for (const st of settlements) {
-        if (st.paidByUserId === me._id) {
-          // I paid them ⇒ my owing goes down
-          owing = Math.max(0, owing - st.amount);
-        } else {
-          // They paid me ⇒ their owing goes down
-          owed = Math.max(0, owed - st.amount);
-        }
-      }
+      const netBalance = await getNetBalanceBetweenUsers(ctx, me._id, other._id);
+      const owed = netBalance > 0 ? netBalance : 0;
+      const owing = netBalance < 0 ? Math.abs(netBalance) : 0;
 
       return {
         type: "user",
@@ -156,7 +107,7 @@ export const getSettlementData = query({
         },
         youAreOwed: owed,
         youOwe: owing,
-        netBalance: owed - owing, // + => you should receive, − => you should pay
+        netBalance, // + => you should receive, − => you should pay
       };
     } else if (args.entityType === "group") {
       /* ──────────────────────────────────────────────────────── group page */
@@ -166,77 +117,45 @@ export const getSettlementData = query({
         me._id
       );
 
-      // ---------- expenses for this group
-      const expenses = await ctx.db
-        .query("expenses")
-        .withIndex("by_group", (q) => q.eq("groupId", group._id))
-        .collect();
+      const list = await Promise.all(
+        group.members
+          .map((m) => m.userId)
+          .filter((userId) => userId !== me._id)
+          .map(async (uid) => {
+            const canonical =
+              me._id < uid
+                ? { userId: me._id, counterpartyUserId: uid, isMeCanonical: true }
+                : {
+                    userId: uid,
+                    counterpartyUserId: me._id,
+                    isMeCanonical: false,
+                  };
+            const rows = await ctx.db
+              .query("balances")
+              .withIndex("by_scope_pair", (q) =>
+                q
+                  .eq("scopeType", "group")
+                  .eq("scopeGroupId", group._id)
+                  .eq("userId", canonical.userId)
+                  .eq("counterpartyUserId", canonical.counterpartyUserId)
+              )
+              .collect();
+            const pairAmount = rows[0]?.amount ?? 0;
+            const netBalance = canonical.isMeCanonical ? -pairAmount : pairAmount;
+            const m = await ctx.db.get(uid);
+            const owed = netBalance > 0 ? netBalance : 0;
+            const owing = netBalance < 0 ? Math.abs(netBalance) : 0;
 
-      // ---------- initialise per‑member tallies
-      const balances: Record<Id<"users">, { owed: number; owing: number }> =
-        {};
-      group.members.forEach((m) => {
-        if (m.userId !== me._id) {
-          balances[m.userId] = { owed: 0, owing: 0 };
-        }
-      });
-
-      // ---------- apply expenses
-      for (const exp of expenses) {
-        if (exp.paidByUserId === me._id) {
-          // I paid; others may owe me
-          exp.splits.forEach((split) => {
-            if (split.userId !== me._id && !split.paid) {
-              balances[split.userId].owed += split.amount;
-            }
-          });
-        } else if (balances[exp.paidByUserId]) {
-          // Someone else in the group paid; I may owe them
-          const split = exp.splits.find((s) => s.userId === me._id && !s.paid);
-          if (split) balances[exp.paidByUserId].owing += split.amount;
-        }
-      }
-
-      // ---------- apply settlements within the group
-      const settlements = await ctx.db
-        .query("settlements")
-        .withIndex("by_group", (q) => q.eq("groupId", group._id))
-        .collect();
-
-      for (const st of settlements) {
-        // we only care if ONE side is me
-        if (st.paidByUserId === me._id && balances[st.receivedByUserId]) {
-          balances[st.receivedByUserId].owing = Math.max(
-            0,
-            balances[st.receivedByUserId].owing - st.amount
-          );
-        }
-        if (st.receivedByUserId === me._id && balances[st.paidByUserId]) {
-          balances[st.paidByUserId].owed = Math.max(
-            0,
-            balances[st.paidByUserId].owed - st.amount
-          );
-        }
-      }
-
-      // ---------- shape result list
-      const memberIds = Object.keys(balances) as Id<"users">[];
-      const members = await Promise.all(
-        memberIds.map((id) => ctx.db.get(id))
+            return {
+              userId: uid,
+              name: m?.name || "Tuntematon",
+              imageUrl: m?.imageUrl,
+              youAreOwed: owed,
+              youOwe: owing,
+              netBalance,
+            };
+          })
       );
-
-      const list = memberIds.map((uid) => {
-        const m = members.find((u) => u && u._id === uid);
-        const { owed, owing } = balances[uid];
-        return {
-          userId: uid,
-          name: m?.name || "Tuntematon",
-          imageUrl: m?.imageUrl,
-          youAreOwed: owed,
-          youOwe: owing,
-          netBalance: owed - owing,
-        };
-      });
 
       return {
         type: "group",

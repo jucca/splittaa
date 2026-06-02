@@ -9,6 +9,7 @@ Generated from `convex/schema.ts`. Re-run `npm run generate:schema-doc` after sc
 | `users` | `by_token` ("tokenIdentifier")<br>`by_email` ("email") | `search_name` → `name`<br>`search_email` → `email` |
 | `expenses` | `by_group` ("groupId")<br>`by_user_and_group` ("paidByUserId","groupId")<br>`by_date` ("date") | — |
 | `settlements` | `by_group` ("groupId")<br>`by_user_and_group` ("paidByUserId","groupId")<br>`by_receiver_and_group` ("receivedByUserId","groupId")<br>`by_date` ("date") | — |
+| `balances` | `by_scope_pair` ("scopeType","scopeGroupId","userId","counterpartyUserId")<br>`by_user_scope` ("userId","scopeType","scopeGroupId")<br>`by_scope` ("scopeType","scopeGroupId") | — |
 | `groups` | — | — |
 
 ## Query patterns (personal / dashboard)

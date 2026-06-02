@@ -51,6 +51,19 @@ export default defineSchema({
     .index("by_receiver_and_group", ["receivedByUserId", "groupId"])
     .index("by_date", ["date"]),
 
+  // Balance snapshots (materialized from expenses + settlements)
+  balances: defineTable({
+    scopeType: v.union(v.literal("personal"), v.literal("group")),
+    scopeGroupId: v.optional(v.id("groups")),
+    userId: v.id("users"),
+    counterpartyUserId: v.id("users"),
+    amount: v.number(), // userId owes counterpartyUserId when > 0
+    updatedAt: v.number(),
+  })
+    .index("by_scope_pair", ["scopeType", "scopeGroupId", "userId", "counterpartyUserId"])
+    .index("by_user_scope", ["userId", "scopeType", "scopeGroupId"])
+    .index("by_scope", ["scopeType", "scopeGroupId"]),
+
   // Groups
   groups: defineTable({
     name: v.string(),

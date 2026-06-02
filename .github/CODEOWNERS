@@ -1,0 +1,10 @@
+# Human review required — money, auth, authorization
+/convex/expenses.ts @jukka
+/convex/expenses/ @jukka
+/convex/settlements.ts @jukka
+/convex/settlements/ @jukka
+/convex/_lib/auth.ts @jukka
+/convex/_lib/money.ts @jukka
+/convex/_lib/authorize.ts @jukka
+/convex/_lib/authorize.js @jukka
+/lib/money/ @jukka

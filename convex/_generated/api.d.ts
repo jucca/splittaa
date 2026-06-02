@@ -1,0 +1,79 @@
+/* eslint-disable */
+/**
+ * Generated `api` utility.
+ *
+ * THIS CODE IS AUTOMATICALLY GENERATED.
+ *
+ * To regenerate, run `npx convex dev`.
+ * @module
+ */
+
+import type * as _lib_auth from "../_lib/auth.js";
+import type * as _lib_authorize from "../_lib/authorize.js";
+import type * as _lib_automation from "../_lib/automation.js";
+import type * as _lib_money from "../_lib/money.js";
+import type * as _lib_personal from "../_lib/personal.js";
+import type * as contacts from "../contacts.js";
+import type * as dashboard from "../dashboard.js";
+import type * as email from "../email.js";
+import type * as expenses from "../expenses.js";
+import type * as groups from "../groups.js";
+import type * as inngest from "../inngest.js";
+import type * as inngestBridge from "../inngestBridge.js";
+import type * as seed from "../seed.js";
+import type * as seedTest from "../seedTest.js";
+import type * as settlements from "../settlements.js";
+import type * as users from "../users.js";
+
+import type {
+  ApiFromModules,
+  FilterApi,
+  FunctionReference,
+} from "convex/server";
+
+declare const fullApi: ApiFromModules<{
+  "_lib/auth": typeof _lib_auth;
+  "_lib/authorize": typeof _lib_authorize;
+  "_lib/automation": typeof _lib_automation;
+  "_lib/money": typeof _lib_money;
+  "_lib/personal": typeof _lib_personal;
+  contacts: typeof contacts;
+  dashboard: typeof dashboard;
+  email: typeof email;
+  expenses: typeof expenses;
+  groups: typeof groups;
+  inngest: typeof inngest;
+  inngestBridge: typeof inngestBridge;
+  seed: typeof seed;
+  seedTest: typeof seedTest;
+  settlements: typeof settlements;
+  users: typeof users;
+}>;
+
+/**
+ * A utility for referencing Convex functions in your app's public API.
+ *
+ * Usage:
+ * ```js
+ * const myFunctionReference = api.myModule.myFunction;
+ * ```
+ */
+export declare const api: FilterApi<
+  typeof fullApi,
+  FunctionReference<any, "public">
+>;
+
+/**
+ * A utility for referencing Convex functions in your app's internal API.
+ *
+ * Usage:
+ * ```js
+ * const myFunctionReference = internal.myModule.myFunction;
+ * ```
+ */
+export declare const internal: FilterApi<
+  typeof fullApi,
+  FunctionReference<any, "internal">
+>;
+
+export declare const components: {};

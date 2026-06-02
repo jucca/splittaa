@@ -1,0 +1,29 @@
+# dependencies
+/node_modules
+/.next
+/out
+*.tsbuildinfo
+
+# env
+.env
+.env.*
+
+# AI plans (agent-generated; keep local only)
+docs/superpowers/plans/
+docs/exec-plans/
+
+# clerk
+.clerk/
+
+# convex
+.convex/
+
+# cursor
+.cursor/
+
+# playwright saved sessions (local E2E only)
+tests/e2e/.auth/
+
+# misc
+.DS_Store
+*.pem

@@ -88,22 +88,22 @@ export const TESTIMONIALS = [
   {
     quote:
       "Splittaan avulla en enää mene sekaisin siitä, kuka maksoi mitäkin!",
-    name: "Babu Rao",
-    image: "/testimonials/babubhaiya.png",
+    name: "Annikki Komulainen",
+    image: "/testimonials/ansku.png",
     role: "Vuokra-asuntojen hoitaja",
   },
   {
     quote:
-      "Splittaan laskelmat ovat niin tarkkoja, että ne päihittävät jopa parhaat sijoitusvinkkini!",
-    name: "Raju",
-    image: "/testimonials/raju.jpg",
-    role: "Pörssiasiantuntija",
+      "Splittaan avulla pidän tarkkaa kirjaa saatavistani. Se päihittävät jopa parhaat muistutussovelukset!",
+    name: "Luigi Bolognese",
+    image: "/testimonials/luigi.jpg",
+    role: "Talous- ja velkaneuvoja",
   },
   {
     quote:
-      "Jos minulla olisi ollut Splittaa aiemmin, Raju ei olisi päässyt myymään kenkiäni ja takkiani! Lisään velan heti listalle.",
-    name: "Shyam",
-    image: "/testimonials/shyam.png",
-    role: "Työnhakija",
+      "Jos minulla olisi ollut Splittaa aiemmin, Luigi ei olisi päässyt myymään kenkiäni ja takkiani! Lisään velan heti listalle.",
+    name: "Antti Kukkonen",
+    image: "/testimonials/antti.png",
+    role: "Ohjelmistokehittäjä / Mindfulness-valmentaja",
   },
 ];

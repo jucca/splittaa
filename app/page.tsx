@@ -21,7 +21,7 @@ export default function LandingPage() {
             Helpoin tapa jakaa kulut ystävien kanssa
           </h1>
 
-          <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl/relaxed">
+          <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed">
             Seuraa yhteisiä kuluja, jaa laskut vaivatta ja tasaa tilit nopeasti.
             Unohda huoli siitä, kuka on kenelle velkaa.
           </p>
@@ -63,7 +63,7 @@ export default function LandingPage() {
       </section>
 
       {/* ───── Features ───── */}
-      <section id="features" className="bg-gray-50 py-20">
+      <section id="features" className="bg-muted py-20">
         <div className="container mx-auto px-4 md:px-6 text-center">
           <Badge variant="outline" className="bg-green-100 text-green-700">
             Ominaisuudet
@@ -71,7 +71,7 @@ export default function LandingPage() {
           <h2 className="gradient-title mt-2 text-3xl md:text-4xl">
             Kaikki mitä tarvitset kulujen jakamiseen
           </h2>
-          <p className="mx-auto mt-3 max-w-[700px] text-gray-500 md:text-xl/relaxed">
+          <p className="mx-auto mt-3 max-w-[700px] text-muted-foreground md:text-xl/relaxed">
             Alustamme tarjoaa kaikki työkalut yhteisten kulujen hoitamiseen
             helposti.
           </p>
@@ -87,7 +87,7 @@ export default function LandingPage() {
                 </div>
 
                 <h3 className="text-xl font-bold">{title}</h3>
-                <p className="text-gray-500">{description}</p>
+                <p className="text-muted-foreground">{description}</p>
               </Card>
             ))}
           </div>
@@ -103,7 +103,7 @@ export default function LandingPage() {
           <h2 className="gradient-title mt-2 text-3xl md:text-4xl">
             Kulujen jakaminen ei ole koskaan ollut näin helppoa
           </h2>
-          <p className="mx-auto mt-3 max-w-[700px] text-gray-500 md:text-xl/relaxed">
+          <p className="mx-auto mt-3 max-w-[700px] text-muted-foreground md:text-xl/relaxed">
             Noudata näitä yksinkertaisia vaiheita aloittaaksesi kulujen seurannan
             ja jakamisen ystävien kanssa.
           </p>
@@ -115,7 +115,7 @@ export default function LandingPage() {
                   {label}
                 </div>
                 <h3 className="text-xl font-bold">{title}</h3>
-                <p className="text-gray-500 text-center">{description}</p>
+                <p className="text-muted-foreground text-center">{description}</p>
               </div>
             ))}
           </div>
@@ -123,7 +123,7 @@ export default function LandingPage() {
       </section>
 
       {/* ───── Testimonials ───── */}
-      <section className="bg-gray-50 py-20">
+      <section className="bg-muted py-20">
         <div className="container mx-auto px-4 md:px-6 text-center">
           <Badge variant="outline" className="bg-green-100 text-green-700">
             Asiakaspalautteet
@@ -136,7 +136,7 @@ export default function LandingPage() {
             {TESTIMONIALS.map(({ quote, name, role, image }) => (
               <Card key={name} className="flex flex-col justify-between">
                 <CardContent className="space-y-4 p-6">
-                  <p className="text-gray-500">{quote}</p>
+                  <p className="text-muted-foreground">{quote}</p>
                   <div className="flex items-center space-x-3">
                     <Avatar>
                       <AvatarImage src={image} alt={name} />
@@ -176,7 +176,7 @@ export default function LandingPage() {
       </section>
 
       {/* ───── Footer ───── */}
-      <footer className="border-t bg-gray-50 py-12 text-center text-sm text-muted-foreground">
+      <footer className="border-t bg-muted py-12 text-center text-sm text-muted-foreground">
         © {new Date().getFullYear()} Splittaa. Kaikki oikeudet pidätetään.
       </footer>
     </div>

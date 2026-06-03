@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard } from "lucide-react";
+import { History, LayoutDashboard, Settings } from "lucide-react";
 import Link from "next/link";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { useStoreUser } from "@/hooks/use-store-user";
@@ -57,6 +57,32 @@ export default function Header() {
               </Button>
               <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
                 <LayoutDashboard className="h-4 w-4" />
+              </Button>
+            </Link>
+
+            <Link href="/toiminta">
+              <Button
+                variant="outline"
+                className="hidden md:inline-flex items-center gap-2 hover:text-green-600 hover:border-green-600 transition"
+              >
+                <History className="h-4 w-4" />
+                Toiminta
+              </Button>
+              <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
+                <History className="h-4 w-4" />
+              </Button>
+            </Link>
+
+            <Link href="/asetukset">
+              <Button
+                variant="outline"
+                className="hidden md:inline-flex items-center gap-2 hover:text-green-600 hover:border-green-600 transition"
+              >
+                <Settings className="h-4 w-4" />
+                Asetukset
+              </Button>
+              <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
+                <Settings className="h-4 w-4" />
               </Button>
             </Link>
 

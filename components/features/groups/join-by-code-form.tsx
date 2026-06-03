@@ -1,0 +1,68 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { api } from "@/convex/_generated/api";
+import { useConvexMutation } from "@/hooks/use-convex-query";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Hash } from "lucide-react";
+import { toast } from "sonner";
+
+export function JoinByCodeForm() {
+  const [code, setCode] = useState("");
+  const router = useRouter();
+  const joinByCode = useConvexMutation(api.groupInvites.joinByCode);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = code.trim();
+    if (!trimmed) return;
+
+    try {
+      const result = await joinByCode.mutate({ displayCode: trimmed });
+      if (result.alreadyMember) {
+        toast.info("Olet jo ryhmän jäsen");
+      } else {
+        toast.success("Liityit ryhmään!");
+      }
+      router.push(`/groups/${result.groupId}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message);
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Hash className="h-5 w-5" />
+          Liity ryhmään koodilla
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+          <div className="flex-1 space-y-1">
+            <Label htmlFor="join-code" className="sr-only">
+              Liittymiskoodi
+            </Label>
+            <Input
+              id="join-code"
+              placeholder="Esim. ABCD2345"
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              className="font-mono tracking-widest"
+              maxLength={12}
+            />
+          </div>
+          <Button type="submit" disabled={joinByCode.isLoading || !code.trim()}>
+            {joinByCode.isLoading ? "Liitytään..." : "Liity"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}

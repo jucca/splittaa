@@ -4,6 +4,7 @@ import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
 import { getPersonalExpensesForUser } from "./_lib/personal";
+import { createInvitesForGroup } from "./groupInvites";
 
 /* ──────────────────────────────────────────────────────────────────────────
    1. getAllContacts – 1‑to‑1 expense contacts + groups
@@ -83,24 +84,49 @@ export const createGroup = mutation({
 
     if (!args.name.trim()) throw new Error("Ryhmän nimi ei voi olla tyhjä");
 
-    const uniqueMembers = new Set(args.members);
-    uniqueMembers.add(currentUser._id); // ensure creator
+    const inviteeIds = [...new Set(args.members)].filter(
+      (id) => id !== currentUser._id
+    );
 
-    // Validate that all member users exist
-    for (const id of uniqueMembers) {
+    for (const id of inviteeIds) {
       if (!(await ctx.db.get(id)))
         throw new Error(`Käyttäjää tunnuksella ${id} ei löytynyt`);
     }
 
-    return await ctx.db.insert("groups", {
+    const groupId = await ctx.db.insert("groups", {
       name: args.name.trim(),
       description: args.description?.trim() ?? "",
       createdBy: currentUser._id,
-      members: [...uniqueMembers].map((id) => ({
-        userId: id,
-        role: id === currentUser._id ? "admin" : "member",
-        joinedAt: Date.now(),
-      })),
+      members: [
+        {
+          userId: currentUser._id,
+          role: "admin",
+          joinedAt: Date.now(),
+        },
+      ],
     });
+
+    const { directInvites, openInvite } = await createInvitesForGroup(ctx, {
+      groupId,
+      invitedBy: currentUser._id,
+      memberIds: inviteeIds,
+    });
+
+    const siteUrl =
+      process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ??
+      (process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000");
+
+    return {
+      groupId,
+      openInvite: {
+        token: openInvite.token,
+        displayCode: openInvite.displayCode ?? "",
+        joinUrl: `${siteUrl}/join/${openInvite.token}`,
+        expiresAt: openInvite.expiresAt,
+      },
+      directInviteCount: directInvites.length,
+    };
   },
 });

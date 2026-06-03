@@ -1,6 +1,11 @@
-import { internalQuery } from "./_generated/server";
+import { internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 import type { Doc, Id } from "./_generated/dataModel";
+import {
+  filterDebtsByMinAge,
+  normalizeReminderSettings,
+  shouldSendReminderNow,
+} from "./_lib/reminderSettings";
 
 // 1‑to‑1 debts netted against cases where the user
 // was the payer and against settlements already made.
@@ -89,33 +94,189 @@ export const getUsersWithOutstandingDebts = internalQuery({
         }
       }
 
-      /* ── 3) build debts[] list with only POSITIVE balances ──────────── */
-      const debts = [];
+      /* ── 3) build owe / owed lists ─────────────────────────────────── */
+      const iOwe = [];
+      const owedToMe = [];
       for (const [counterId, { amount, since }] of ledger) {
+        const counter = await getUser(counterId);
+        const name = counter?.name ?? "Tuntematon";
         if (amount > 0) {
-          const counter = await getUser(counterId);
-          debts.push({
+          iOwe.push({ userId: counterId, name, amount, since });
+        } else if (amount < 0) {
+          owedToMe.push({
             userId: counterId,
-            name: counter?.name ?? "Unknown",
-            amount,
+            name,
+            amount: Math.abs(amount),
             since,
           });
         }
       }
 
-      console.log(user.name, debts);
-
-      if (debts.length) {
+      if (iOwe.length) {
         result.push({
           _id: user._id,
           name: user.name,
           email: user.email,
-          debts,
+          debts: iOwe,
         });
       }
     }
 
     return result;
+  },
+});
+
+/** Users eligible for configurable payment reminder emails. */
+export const getUsersForPaymentReminders = internalQuery({
+  args: { now: v.number() },
+  handler: async (ctx, { now }) => {
+    const users = await ctx.db.query("users").collect();
+    const eligible: {
+      _id: Id<"users">;
+      name: string;
+      email: string;
+      settings: ReturnType<typeof normalizeReminderSettings>;
+      iOwe: { userId: Id<"users">; name: string; amount: number; since: number }[];
+      owedToMe: {
+        userId: Id<"users">;
+        name: string;
+        amount: number;
+        since: number;
+      }[];
+    }[] = [];
+
+    const expenses = await ctx.db
+      .query("expenses")
+      .filter((q) => q.eq(q.field("groupId"), undefined))
+      .collect();
+
+    const settlements = await ctx.db
+      .query("settlements")
+      .filter((q) => q.eq(q.field("groupId"), undefined))
+      .collect();
+
+    const userCache = new Map<Id<"users">, Doc<"users"> | null>();
+    const getUser = async (id: Id<"users">) => {
+      if (!userCache.has(id)) userCache.set(id, await ctx.db.get(id));
+      return userCache.get(id);
+    };
+
+    for (const user of users) {
+      const settings = normalizeReminderSettings(user.reminderSettings ?? undefined);
+      if (!shouldSendReminderNow(settings, now)) continue;
+
+      const ledger = new Map<
+        Id<"users">,
+        { amount: number; since: number }
+      >();
+
+      for (const exp of expenses) {
+        if (exp.paidByUserId !== user._id) {
+          const split = exp.splits.find(
+            (s) => s.userId === user._id && !s.paid
+          );
+          if (!split) continue;
+          const entry = ledger.get(exp.paidByUserId) ?? {
+            amount: 0,
+            since: exp.date,
+          };
+          entry.amount += split.amount;
+          entry.since = Math.min(entry.since, exp.date);
+          ledger.set(exp.paidByUserId, entry);
+        } else {
+          for (const s of exp.splits) {
+            if (s.userId === user._id || s.paid) continue;
+            const entry = ledger.get(s.userId) ?? {
+              amount: 0,
+              since: exp.date,
+            };
+            entry.amount -= s.amount;
+            ledger.set(s.userId, entry);
+          }
+        }
+      }
+
+      for (const st of settlements) {
+        if (st.paidByUserId === user._id) {
+          const entry = ledger.get(st.receivedByUserId);
+          if (entry) {
+            entry.amount -= st.amount;
+            if (entry.amount === 0) ledger.delete(st.receivedByUserId);
+            else ledger.set(st.receivedByUserId, entry);
+          }
+        } else if (st.receivedByUserId === user._id) {
+          const entry = ledger.get(st.paidByUserId);
+          if (entry) {
+            entry.amount += st.amount;
+            if (entry.amount === 0) ledger.delete(st.paidByUserId);
+            else ledger.set(st.paidByUserId, entry);
+          }
+        }
+      }
+
+      let iOwe: {
+        userId: Id<"users">;
+        name: string;
+        amount: number;
+        since: number;
+      }[] = [];
+      let owedToMe: typeof iOwe = [];
+
+      for (const [counterId, { amount, since }] of ledger) {
+        const counter = await getUser(counterId);
+        const name = counter?.name ?? "Tuntematon";
+        if (amount > 0) {
+          iOwe.push({ userId: counterId, name, amount, since });
+        } else if (amount < 0) {
+          owedToMe.push({
+            userId: counterId,
+            name,
+            amount: Math.abs(amount),
+            since,
+          });
+        }
+      }
+
+      if (settings.notifyWhenIOwe) {
+        iOwe = filterDebtsByMinAge(iOwe, settings.minAgeDays, now);
+      } else {
+        iOwe = [];
+      }
+
+      if (settings.notifyWhenOwedToMe) {
+        owedToMe = filterDebtsByMinAge(owedToMe, settings.minAgeDays, now);
+      } else {
+        owedToMe = [];
+      }
+
+      if (iOwe.length === 0 && owedToMe.length === 0) continue;
+
+      eligible.push({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        settings,
+        iOwe,
+        owedToMe,
+      });
+    }
+
+    return eligible;
+  },
+});
+
+export const markReminderSent = internalMutation({
+  args: {
+    userId: v.id("users"),
+    sentAt: v.number(),
+  },
+  handler: async (ctx, { userId, sentAt }) => {
+    const user = await ctx.db.get(userId);
+    if (!user) return;
+    const settings = normalizeReminderSettings(user.reminderSettings ?? undefined);
+    await ctx.db.patch(userId, {
+      reminderSettings: { ...settings, lastSentAt: sentAt },
+    });
   },
 });
 

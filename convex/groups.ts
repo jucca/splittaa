@@ -157,6 +157,8 @@ export const getGroupExpenses = query({
       userLookupMap[member.id] = member;
     });
 
+    const currentMember = group.members.find((m) => m.userId === currentUser._id);
+
     return {
       group: {
         id: group._id,
@@ -168,6 +170,7 @@ export const getGroupExpenses = query({
       settlements,
       balances,
       userLookupMap,
+      isAdmin: currentMember?.role === "admin",
     };
   },
 });

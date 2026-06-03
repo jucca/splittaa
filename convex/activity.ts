@@ -6,6 +6,15 @@ import {
   getPersonalExpensesForUser,
   getPersonalSettlementsForUser,
 } from "./_lib/personal";
+import {
+  applyExpenseToTimeBuckets,
+  buildTimeBuckets,
+  getAllExpensesForUser,
+  getSpendingPeriodBounds,
+  getUserExpenseShare,
+  userParticipatesInExpense,
+  type SpendingPeriod,
+} from "./_lib/spending";
 
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 100;
@@ -248,5 +257,72 @@ export const getRecentActivity = query({
     }
 
     return deduped;
+  },
+});
+
+export const getSpendingSummary = query({
+  args: {
+    period: v.union(
+      v.literal("week"),
+      v.literal("month"),
+      v.literal("year")
+    ),
+  },
+  handler: async (ctx, args) => {
+    const user = await requireAuth(ctx);
+    const period = args.period as SpendingPeriod;
+    const { rangeStart, rangeEnd } = getSpendingPeriodBounds(period);
+
+    const allExpenses = await getAllExpensesForUser(ctx, user._id);
+    const inRange = allExpenses.filter(
+      (e) =>
+        e.date >= rangeStart &&
+        e.date <= rangeEnd &&
+        userParticipatesInExpense(e, user._id)
+    );
+
+    const byTime = buildTimeBuckets(period, rangeStart, rangeEnd);
+    const categoryTotals = new Map<string, number>();
+
+    let totalAmount = 0;
+
+    for (const expense of inRange) {
+      const share = getUserExpenseShare(expense, user._id);
+      if (share <= 0) continue;
+
+      totalAmount += share;
+      applyExpenseToTimeBuckets(
+        byTime,
+        period,
+        expense.date,
+        share,
+        rangeStart
+      );
+
+      const categoryId = expense.category || "other";
+      categoryTotals.set(
+        categoryId,
+        (categoryTotals.get(categoryId) ?? 0) + share
+      );
+    }
+
+    const byCategory = [...categoryTotals.entries()]
+      .map(([categoryId, amount]) => ({
+        categoryId,
+        amount,
+      }))
+      .sort((a, b) => b.amount - a.amount);
+
+    return {
+      period,
+      rangeStart,
+      rangeEnd,
+      totalAmount,
+      expenseCount: inRange.filter(
+        (e) => getUserExpenseShare(e, user._id) > 0
+      ).length,
+      byTime,
+      byCategory,
+    };
   },
 });

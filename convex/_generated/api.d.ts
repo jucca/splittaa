@@ -18,6 +18,7 @@ import type * as _lib_money from "../_lib/money.js";
 import type * as _lib_notifications from "../_lib/notifications.js";
 import type * as _lib_personal from "../_lib/personal.js";
 import type * as _lib_reminderSettings from "../_lib/reminderSettings.js";
+import type * as _lib_spending from "../_lib/spending.js";
 import type * as activity from "../activity.js";
 import type * as balances from "../balances.js";
 import type * as contacts from "../contacts.js";
@@ -53,6 +54,7 @@ declare const fullApi: ApiFromModules<{
   "_lib/notifications": typeof _lib_notifications;
   "_lib/personal": typeof _lib_personal;
   "_lib/reminderSettings": typeof _lib_reminderSettings;
+  "_lib/spending": typeof _lib_spending;
   activity: typeof activity;
   balances: typeof balances;
   contacts: typeof contacts;

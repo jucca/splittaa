@@ -83,6 +83,7 @@ Playwright tests (Phase 4) need stable selectors. Add **`data-testid`** on:
 | New expense | `expense-form`, `expense-submit`, `split-selector` |
 | Settlement | `settlement-form`, `settlement-submit` |
 | Group / contacts | `group-create`, `contact-search` |
+| Activity spending (`/toiminta`) | `spending-period-week`, `spending-period-month`, `spending-period-year`, `spending-total`, `spending-chart-time`, `spending-chart-category` |
 
 Convention: kebab-case, prefix with feature (`expense-`, `settlement-`). Do not rely on visible Finnish text alone (copy may change).
 

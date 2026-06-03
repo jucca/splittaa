@@ -34,16 +34,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { GroupInviteShare } from "@/components/features/groups/group-invite-share";
+import type { Participant } from "@/lib/types/domain";
+import type { Id } from "@/convex/_generated/dataModel";
+import type { FunctionReturnType } from "convex/server";
 
 const groupSchema = z.object({
   name: z.string().min(1, "Ryhmän nimi on pakollinen"),
   description: z.string().optional(),
 });
 
-import type { Participant } from "@/lib/types/domain";
-import type { Id } from "@/convex/_generated/dataModel";
-
 type GroupFormValues = z.infer<typeof groupSchema>;
+
+type CreateGroupResult = FunctionReturnType<typeof api.contacts.createGroup>;
 
 export function CreateGroupModal({
   isOpen,
@@ -57,6 +60,9 @@ export function CreateGroupModal({
   const [selectedMembers, setSelectedMembers] = useState<Participant[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [commandOpen, setCommandOpen] = useState(false);
+  const [createdResult, setCreatedResult] = useState<CreateGroupResult | null>(
+    null
+  );
 
   const { data: currentUser } = useConvexQuery(api.users.me);
   const createGroup = useConvexMutation(api.contacts.createGroup);
@@ -93,19 +99,20 @@ export function CreateGroupModal({
     try {
       const memberIds = selectedMembers.map((member) => member.id);
 
-      const groupId = await createGroup.mutate({
+      const result = await createGroup.mutate({
         name: data.name,
         description: data.description,
         members: memberIds,
       });
 
-      toast.success("Ryhmä luotu onnistuneesti!");
-      reset();
-      setSelectedMembers([]);
-      onClose();
+      setCreatedResult(result);
 
-      if (onSuccess) {
-        onSuccess(groupId);
+      if (result.directInviteCount > 0) {
+        toast.success(
+          `Ryhmä luotu! ${result.directInviteCount} kutsua lähetetty.`
+        );
+      } else {
+        toast.success("Ryhmä luotu onnistuneesti!");
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -116,8 +123,45 @@ export function CreateGroupModal({
   const handleClose = () => {
     reset();
     setSelectedMembers([]);
+    setCreatedResult(null);
     onClose();
   };
+
+  const handleDone = () => {
+    if (createdResult && onSuccess) {
+      onSuccess(createdResult.groupId);
+    }
+    handleClose();
+  };
+
+  if (createdResult) {
+    return (
+      <Dialog open={isOpen} onOpenChange={handleClose}>
+        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Ryhmä luotu</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            {createdResult.directInviteCount > 0 && (
+              <p className="text-sm text-muted-foreground">
+                Kutsut lähetettiin sähköpostilla ja näkyvät sovelluksessa
+                kutsutuille käyttäjille.
+              </p>
+            )}
+
+            <GroupInviteShare openInvite={createdResult.openInvite} />
+          </div>
+
+          <DialogFooter>
+            <Button type="button" onClick={handleDone}>
+              Valmis
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -149,7 +193,11 @@ export function CreateGroupModal({
           </div>
 
           <div className="space-y-2">
-            <Label>Jäsenet</Label>
+            <Label>Kutsu jäseniä (valinnainen)</Label>
+            <p className="text-xs text-muted-foreground">
+              Kutsutut saavat linkin hyväksyä tai hylätä liittymisen. Voit myös
+              jakaa liittymiskoodin tai QR-koodin luonnin jälkeen.
+            </p>
             <div className="flex flex-wrap gap-2 mb-2">
               {currentUser && (
                 <Badge variant="secondary" className="px-3 py-1">
@@ -195,7 +243,7 @@ export function CreateGroupModal({
                     className="h-8 gap-1 text-xs"
                   >
                     <UserPlus className="h-3.5 w-3.5" />
-                    Lisää jäsen
+                    Lisää kutsuttava
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="p-0" align="start" side="bottom">
@@ -250,21 +298,13 @@ export function CreateGroupModal({
                 </PopoverContent>
               </Popover>
             </div>
-            {selectedMembers.length === 0 && (
-              <p className="text-sm text-amber-600">
-                Lisää vähintään yksi muu henkilö ryhmään
-              </p>
-            )}
           </div>
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={handleClose}>
               Peruuta
             </Button>
-            <Button
-              type="submit"
-              disabled={isSubmitting || selectedMembers.length === 0}
-            >
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Luodaan..." : "Luo ryhmä"}
             </Button>
           </DialogFooter>

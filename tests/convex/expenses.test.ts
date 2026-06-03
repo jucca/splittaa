@@ -5,6 +5,7 @@ import {
   createTestConvex,
   createTestUser,
   expectConvexError,
+  joinGroupAsUser,
 } from "./helpers";
 
 describe("expenses", () => {
@@ -15,7 +16,7 @@ describe("expenses", () => {
     const { userId: userB } = await createTestUser(t, "bob");
     const { asUser: asC, userId: userC } = await createTestUser(t, "carol");
 
-    const groupId = await asA.mutation(api.contacts.createGroup, {
+    const { groupId } = await asA.mutation(api.contacts.createGroup, {
       name: "Test group",
       members: [userB],
     });
@@ -56,12 +57,14 @@ describe("expenses", () => {
 
   it("allows member to create a valid group expense", async () => {
     const { asUser: asA, userId: userA } = await createTestUser(t, "erin");
-    const { userId: userB } = await createTestUser(t, "frank");
+    const { asUser: asB, userId: userB } = await createTestUser(t, "frank");
 
-    const groupId = await asA.mutation(api.contacts.createGroup, {
+    const { groupId } = await asA.mutation(api.contacts.createGroup, {
       name: "Roommates",
       members: [userB],
     });
+
+    await joinGroupAsUser(t, asB, groupId, userB);
 
     const expenseId = await asA.mutation(api.expenses.createExpense, {
       description: "Rent share",

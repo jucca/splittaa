@@ -17,6 +17,8 @@ import { formatCurrency, formatSignedCurrency } from "@/lib/utils";
 import { ExpenseSummary } from "@/components/features/dashboard/expense-summary";
 import { BalanceSummary } from "@/components/features/dashboard/balance-summary";
 import { GroupList } from "@/components/features/dashboard/group-list";
+import { PendingGroupInvites } from "@/components/features/groups/pending-group-invites";
+import { JoinByCodeForm } from "@/components/features/groups/join-by-code-form";
 
 export default function Dashboard() {
   const { data: balances, isLoading: balancesLoading } = useConvexQuery(
@@ -48,6 +50,9 @@ export default function Dashboard() {
         </div>
       ) : (
         <>
+          <PendingGroupInvites />
+          <JoinByCodeForm />
+
           <div className="flex  justify-between flex-col sm:flex-row sm:items-center gap-4">
             <h1 className="text-5xl gradient-title">Etusivu</h1>
             <Button asChild>

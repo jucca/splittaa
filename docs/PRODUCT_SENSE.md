@@ -43,8 +43,17 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 2. Add expense in group context (participants pre-filled from members).
 3. Settlements can be group-scoped.
 
-**Success:** Group balance reflects sum of member shares minus settlements.  
-**Note:** Creating groups may start from contacts flow (modal).
+**Creating a group (invite flow):**
+
+1. Creator opens **Luo ryhmä** (contacts or dashboard).
+2. Optionally selects users to **invite** — they are not added until they accept.
+3. On create: creator is the only member; each invitee gets in-app pending invite + email (Resend).
+4. Creator sees **join link**, **display code**, and **QR** for open invites (anyone with Splittaa account or new sign-up via `/join/[token]`).
+5. Invitee opens link → preview → sign in/up → **Hyväksy** or **Hylkää** (direct only).
+6. Alternatively: enter display code on dashboard (**Liity ryhmään koodilla**).
+7. Invites expire after **7 days**; admins see pending invites on the group page and can revoke.
+
+**Success:** Group balance reflects sum of member shares minus settlements; only accepted members appear in splits.
 
 ---
 
@@ -57,16 +66,42 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 2. Add contact / invite flows (email via Resend where implemented).
 3. **Create group** from selected contacts (`create-group-modal`).
 
-**Success:** New group exists with chosen members; contacts appear in participant search.
+**Success:** New group exists; invited users appear after accept; contacts appear in participant search.
 
 ---
 
-## 5. Dashboard (home after auth)
+## 5. Activity feed (`/toiminta`)
+
+**Actor:** Signed-in user  
+**Goal:** Review recent money movements in one chronological list.
+
+1. Open **Toiminta** from the header (separate from dashboard).
+2. See expenses and settlements involving the user, newest first.
+3. Each row shows amount, description, context (group or person), and link to detail.
+4. Tap a row → group or person view.
+
+---
+
+## 6. Reminder settings (`/asetukset`)
+
+**Actor:** Signed-in user  
+**Goal:** Control email reminders about long-open balances.
+
+1. Open **Asetukset** from the header.
+2. Toggle reminders on/off.
+3. Choose how often emails are sent (3–30 days) and how long a balance must be open before reminding.
+4. Choose whether to remind when **you owe** others and/or when **others owe you**.
+
+**Automation:** Inngest cron (`payment-reminders`) runs daily; only users due per their interval receive email.
+
+---
+
+## 7. Dashboard (home after auth)
 
 **Actor:** Returning user  
 **Goal:** Situation awareness at a glance.
 
-1. **Dashboard** (`/dashboard`) — total balance, per-group summaries, monthly spending chart.
+1. **Dashboard** (`/dashboard`) — pending group invites, join-by-code, total balance, per-group summaries, monthly spending chart.
 2. Navigate to person or group for detail.
 
 **Performance note:** Aggregates must use indexed queries — not full-table scans (harness Phase 3).

@@ -7,6 +7,26 @@ export default defineSchema({
     email: v.string(),
     tokenIdentifier: v.string(),
     imageUrl: v.optional(v.string()),
+    reminderSettings: v.optional(
+      v.object({
+        enabled: v.boolean(),
+        intervalDays: v.union(
+          v.literal(3),
+          v.literal(7),
+          v.literal(14),
+          v.literal(30)
+        ),
+        minAgeDays: v.union(
+          v.literal(3),
+          v.literal(7),
+          v.literal(14),
+          v.literal(30)
+        ),
+        notifyWhenIOwe: v.boolean(),
+        notifyWhenOwedToMe: v.boolean(),
+        lastSentAt: v.optional(v.number()),
+      })
+    ),
   })
     .index("by_token", ["tokenIdentifier"])
     .index("by_email", ["email"])
@@ -77,4 +97,27 @@ export default defineSchema({
       })
     ),
   }),
+
+  // Group membership invites (direct + open join link/code)
+  groupInvites: defineTable({
+    groupId: v.id("groups"),
+    invitedBy: v.id("users"),
+    invitedUserId: v.optional(v.id("users")),
+    token: v.string(),
+    displayCode: v.optional(v.string()),
+    kind: v.union(v.literal("direct"), v.literal("open")),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("accepted"),
+      v.literal("declined"),
+      v.literal("expired"),
+      v.literal("revoked")
+    ),
+    expiresAt: v.number(),
+    createdAt: v.number(),
+  })
+    .index("by_token", ["token"])
+    .index("by_display_code", ["displayCode"])
+    .index("by_group_and_status", ["groupId", "status"])
+    .index("by_invited_user_and_status", ["invitedUserId", "status"]),
 });

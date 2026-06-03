@@ -14,6 +14,8 @@ import { ExpenseList } from "@/components/features/expenses/expense-list";
 import { SettlementList } from "@/components/features/settlements/settlement-list";
 import { GroupBalances } from "@/components/features/groups/group-balances";
 import { GroupMembers } from "@/components/features/groups/group-members";
+import { GroupInvitesAdmin } from "@/components/features/groups/group-invites-admin";
+import type { Id } from "@/convex/_generated/dataModel";
 
 export default function GroupExpensesPage() {
   const params = useParams();
@@ -38,6 +40,8 @@ export default function GroupExpensesPage() {
   const settlements = data?.settlements || [];
   const balances = data?.balances || [];
   const userLookupMap = data?.userLookupMap || {};
+  const isAdmin = data?.isAdmin ?? false;
+  const groupId = params.id as Id<"groups">;
 
   return (
     <div className="container mx-auto py-6 max-w-4xl">
@@ -82,6 +86,8 @@ export default function GroupExpensesPage() {
           </div>
         </div>
       </div>
+
+      {isAdmin && <GroupInvitesAdmin groupId={groupId} />}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <div className="lg:col-span-2">

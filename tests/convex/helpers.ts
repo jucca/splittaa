@@ -36,3 +36,35 @@ export function expectConvexError(
   const data = (error as { data?: { code?: string } }).data;
   expect(data?.code).toBe(code);
 }
+
+export async function getDirectInviteToken(
+  t: TestContext,
+  groupId: Awaited<ReturnType<TestContext["mutation"]>>,
+  userId: Awaited<ReturnType<TestContext["mutation"]>>
+): Promise<string | null> {
+  return await t.run(async (ctx) => {
+    const invites = await ctx.db
+      .query("groupInvites")
+      .withIndex("by_group_and_status", (q) =>
+        q.eq("groupId", groupId).eq("status", "pending")
+      )
+      .collect();
+    const direct = invites.find(
+      (i) => i.kind === "direct" && i.invitedUserId === userId
+    );
+    return direct?.token ?? null;
+  });
+}
+
+export async function joinGroupAsUser(
+  t: TestContext,
+  asUser: TestContext,
+  groupId: Awaited<ReturnType<TestContext["mutation"]>>,
+  userId: Awaited<ReturnType<TestContext["mutation"]>>
+): Promise<void> {
+  const token = await getDirectInviteToken(t, groupId, userId);
+  if (!token) {
+    throw new Error("No direct invite token found for user");
+  }
+  await asUser.mutation(api.groupInvites.acceptInvite, { token });
+}

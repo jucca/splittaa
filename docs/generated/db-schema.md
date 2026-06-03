@@ -12,6 +12,7 @@ Generated from `convex/schema.ts`. Re-run `npm run generate:schema-doc` after sc
 | `balances` | `by_scope_pair` ("scopeType","scopeGroupId","userId","counterpartyUserId")<br>`by_user_scope` ("userId","scopeType","scopeGroupId")<br>`by_scope` ("scopeType","scopeGroupId") | — |
 | `groups` | — | — |
 | `groupInvites` | `by_token` ("token")<br>`by_display_code` ("displayCode")<br>`by_group_and_status` ("groupId","status")<br>`by_invited_user_and_status` ("invitedUserId","status") | — |
+| `notifications` | `by_user_created` ("userId","createdAt")<br>`by_user_unread` ("userId","isRead")<br>`by_user_dedupe` ("userId","dedupeKey") | — |
 
 ## Query patterns (personal / dashboard)
 

@@ -52,6 +52,12 @@ export const markReminderSent = action({
     secret: v.string(),
     userId: v.id("users"),
     sentAt: v.number(),
+    iOwe: v.optional(
+      v.array(v.object({ name: v.string(), amount: v.number() }))
+    ),
+    owedToMe: v.optional(
+      v.array(v.object({ name: v.string(), amount: v.number() }))
+    ),
   },
   handler: async (ctx, args): Promise<void> => {
     assertAutomationSecret(args.secret);
@@ -59,7 +65,12 @@ export const markReminderSent = action({
       internal.inngest.markReminderSent as Parameters<
         typeof ctx.runMutation
       >[0],
-      { userId: args.userId, sentAt: args.sentAt }
+      {
+        userId: args.userId,
+        sentAt: args.sentAt,
+        iOwe: args.iOwe,
+        owedToMe: args.owedToMe,
+      }
     );
   },
 });

@@ -5,6 +5,7 @@ import { api } from "@/convex/_generated/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import { formatCurrency, formatSignedCurrency } from "@/lib/utils";
+import { SendDebtRequestButton } from "@/components/features/debt-requests/send-debt-request-button";
 
 import type { Id } from "@/convex/_generated/dataModel";
 
@@ -19,8 +20,12 @@ type BalanceMember = {
 
 export function GroupBalances({
   balances,
+  groupId,
+  groupName,
 }: {
   balances: BalanceMember[] | null | undefined;
+  groupId?: Id<"groups">;
+  groupName?: string;
 }) {
   const { data: currentUser } = useConvexQuery(api.users.me);
 
@@ -108,20 +113,32 @@ export function GroupBalances({
                 {owedByMembers.map((member: BalanceMember & { amount: number }) => (
                   <div
                     key={member.id}
-                    className="flex items-center justify-between"
+                    className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
                   >
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.imageUrl ?? undefined} />
-                        <AvatarFallback>
-                          {member.name?.charAt(0) ?? "?"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm">{member.name}</span>
+                    <div className="flex items-center justify-between flex-1 gap-2">
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={member.imageUrl ?? undefined} />
+                          <AvatarFallback>
+                            {member.name?.charAt(0) ?? "?"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm">{member.name}</span>
+                      </div>
+                      <span className="font-medium text-green-600">
+                        {formatCurrency(member.amount)}
+                      </span>
                     </div>
-                    <span className="font-medium text-green-600">
-                      {formatCurrency(member.amount)}
-                    </span>
+                    {groupId && (
+                      <SendDebtRequestButton
+                        debtorUserId={member.id}
+                        debtorName={member.name}
+                        amount={member.amount}
+                        groupId={groupId}
+                        groupName={groupName}
+                        className="w-full sm:w-auto"
+                      />
+                    )}
                   </div>
                 ))}
               </div>

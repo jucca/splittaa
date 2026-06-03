@@ -96,7 +96,11 @@ export default function GroupExpensesPage() {
               <CardTitle className="text-xl">Ryhmäsaldot</CardTitle>
             </CardHeader>
             <CardContent>
-              <GroupBalances balances={balances} />
+              <GroupBalances
+                balances={balances}
+                groupId={groupId}
+                groupName={group?.name}
+              />
             </CardContent>
           </Card>
         </div>

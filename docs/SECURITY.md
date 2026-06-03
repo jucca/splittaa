@@ -87,7 +87,13 @@ Configured in `next.config.ts` (Phase 3):
 | `settings.getReminderSettings` | query | `requireAuth` | Self only | Reminder prefs |
 | `settings.updateReminderSettings` | mutation | `requireAuth` | Self only | Email reminder prefs |
 | `inngestBridge.getUsersForPaymentReminders` | action | `INNGEST_CONVEX_SECRET` | System cron | Eligible users for debt reminders |
-| `inngestBridge.markReminderSent` | action | `INNGEST_CONVEX_SECRET` | System cron | Updates `lastSentAt` |
+| `inngestBridge.markReminderSent` | action | `INNGEST_CONVEX_SECRET` | System cron | Updates `lastSentAt` + inbox balance reminder |
+| `notifications.listMyNotifications` | query | `requireAuth` | Self only | Inbox feed (capped) |
+| `notifications.getUnreadCount` | query | `requireAuth` | Self only | Header badge |
+| `notifications.markAsRead` | mutation | `requireAuth` | Owner only | |
+| `notifications.markAllAsRead` | mutation | `requireAuth` | Self only | |
+| `debtRequests.sendDebtRequest` | mutation | `requireAuth` | Creditor only; verified open debt | Inbox + email to debtor; 24h cooldown per pair/scope |
+| `debtRequests.respondToDebtRequest` | mutation | `requireAuth` | Debtor only; creates settlement | Marks request handled; notifies creditor |
 | `expenses.getExpensesBetweenUsers` | query | `requireAuth` | Counterparty filter | Rejects self |
 | `expenses.createExpense` | mutation | `requireAuth` | Group member if `groupId` | See participant gap |
 | `expenses.deleteExpense` | mutation | `requireAuth` | Creator or payer | |
@@ -96,7 +102,7 @@ Configured in `next.config.ts` (Phase 3):
 | `settlements.getSettlementData` | query | `requireAuth` | User or group scope | |
 | `settlements.createSettlement` | mutation | `requireAuth` | Payer/receiver + group members | |
 | `contacts.getAllContacts` | query | `requireAuth` | Self-scoped | |
-| `contacts.createGroup` | mutation | `requireAuth` | Creator only as member; sends invites | Creates `groupInvites` + schedules email |
+| `contacts.createGroup` | mutation | `requireAuth` | Creator only as member; sends invites | Creates `groupInvites`, inbox message, schedules email |
 | `groupInvites.getInvitePreview` | query | **None** | Public token lookup | Returns group name, inviter, member count only — no balances |
 | `groupInvites.listMyPendingInvites` | query | `requireAuth` | Self-scoped | Direct pending invites |
 | `groupInvites.getOpenInviteForGroup` | query | `requireAuth` | Group member | Join URL + display code |
@@ -109,7 +115,7 @@ Configured in `next.config.ts` (Phase 3):
 | `users.store` | mutation | Clerk identity | Self provision | First-login upsert |
 | `users.searchUsers` | query | `requireAuth` | Authenticated search | Min 2 chars; returns email |
 
-**Internal only (not public):** `seed:seedDatabase`, `seedTest:seedTestFixtures`, `internal.inngest.*`, `internal._lib.auth.getCurrentUser`, `internal.email.sendGroupInviteEmail`.
+**Internal only (not public):** `seed:seedDatabase`, `seedTest:seedTestFixtures`, `internal.inngest.*`, `internal._lib.auth.getCurrentUser`, `internal.email.sendGroupInviteEmail`, `internal.email.sendDebtRequestEmail`, `internal.notifications.deliverBalanceReminder`, `internal.notifications.deliverGroupInvite`.
 
 ---
 

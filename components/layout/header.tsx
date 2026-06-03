@@ -3,6 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { History, LayoutDashboard, Settings } from "lucide-react";
+import { InboxNavLink } from "@/components/layout/inbox-nav-link";
 import Link from "next/link";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { useStoreUser } from "@/hooks/use-store-user";
@@ -59,6 +60,8 @@ export default function Header() {
                 <LayoutDashboard className="h-4 w-4" />
               </Button>
             </Link>
+
+            <InboxNavLink />
 
             <Link href="/toiminta">
               <Button

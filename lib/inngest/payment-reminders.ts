@@ -107,6 +107,11 @@ export const paymentReminders = inngest.createFunction(
               secret: process.env.INNGEST_CONVEX_SECRET ?? "",
               userId: u._id as Id<"users">,
               sentAt: now,
+              iOwe: u.iOwe.map((d) => ({ name: d.name, amount: d.amount })),
+              owedToMe: u.owedToMe.map((d) => ({
+                name: d.name,
+                amount: d.amount,
+              })),
             });
 
             return { userId: u._id, success: true as const };

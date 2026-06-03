@@ -51,7 +51,6 @@ export default function Dashboard() {
       ) : (
         <>
           <PendingGroupInvites />
-          <JoinByCodeForm />
 
           <div className="flex  justify-between flex-col sm:flex-row sm:items-center gap-4">
             <h1 className="text-5xl gradient-title">Etusivu</h1>
@@ -166,6 +165,8 @@ export default function Dashboard() {
                   <BalanceSummary balances={balances} />
                 </CardContent>
               </Card>
+
+              <JoinByCodeForm />
 
               <Card>
                 <CardHeader className="pb-3">

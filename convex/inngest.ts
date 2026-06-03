@@ -1,6 +1,7 @@
 import { internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 import type { Doc, Id } from "./_generated/dataModel";
+import { deliverBalanceReminderNotification } from "./_lib/notifications";
 import {
   filterDebtsByMinAge,
   normalizeReminderSettings,
@@ -269,14 +270,29 @@ export const markReminderSent = internalMutation({
   args: {
     userId: v.id("users"),
     sentAt: v.number(),
+    iOwe: v.optional(
+      v.array(v.object({ name: v.string(), amount: v.number() }))
+    ),
+    owedToMe: v.optional(
+      v.array(v.object({ name: v.string(), amount: v.number() }))
+    ),
   },
-  handler: async (ctx, { userId, sentAt }) => {
+  handler: async (ctx, { userId, sentAt, iOwe, owedToMe }) => {
     const user = await ctx.db.get(userId);
     if (!user) return;
     const settings = normalizeReminderSettings(user.reminderSettings ?? undefined);
     await ctx.db.patch(userId, {
       reminderSettings: { ...settings, lastSentAt: sentAt },
     });
+
+    if (iOwe?.length || owedToMe?.length) {
+      await deliverBalanceReminderNotification(ctx, {
+        userId,
+        sentAt,
+        iOwe: iOwe ?? [],
+        owedToMe: owedToMe ?? [],
+      });
+    }
   },
 });
 

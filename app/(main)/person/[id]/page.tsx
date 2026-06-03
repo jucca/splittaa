@@ -14,6 +14,8 @@ import { PlusCircle, ArrowLeftRight, ArrowLeft } from "lucide-react";
 import { ExpenseList } from "@/components/features/expenses/expense-list";
 import { SettlementList } from "@/components/features/settlements/settlement-list";
 import { formatCurrency } from "@/lib/utils";
+import { SendDebtRequestButton } from "@/components/features/debt-requests/send-debt-request-button";
+import type { Id } from "@/convex/_generated/dataModel";
 
 export default function PersonExpensesPage() {
   const params = useParams();
@@ -87,7 +89,7 @@ export default function PersonExpensesPage() {
           <CardTitle className="text-xl">Saldo</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               {balance === 0 ? (
                 <p>Kaikki on tasoitettu</p>
@@ -103,10 +105,19 @@ export default function PersonExpensesPage() {
                 </p>
               )}
             </div>
-            <div
-              className={`text-2xl font-bold ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-600" : ""}`}
-            >
-              {formatCurrency(Math.abs(balance))}
+            <div className="flex flex-col items-end gap-2">
+              <div
+                className={`text-2xl font-bold ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-600" : ""}`}
+              >
+                {formatCurrency(Math.abs(balance))}
+              </div>
+              {balance > 0 && otherUser?.id && (
+                <SendDebtRequestButton
+                  debtorUserId={otherUser.id as Id<"users">}
+                  debtorName={otherUser.name}
+                  amount={balance}
+                />
+              )}
             </div>
           </div>
         </CardContent>

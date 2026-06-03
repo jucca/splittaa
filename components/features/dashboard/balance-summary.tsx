@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { SendDebtRequestButton } from "@/components/features/debt-requests/send-debt-request-button";
+import type { Id } from "@/convex/_generated/dataModel";
 
 import type { UserBalances } from "@/lib/types/domain";
 
@@ -39,22 +41,32 @@ export function BalanceSummary({
           </h3>
           <div className="space-y-3">
             {oweDetails.youAreOwedBy.map((item: BalanceItem) => (
-              <Link
-                href={`/person/${item.userId}`}
+              <div
                 key={item.userId}
-                className="flex items-center justify-between hover:bg-muted p-2 rounded-md transition-colors"
+                className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between hover:bg-muted p-2 rounded-md transition-colors"
               >
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={item.imageUrl ?? undefined} />
-                    <AvatarFallback>{item.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <span className="text-sm">{item.name}</span>
-                </div>
-                <span className="font-medium text-green-600">
-                  {formatCurrency(item.amount)}
-                </span>
-              </Link>
+                <Link
+                  href={`/person/${item.userId}`}
+                  className="flex items-center justify-between flex-1 min-w-0 gap-2"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Avatar className="h-8 w-8 shrink-0">
+                      <AvatarImage src={item.imageUrl ?? undefined} />
+                      <AvatarFallback>{item.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm truncate">{item.name}</span>
+                  </div>
+                  <span className="font-medium text-green-600 shrink-0">
+                    {formatCurrency(item.amount)}
+                  </span>
+                </Link>
+                <SendDebtRequestButton
+                  debtorUserId={item.userId as Id<"users">}
+                  debtorName={item.name}
+                  amount={item.amount}
+                  className="w-full sm:w-auto shrink-0"
+                />
+              </div>
             ))}
           </div>
         </div>

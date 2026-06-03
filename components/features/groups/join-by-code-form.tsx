@@ -44,7 +44,7 @@ export function JoinByCodeForm() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <div className="flex-1 space-y-1">
             <Label htmlFor="join-code" className="sr-only">
               Liittymiskoodi

@@ -17,6 +17,10 @@ import {
   newInviteToken,
 } from "./_lib/invites";
 import { internal } from "./_generated/api";
+import {
+  deliverGroupInviteNotification,
+  markInviteNotificationsRead,
+} from "./_lib/notifications";
 
 async function loadInvitePreview(
   ctx: QueryCtx,
@@ -196,6 +200,7 @@ export const acceptInvite = mutation({
     if (isGroupMember(group, currentUser._id)) {
       if (invite.kind === "direct") {
         await ctx.db.patch(invite._id, { status: "accepted" });
+        await markInviteNotificationsRead(ctx, invite._id);
       }
       return { groupId: group._id, alreadyMember: true };
     }
@@ -204,6 +209,7 @@ export const acceptInvite = mutation({
 
     if (invite.kind === "direct") {
       await ctx.db.patch(invite._id, { status: "accepted" });
+      await markInviteNotificationsRead(ctx, invite._id);
     }
 
     return { groupId: group._id, alreadyMember: false };
@@ -236,6 +242,7 @@ export const declineInvite = mutation({
     }
 
     await ctx.db.patch(invite._id, { status: "declined" });
+    await markInviteNotificationsRead(ctx, invite._id);
     return { success: true as const };
   },
 });
@@ -297,6 +304,7 @@ export const revokeInvite = mutation({
     }
 
     await ctx.db.patch(inviteId, { status: "revoked" });
+    await markInviteNotificationsRead(ctx, inviteId);
     return { success: true as const };
   },
 });
@@ -371,6 +379,16 @@ export async function createInvitesForGroup(
       groupName: group.name,
       joinUrl: `${siteUrl}/join/${invite.token}`,
     });
+
+    if (invite.invitedUserId) {
+      await deliverGroupInviteNotification(ctx, {
+        userId: invite.invitedUserId,
+        inviteId: invite._id,
+        groupName: group.name,
+        inviterName: inviter?.name ?? "Joku",
+        token: invite.token,
+      });
+    }
   }
 
   return { directInvites, openInvite };

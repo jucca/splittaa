@@ -120,4 +120,29 @@ export default defineSchema({
     .index("by_display_code", ["displayCode"])
     .index("by_group_and_status", ["groupId", "status"])
     .index("by_invited_user_and_status", ["invitedUserId", "status"]),
+
+  // In-app inbox (group invites, balance reminders, future alerts)
+  notifications: defineTable({
+    userId: v.id("users"),
+    type: v.union(
+      v.literal("group_invite"),
+      v.literal("balance_reminder"),
+      v.literal("debt_request"),
+      v.literal("debt_request_paid")
+    ),
+    title: v.string(),
+    body: v.string(),
+    href: v.optional(v.string()),
+    isRead: v.boolean(),
+    createdAt: v.number(),
+    relatedInviteId: v.optional(v.id("groupInvites")),
+    dedupeKey: v.optional(v.string()),
+    debtRequestCreditorId: v.optional(v.id("users")),
+    debtRequestAmount: v.optional(v.number()),
+    debtRequestGroupId: v.optional(v.id("groups")),
+    debtRequestRespondedAt: v.optional(v.number()),
+  })
+    .index("by_user_created", ["userId", "createdAt"])
+    .index("by_user_unread", ["userId", "isRead"])
+    .index("by_user_dedupe", ["userId", "dedupeKey"]),
 });

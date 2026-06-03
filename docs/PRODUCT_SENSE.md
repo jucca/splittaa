@@ -28,6 +28,7 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 1. From dashboard, group, or person view — open settlement flow (`/settlements/[type]/[id]`).
 2. Confirm counterparty and amount (defaults from current balance).
 3. Submit settlement mutation.
+4. If you are owed money, you may send a **velkapyyntö** (debt request) from the person view, dashboard balance list, or group balances — distinct from the automated email reminder in settings.
 
 **Success:** Net balance between parties decreases; settlement appears in history.  
 **Human-sensitive:** Wrong party or amount erodes trust — CODEOWNERS on `convex/settlements/`.
@@ -50,7 +51,7 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 3. On create: creator is the only member; each invitee gets in-app pending invite + email (Resend).
 4. Creator sees **join link**, **display code**, and **QR** for open invites (anyone with Splittaa account or new sign-up via `/join/[token]`).
 5. Invitee opens link → preview → sign in/up → **Hyväksy** or **Hylkää** (direct only).
-6. Alternatively: enter display code on dashboard (**Liity ryhmään koodilla**).
+6. Alternatively: enter display code on the dashboard sidebar between **Saldotiedot** and **Ryhmäsi** (**Liity ryhmään koodilla**).
 7. Invites expire after **7 days**; admins see pending invites on the group page and can revoke.
 
 **Success:** Group balance reflects sum of member shares minus settlements; only accepted members appear in splits.
@@ -92,16 +93,29 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 3. Choose how often emails are sent (3–30 days) and how long a balance must be open before reminding.
 4. Choose whether to remind when **you owe** others and/or when **others owe you**.
 
-**Automation:** Inngest cron (`payment-reminders`) runs daily; only users due per their interval receive email.
+**Automation:** Inngest cron (`payment-reminders`) runs daily; eligible users receive email and an inbox message on `/viestit`.
 
 ---
 
-## 7. Dashboard (home after auth)
+## 7. Inbox (`/viestit`)
+
+**Actor:** Signed-in user  
+**Goal:** See app notifications in one place (in addition to email and existing UI).
+
+1. Open **Viestit** from the header (badge shows unread count).
+2. Messages include **group invites** (same actions as dashboard/join link) and **balance reminders** (when the daily email cron runs).
+3. **Merkitse luetuksi** or open the linked action; accepting/declining a group invite marks the related message read.
+4. Dashboard pending-invite card and email flows are unchanged — inbox is an extra channel.
+5. **Velkapyyntö** — creditor can manually request payment from someone who owes them (person or group balance); separate from automated balance reminders. Debtor gets inbox message + email and can **Merkitse maksetuksi** in `/viestit` (records settlement + notifies creditor).
+
+---
+
+## 8. Dashboard (home after auth)
 
 **Actor:** Returning user  
 **Goal:** Situation awareness at a glance.
 
-1. **Dashboard** (`/dashboard`) — pending group invites, join-by-code, total balance, per-group summaries, monthly spending chart.
+1. **Dashboard** (`/dashboard`) — pending group invites at top; join-by-code between **Saldotiedot** and **Ryhmäsi**; total balance cards; per-group summaries; monthly spending chart.
 2. Navigate to person or group for detail.
 
 **Performance note:** Aggregates must use indexed queries — not full-table scans (harness Phase 3).

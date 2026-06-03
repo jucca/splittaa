@@ -106,8 +106,7 @@ export const getGroupExpenses = query({
     ).filter((m): m is NonNullable<typeof m> => m !== null);
     const ids = memberDetails.map((m) => m.id);
 
-    /* ----------  ledgers ---------- */
-    // total net balance (old behaviour)
+    /* ----------  ledgers from snapshot table ---------- */
     const totals = Object.fromEntries(ids.map((id) => [id, 0])) as Record<
       Id<"users">,
       number
@@ -120,45 +119,23 @@ export const getGroupExpenses = query({
       });
     });
 
-    /* ----------  apply expenses ---------- */
-    for (const exp of expenses) {
-      const payer = exp.paidByUserId;
-      for (const split of exp.splits) {
-        if (split.userId === payer || split.paid) continue; // skip payer & settled
-        const debtor = split.userId;
-        const amt = split.amount;
+    const snapshotRows = await ctx.db
+      .query("balances")
+      .withIndex("by_scope", (q) =>
+        q.eq("scopeType", "group").eq("scopeGroupId", groupId)
+      )
+      .collect();
 
-        totals[payer] += amt;
-        totals[debtor] -= amt;
-
-        ledger[debtor][payer] += amt; // debtor owes payer
+    for (const row of snapshotRows) {
+      if (!ids.includes(row.userId) || !ids.includes(row.counterpartyUserId)) {
+        continue;
       }
+      if (row.amount <= 0) continue;
+      // Canonical row stores "row.userId owes row.counterpartyUserId".
+      ledger[row.userId][row.counterpartyUserId] = row.amount;
+      totals[row.userId] -= row.amount;
+      totals[row.counterpartyUserId] += row.amount;
     }
-
-    /* ----------  apply settlements ---------- */
-    for (const s of settlements) {
-      totals[s.paidByUserId] += s.amount;
-      totals[s.receivedByUserId] -= s.amount;
-
-      ledger[s.paidByUserId][s.receivedByUserId] -= s.amount; // they paid back
-    }
-
-    /* ----------  net the pair‑wise ledger ---------- */
-    ids.forEach((a) => {
-      ids.forEach((b) => {
-        if (a >= b) return; // visit each unordered pair once
-        const diff = ledger[a][b] - ledger[b][a];
-        if (diff > 0) {
-          ledger[a][b] = diff;
-          ledger[b][a] = 0;
-        } else if (diff < 0) {
-          ledger[b][a] = -diff;
-          ledger[a][b] = 0;
-        } else {
-          ledger[a][b] = ledger[b][a] = 0;
-        }
-      });
-    });
 
     /* ----------  shape the response ---------- */
     const balances = memberDetails.map((m) => ({

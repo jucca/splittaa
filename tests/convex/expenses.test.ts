@@ -109,4 +109,35 @@ describe("expenses", () => {
       asUser.query(api.expenses.getExpensesBetweenUsers, { userId })
     ).rejects.toThrow(/itsestäsi/);
   });
+
+  it("updates personal balance snapshot on create and delete", async () => {
+    const { asUser: asA, userId: userA } = await createTestUser(t, "jill");
+    const { asUser: asB, userId: userB } = await createTestUser(t, "kate");
+
+    const expenseId = await asA.mutation(api.expenses.createExpense, {
+      description: "Dinner",
+      amount: 60,
+      date: Date.now(),
+      paidByUserId: userA,
+      splitType: "exact",
+      splits: [
+        { userId: userA, amount: 30, paid: true },
+        { userId: userB, amount: 30, paid: false },
+      ],
+    });
+
+    const aBalances = await asA.query(api.balances.getPersonalBalances, {});
+    const bBalances = await asB.query(api.balances.getPersonalBalances, {});
+    expect(aBalances.find((x) => x.userId === userB)?.netBalance).toBe(30);
+    expect(bBalances.find((x) => x.userId === userA)?.netBalance).toBe(-30);
+
+    await asA.mutation(api.expenses.deleteExpense, {
+      expenseId: expenseId as Id<"expenses">,
+    });
+
+    const aAfterDelete = await asA.query(api.balances.getPersonalBalances, {});
+    const bAfterDelete = await asB.query(api.balances.getPersonalBalances, {});
+    expect(aAfterDelete.find((x) => x.userId === userB)).toBeUndefined();
+    expect(bAfterDelete.find((x) => x.userId === userA)).toBeUndefined();
+  });
 });

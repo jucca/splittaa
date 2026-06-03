@@ -11,8 +11,10 @@
 import type * as _lib_auth from "../_lib/auth.js";
 import type * as _lib_authorize from "../_lib/authorize.js";
 import type * as _lib_automation from "../_lib/automation.js";
+import type * as _lib_balances from "../_lib/balances.js";
 import type * as _lib_money from "../_lib/money.js";
 import type * as _lib_personal from "../_lib/personal.js";
+import type * as balances from "../balances.js";
 import type * as contacts from "../contacts.js";
 import type * as dashboard from "../dashboard.js";
 import type * as email from "../email.js";
@@ -35,8 +37,10 @@ declare const fullApi: ApiFromModules<{
   "_lib/auth": typeof _lib_auth;
   "_lib/authorize": typeof _lib_authorize;
   "_lib/automation": typeof _lib_automation;
+  "_lib/balances": typeof _lib_balances;
   "_lib/money": typeof _lib_money;
   "_lib/personal": typeof _lib_personal;
+  balances: typeof balances;
   contacts: typeof contacts;
   dashboard: typeof dashboard;
   email: typeof email;

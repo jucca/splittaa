@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { History, LayoutDashboard, Settings } from "lucide-react";
 import { InboxNavLink } from "@/components/layout/inbox-nav-link";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import Link from "next/link";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { useStoreUser } from "@/hooks/use-store-user";
@@ -17,7 +18,7 @@ export default function Header() {
   const path = usePathname();
 
   return (
-    <header className="fixed top-0 w-full border-b bg-white/95 backdrop-blur z-50 supports-[backdrop-filter]:bg-white/60">
+    <header className="fixed top-0 w-full border-b bg-background/95 backdrop-blur z-50 supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image
@@ -48,6 +49,7 @@ export default function Header() {
 
         <div className="flex items-center gap-4">
           <Authenticated>
+            <div className="flex items-center gap-4">
             <Link href="/dashboard">
               <Button
                 variant="outline"
@@ -89,28 +91,36 @@ export default function Header() {
               </Button>
             </Link>
 
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: "w-10 h-10",
-                  userButtonPopoverCard: "shadow-xl",
-                  userPreviewMainIdentifier: "font-semibold",
-                },
-              }}
-              afterSignOutUrl="/"
-            />
+            <div className="flex items-center gap-3">
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox: "w-10 h-10",
+                    userButtonPopoverCard: "shadow-xl",
+                    userPreviewMainIdentifier: "font-semibold",
+                  },
+                }}
+                afterSignOutUrl="/"
+              />
+              <ThemeToggle />
+            </div>
+            </div>
           </Authenticated>
 
           <Unauthenticated>
-            <SignInButton>
-              <Button variant="ghost">Kirjaudu</Button>
-            </SignInButton>
+            <div className="flex items-center gap-4">
+              <SignInButton>
+                <Button variant="ghost">Kirjaudu</Button>
+              </SignInButton>
 
-            <SignUpButton>
-              <Button className="bg-green-600 hover:bg-green-700 border-none">
-                Aloita
-              </Button>
-            </SignUpButton>
+              <SignUpButton>
+                <Button className="bg-green-600 hover:bg-green-700 border-none">
+                  Aloita
+                </Button>
+              </SignUpButton>
+
+              <ThemeToggle />
+            </div>
           </Unauthenticated>
         </div>
       </nav>

@@ -27,3 +27,5 @@ tests/e2e/.auth/
 # misc
 .DS_Store
 *.pem
+.vercel
+.env*

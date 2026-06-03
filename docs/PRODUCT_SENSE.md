@@ -74,12 +74,13 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 ## 5. Activity feed (`/toiminta`)
 
 **Actor:** Signed-in user  
-**Goal:** Review recent money movements in one chronological list.
+**Goal:** Review spending summary and recent money movements.
 
 1. Open **Toiminta** from the header (separate from dashboard).
-2. See expenses and settlements involving the user, newest first.
-3. Each row shows amount, description, context (group or person), and link to detail.
-4. Tap a row → group or person view.
+2. At the top: **Kulutusyhteenveto** — toggle **Viikko | Kuukausi | Vuosi**; bar chart (spending over time) and category donut; totals use **only the user’s split share** (not whole group bills).
+3. Below: **Viimeisimmät tapahtumat** — expenses and settlements involving the user, newest first.
+4. Each row shows amount, description, context (group or person), and link to detail.
+5. Tap a row → group or person view.
 
 ---
 

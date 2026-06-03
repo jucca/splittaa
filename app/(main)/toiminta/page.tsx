@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ActivityFeed } from "@/components/features/activity/activity-feed";
+import { SpendingCharts } from "@/components/features/activity/spending-charts";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, History } from "lucide-react";
 
@@ -24,13 +25,18 @@ export default function ActivityPage() {
         <div>
           <h1 className="text-4xl gradient-title">Toiminta</h1>
           <p className="text-muted-foreground mt-1">
-            Viimeisimmät kulut ja tilitykset — uusin ylimpänä. Näet missä
-            kontekstissa, kenen kanssa ja summan.
+            Kulutusyhteenveto ja viimeisimmät tapahtumat — vain sinun osuutesi
+            kaavioissa.
           </p>
         </div>
       </div>
 
-      <ActivityFeed />
+      <SpendingCharts />
+
+      <div className="space-y-3">
+        <h2 className="text-lg font-semibold">Viimeisimmät tapahtumat</h2>
+        <ActivityFeed />
+      </div>
     </div>
   );
 }

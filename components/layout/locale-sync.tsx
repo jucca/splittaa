@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useQuery } from "convex/react";
+import { useConvexAuth, useQuery } from "convex/react";
 import { useLocale } from "next-intl";
 import { api } from "@/convex/_generated/api";
 import {
@@ -12,7 +12,8 @@ import {
 import { useSwitchLocale } from "@/lib/i18n/use-switch-locale";
 
 export function LocaleSync() {
-  const me = useQuery(api.users.me);
+  const { isAuthenticated } = useConvexAuth();
+  const me = useQuery(api.users.me, isAuthenticated ? {} : "skip");
   const currentLocale = resolveLocale(useLocale());
   const switchLocale = useSwitchLocale();
   const syncedRef = useRef<string | null>(null);

@@ -1,48 +1,63 @@
-import { Bell, CreditCard, PieChart, Receipt, Users } from "lucide-react";
+import {
+  Bell,
+  CreditCard,
+  PieChart,
+  Receipt,
+  Users,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import type { ReactElement } from "react";
 
-export const FEATURES = [
+export type LandingFeatureKey =
+  | "groupExpenses"
+  | "smartSettlements"
+  | "spendingAnalysis"
+  | "paymentReminders"
+  | "splitMethods"
+  | "realtimeUpdates";
+
+export type LandingStepKey = "step1" | "step2" | "step3";
+
+export type LandingTestimonialKey = "annikki" | "luigi" | "antti";
+
+export const LANDING_FEATURES: {
+  key: LandingFeatureKey;
+  Icon: LucideIcon | (() => ReactElement);
+  bg: string;
+  color: string;
+}[] = [
   {
-    title: "Ryhmäkulut",
+    key: "groupExpenses",
     Icon: Users,
     bg: "bg-green-100",
     color: "text-green-600",
-    description:
-      "Luo ryhmiä kämppäkavereille, matkoille tai tapahtumille ja pidä kulut järjestyksessä.",
   },
   {
-    title: "Älykkäät tilitykset",
+    key: "smartSettlements",
     Icon: CreditCard,
     bg: "bg-teal-100",
     color: "text-teal-600",
-    description:
-      "Algoritmimme minimoi maksujen määrän tilien tasoittamisessa.",
   },
   {
-    title: "Kuluanalyysi",
+    key: "spendingAnalysis",
     Icon: PieChart,
     bg: "bg-green-100",
     color: "text-green-600",
-    description:
-      "Seuraa kulutustottumuksia ja löydä oivalluksia yhteisistä kuluistasi.",
   },
   {
-    title: "Maksumuistutukset",
+    key: "paymentReminders",
     Icon: Bell,
     bg: "bg-amber-100",
     color: "text-amber-600",
-    description:
-      "Automaattiset muistutukset avoimista veloista ja oivalluksia kulutuksesta.",
   },
   {
-    title: "Useita jakotapoja",
+    key: "splitMethods",
     Icon: Receipt,
     bg: "bg-green-100",
     color: "text-green-600",
-    description:
-      "Jaa tasan, prosenttiosuuksilla tai tarkoilla summilla – sopii mihin tahansa tilanteeseen.",
   },
   {
-    title: "Reaaliaikaiset päivitykset",
+    key: "realtimeUpdates",
     Icon: () => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -58,52 +73,21 @@ export const FEATURES = [
     ),
     bg: "bg-teal-100",
     color: "text-teal-600",
-    description:
-      "Näe uudet kulut ja maksut heti, kun ystäväsi lisäävät ne.",
   },
 ];
 
-export const STEPS = [
-  {
-    label: "1",
-    title: "Luo tai liity ryhmään",
-    description:
-      "Perusta ryhmä kämppäkavereille, matkalle tai tapahtumaan ja kutsu ystäviä mukaan.",
-  },
-  {
-    label: "2",
-    title: "Lisää kuluja",
-    description:
-      "Kirjaa kuka maksoi ja miten lasku jaetaan jäsenten kesken.",
-  },
-  {
-    label: "3",
-    title: "Tasaa tilit",
-    description:
-      "Katso kuka on kenelle velkaa ja kirjaa maksut, kun velat on maksettu.",
-  },
+export const LANDING_STEPS: { key: LandingStepKey; label: string }[] = [
+  { key: "step1", label: "1" },
+  { key: "step2", label: "2" },
+  { key: "step3", label: "3" },
 ];
 
-export const TESTIMONIALS = [
-  {
-    quote:
-      "Splittaan avulla en enää mene sekaisin siitä, kuka maksoi mitäkin!",
-    name: "Annikki Komulainen",
-    image: "/testimonials/ansku.png",
-    role: "Vuokra-asuntojen hoitaja",
-  },
-  {
-    quote:
-      "Splittaan avulla pidän tarkkaa kirjaa saatavistani. Se päihittävät jopa parhaat muistutussovelukset!",
-    name: "Luigi Bolognese",
-    image: "/testimonials/luigi.jpg",
-    role: "Talous- ja velkaneuvoja",
-  },
-  {
-    quote:
-      "Jos minulla olisi ollut Splittaa aiemmin, Luigi ei olisi päässyt myymään kenkiäni ja takkiani! Lisään velan heti listalle.",
-    name: "Antti Kukkonen",
-    image: "/testimonials/antti.png",
-    role: "Ohjelmistokehittäjä / Mindfulness-valmentaja",
-  },
+export const LANDING_TESTIMONIALS: {
+  key: LandingTestimonialKey;
+  name: string;
+  image: string;
+}[] = [
+  { key: "annikki", name: "Annikki Komulainen", image: "/testimonials/ansku.png" },
+  { key: "luigi", name: "Luigi Bolognese", image: "/testimonials/luigi.jpg" },
+  { key: "antti", name: "Antti Kukkonen", image: "/testimonials/antti.png" },
 ];

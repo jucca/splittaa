@@ -6,8 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import { formatCurrency, formatSignedCurrency } from "@/lib/utils";
 import { SendDebtRequestButton } from "@/components/features/debt-requests/send-debt-request-button";
-
 import type { Id } from "@/convex/_generated/dataModel";
+import { useTranslations } from "next-intl";
 
 type BalanceMember = {
   id: Id<"users">;
@@ -27,12 +27,14 @@ export function GroupBalances({
   groupId?: Id<"groups">;
   groupName?: string;
 }) {
+  const t = useTranslations("groups");
+  const tDashboard = useTranslations("dashboard");
   const { data: currentUser } = useConvexQuery(api.users.me);
 
   if (!balances?.length || !currentUser) {
     return (
       <div className="text-center py-4 text-muted-foreground">
-        Saldotietoja ei saatavilla
+        {t("balancesUnavailable")}
       </div>
     );
   }
@@ -41,7 +43,7 @@ export function GroupBalances({
   if (!me) {
     return (
       <div className="text-center py-4 text-muted-foreground">
-        Et kuulu tähän ryhmään
+        {t("notMember")}
       </div>
     );
   }
@@ -72,7 +74,7 @@ export function GroupBalances({
   return (
     <div className="space-y-4">
       <div className="text-center pb-4 border-b">
-        <p className="text-sm text-muted-foreground mb-1">Saldosi</p>
+        <p className="text-sm text-muted-foreground mb-1">{t("yourBalance")}</p>
         <p
           className={`text-2xl font-bold ${
             me.totalBalance > 0
@@ -90,16 +92,16 @@ export function GroupBalances({
         </p>
         <p className="text-sm text-muted-foreground mt-1">
           {me.totalBalance > 0
-            ? "Sinulle ollaan velkaa"
+            ? tDashboard("balanceOwedToYou")
             : me.totalBalance < 0
-              ? "Olet velkaa"
-              : "Kaikki on tasoitettu"}
+              ? tDashboard("balanceYouOwe")
+              : t("allSettledInGroup")}
         </p>
       </div>
 
       {isAllSettledUp ? (
         <div className="text-center py-4">
-          <p className="text-muted-foreground">Kaikilla on tilit tasattu!</p>
+          <p className="text-muted-foreground">{t("everyoneSettled")}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -107,7 +109,7 @@ export function GroupBalances({
             <div>
               <h3 className="text-sm font-medium flex items-center mb-3">
                 <ArrowUpCircle className="h-4 w-4 text-green-500 mr-2" />
-                Sinulle ollaan velkaa
+                {tDashboard("balanceOwedToYou")}
               </h3>
               <div className="space-y-3">
                 {owedByMembers.map((member: BalanceMember & { amount: number }) => (
@@ -149,7 +151,7 @@ export function GroupBalances({
             <div>
               <h3 className="text-sm font-medium flex items-center mb-3">
                 <ArrowDownCircle className="h-4 w-4 text-red-500 mr-2" />
-                Olet velkaa
+                {tDashboard("balanceYouOwe")}
               </h3>
               <div className="space-y-3">
                 {owingToMembers.map((member: BalanceMember & { amount: number }) => (

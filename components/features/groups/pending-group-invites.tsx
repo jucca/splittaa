@@ -4,15 +4,17 @@ import Link from "next/link";
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import type { FunctionReturnType } from "convex/server";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Mail } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type PendingInvite = FunctionReturnType<
   typeof api.groupInvites.listMyPendingInvites
 >[number];
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Mail } from "lucide-react";
 
 export function PendingGroupInvites() {
+  const t = useTranslations("dashboard");
   const { data: invites, isLoading } = useConvexQuery(
     api.groupInvites.listMyPendingInvites
   );
@@ -26,7 +28,7 @@ export function PendingGroupInvites() {
       <CardHeader className="pb-2">
         <CardTitle className="text-lg flex items-center gap-2">
           <Mail className="h-5 w-5" />
-          Ryhmäkutsut ({invites.length})
+          {t("pendingInvitesTitle", { count: invites.length })}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -38,11 +40,11 @@ export function PendingGroupInvites() {
             <div>
               <p className="font-medium">{invite.groupName}</p>
               <p className="text-sm text-muted-foreground">
-                Kutsuja: {invite.inviterName}
+                {t("inviterLabel", { name: invite.inviterName })}
               </p>
             </div>
             <Button asChild size="sm">
-              <Link href={`/join/${invite.token}`}>Avaa kutsu</Link>
+              <Link href={`/join/${invite.token}`}>{t("openInvite")}</Link>
             </Button>
           </div>
         ))}

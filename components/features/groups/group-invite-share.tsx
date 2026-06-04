@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Copy, Check } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
+import { format } from "date-fns";
+import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
 
 type OpenInviteInfo = {
   token: string;
@@ -16,6 +19,8 @@ type OpenInviteInfo = {
 };
 
 export function GroupInviteShare({ openInvite }: { openInvite: OpenInviteInfo }) {
+  const t = useTranslations("groups");
+  const dateFnsLocale = useDateFnsLocale();
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState<"link" | "code" | null>(null);
 
@@ -29,31 +34,30 @@ export function GroupInviteShare({ openInvite }: { openInvite: OpenInviteInfo })
     try {
       await navigator.clipboard.writeText(text);
       setCopied(kind);
-      toast.success(kind === "link" ? "Linkki kopioitu" : "Koodi kopioitu");
+      toast.success(
+        kind === "link" ? t("toastLinkCopied") : t("toastCodeCopied")
+      );
       setTimeout(() => setCopied(null), 2000);
     } catch {
-      toast.error("Kopiointi epäonnistui");
+      toast.error(t("toastCopyFailed"));
     }
   };
 
-  const expiresLabel = new Date(openInvite.expiresAt).toLocaleDateString("fi-FI", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
+  const expiresLabel = format(new Date(openInvite.expiresAt), "PPP", {
+    locale: dateFnsLocale,
   });
 
   return (
     <div className="space-y-4 rounded-lg border bg-muted/30 p-4">
       <p className="text-sm text-muted-foreground">
-        Jaa linkki tai koodi, jotta muut voivat liittyä ryhmään. Voimassa{" "}
-        {expiresLabel} asti.
+        {t("shareInviteHint", { expiresDate: expiresLabel })}
       </p>
 
       {qrDataUrl && (
         <div className="flex justify-center">
           <img
             src={qrDataUrl}
-            alt="QR-koodi ryhmään liittymistä varten"
+            alt={t("qrAlt")}
             className="rounded-md border bg-white p-2"
             width={200}
             height={200}
@@ -62,7 +66,7 @@ export function GroupInviteShare({ openInvite }: { openInvite: OpenInviteInfo })
       )}
 
       <div className="space-y-2">
-        <Label>Liittymislinkki</Label>
+        <Label>{t("joinLinkLabel")}</Label>
         <div className="flex gap-2">
           <Input readOnly value={openInvite.joinUrl} className="text-xs" />
           <Button
@@ -70,7 +74,7 @@ export function GroupInviteShare({ openInvite }: { openInvite: OpenInviteInfo })
             variant="outline"
             size="icon"
             onClick={() => copyToClipboard(openInvite.joinUrl, "link")}
-            aria-label="Kopioi linkki"
+            aria-label={t("copyLinkAria")}
           >
             {copied === "link" ? (
               <Check className="h-4 w-4" />
@@ -82,7 +86,7 @@ export function GroupInviteShare({ openInvite }: { openInvite: OpenInviteInfo })
       </div>
 
       <div className="space-y-2">
-        <Label>Liittymiskoodi</Label>
+        <Label>{t("joinCodeLabel")}</Label>
         <div className="flex gap-2">
           <Input
             readOnly
@@ -94,7 +98,7 @@ export function GroupInviteShare({ openInvite }: { openInvite: OpenInviteInfo })
             variant="outline"
             size="icon"
             onClick={() => copyToClipboard(openInvite.displayCode, "code")}
-            aria-label="Kopioi koodi"
+            aria-label={t("copyCodeAria")}
           >
             {copied === "code" ? (
               <Check className="h-4 w-4" />

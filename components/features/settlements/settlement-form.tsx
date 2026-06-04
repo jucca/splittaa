@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -14,21 +14,16 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { formatCurrency } from "@/lib/utils";
-
-const settlementSchema = z.object({
-  amount: z
-    .string()
-    .min(1, "Summa on pakollinen")
-    .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
-      message: "Summan on oltava positiivinen luku",
-    }),
-  note: z.string().optional(),
-  paymentType: z.enum(["youPaid", "theyPaid"]),
-});
-
 import type { Id } from "@/convex/_generated/dataModel";
+import { useLocale, useTranslations } from "next-intl";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
 
-type SettlementFormValues = z.infer<typeof settlementSchema>;
+type SettlementFormValues = {
+  amount: string;
+  note?: string;
+  paymentType: "youPaid" | "theyPaid";
+};
 
 export type UserSettlementData = {
   counterpart: { userId: Id<"users">; name: string; imageUrl?: string | null };
@@ -56,6 +51,26 @@ export default function SettlementForm({
   entityData: UserSettlementData | GroupSettlementData;
   onSuccess?: () => void;
 }) {
+  const t = useTranslations("settlements.form");
+  const tGroups = useTranslations("groups");
+  const tShared = useTranslations("shared");
+  const locale = resolveLocale(useLocale());
+
+  const settlementSchema = useMemo(
+    () =>
+      z.object({
+        amount: z
+          .string()
+          .min(1, t("validationAmountRequired"))
+          .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
+            message: t("validationAmountPositive"),
+          }),
+        note: z.string().optional(),
+        paymentType: z.enum(["youPaid", "theyPaid"]),
+      }),
+    [t]
+  );
+
   const { data: currentUser } = useConvexQuery(api.users.me);
   const createSettlement = useConvexMutation(api.settlements.createSettlement);
 
@@ -64,7 +79,7 @@ export default function SettlementForm({
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<SettlementFormValues>({
     resolver: zodResolver(settlementSchema),
     defaultValues: {
       amount: "",
@@ -82,13 +97,13 @@ export default function SettlementForm({
       const userData = entityData as UserSettlementData;
       const paidByUserId =
         data.paymentType === "youPaid"
-          ? currentUser.id
+          ? currentUser!.id
           : userData.counterpart.userId;
 
       const receivedByUserId =
         data.paymentType === "youPaid"
           ? userData.counterpart.userId
-          : currentUser.id;
+          : currentUser!.id;
 
       await createSettlement.mutate({
         amount,
@@ -97,11 +112,14 @@ export default function SettlementForm({
         receivedByUserId,
       });
 
-      toast.success("Tilitys kirjattu onnistuneesti!");
+      toast.success(t("toastSuccess"));
       if (onSuccess) onSuccess();
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error("Tilityksen kirjaus epäonnistui: " + message);
+      toast.error(
+        t("toastFailed", {
+          message: getConvexErrorFromUnknown(error, locale),
+        })
+      );
     }
   };
 
@@ -110,7 +128,7 @@ export default function SettlementForm({
     selectedUserId: Id<"users">
   ) => {
     if (!selectedUserId) {
-      toast.error("Valitse ryhmän jäsen, jonka kanssa tasoitat");
+      toast.error(t("toastSelectMember"));
       return;
     }
 
@@ -123,15 +141,15 @@ export default function SettlementForm({
       );
 
       if (!selectedUser) {
-        toast.error("Valittua käyttäjää ei löytynyt ryhmästä");
+        toast.error(t("toastMemberNotFound"));
         return;
       }
 
       const paidByUserId =
-        data.paymentType === "youPaid" ? currentUser.id : selectedUser.userId;
+        data.paymentType === "youPaid" ? currentUser!.id : selectedUser.userId;
 
       const receivedByUserId =
-        data.paymentType === "youPaid" ? selectedUser.userId : currentUser.id;
+        data.paymentType === "youPaid" ? selectedUser.userId : currentUser!.id;
 
       await createSettlement.mutate({
         amount,
@@ -141,13 +159,19 @@ export default function SettlementForm({
         groupId: groupData.group.id,
       });
 
-      toast.success("Tilitys kirjattu onnistuneesti!");
+      toast.success(t("toastSuccess"));
       if (onSuccess) onSuccess();
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error("Tilityksen kirjaus epäonnistui: " + message);
+      toast.error(
+        t("toastFailed", {
+          message: getConvexErrorFromUnknown(error, locale),
+        })
+      );
     }
   };
+
+  const [selectedGroupMemberId, setSelectedGroupMemberId] =
+    useState<Id<"users"> | null>(null);
 
   const onSubmit = async (data: SettlementFormValues) => {
     if (entityType === "user") {
@@ -156,9 +180,6 @@ export default function SettlementForm({
       await handleGroupSettlement(data, selectedGroupMemberId);
     }
   };
-
-  const [selectedGroupMemberId, setSelectedGroupMemberId] =
-    useState<Id<"users"> | null>(null);
 
   if (!currentUser) return null;
 
@@ -170,25 +191,19 @@ export default function SettlementForm({
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="bg-muted p-4 rounded-lg">
-          <h3 className="font-medium mb-2">Nykyinen saldo</h3>
+          <h3 className="font-medium mb-2">{t("currentBalance")}</h3>
           {netBalance === 0 ? (
-            <p>Kaikki on tasoitettu käyttäjän {otherUser.name} kanssa</p>
+            <p>{t("allSettledWithUser", { name: otherUser.name })}</p>
           ) : netBalance > 0 ? (
             <div className="flex justify-between items-center">
-              <p>
-                <span className="font-medium">{otherUser.name}</span> on sinulle
-                velkaa
-              </p>
+              <p>{t("theyOweYou", { name: otherUser.name })}</p>
               <span className="text-xl font-bold text-green-600">
                 {formatCurrency(netBalance)}
               </span>
             </div>
           ) : (
             <div className="flex justify-between items-center">
-              <p>
-                Olet velkaa{" "}
-                <span className="font-medium">{otherUser.name}</span>lle
-              </p>
+              <p>{t("youOweThem", { name: otherUser.name })}</p>
               <span className="text-xl font-bold text-red-600">
                 {formatCurrency(Math.abs(netBalance))}
               </span>
@@ -197,7 +212,7 @@ export default function SettlementForm({
         </div>
 
         <div className="space-y-2">
-          <Label>Kuka maksoi?</Label>
+          <Label>{t("whoPaid")}</Label>
           <RadioGroup
             defaultValue="youPaid"
             {...register("paymentType")}
@@ -218,7 +233,9 @@ export default function SettlementForm({
                       {currentUser.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  <span>Sinä maksoit käyttäjälle {otherUser.name}</span>
+                  <span>
+                    {t("youPaidUser", { name: otherUser.name })}
+                  </span>
                 </div>
               </Label>
             </div>
@@ -231,7 +248,7 @@ export default function SettlementForm({
                     <AvatarImage src={otherUser.imageUrl ?? undefined} />
                     <AvatarFallback>{otherUser.name.charAt(0)}</AvatarFallback>
                   </Avatar>
-                  <span>{otherUser.name} maksoi sinulle</span>
+                  <span>{t("userPaidYou", { name: otherUser.name })}</span>
                 </div>
               </Label>
             </div>
@@ -239,7 +256,7 @@ export default function SettlementForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="amount">Summa</Label>
+          <Label htmlFor="amount">{t("amountLabel")}</Label>
           <div className="relative">
             <span className="absolute left-3 top-2.5">€</span>
             <Input
@@ -258,16 +275,16 @@ export default function SettlementForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="note">Muistiinpano (valinnainen)</Label>
+          <Label htmlFor="note">{t("noteLabel")}</Label>
           <Textarea
             id="note"
-            placeholder="Illallinen, vuokra jne."
+            placeholder={t("notePlaceholder")}
             {...register("note")}
           />
         </div>
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Kirjataan..." : "Kirjaa tilitys"}
+          {isSubmitting ? tShared("recording") : t("submit")}
         </Button>
       </form>
     );
@@ -280,7 +297,7 @@ export default function SettlementForm({
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-2">
-          <Label>Kenen kanssa tasoitat?</Label>
+          <Label>{t("selectMember")}</Label>
           <div className="space-y-2">
             {groupMembers.map((member: GroupBalanceMember) => {
               const isSelected = selectedGroupMemberId === member.userId;
@@ -315,10 +332,14 @@ export default function SettlementForm({
                       }`}
                     >
                       {isOwing
-                        ? `He ovat sinulle velkaa ${formatCurrency(Math.abs(member.netBalance))}`
+                        ? tGroups("theyOweYou", {
+                            amount: formatCurrency(Math.abs(member.netBalance)),
+                          })
                         : isOwed
-                          ? `Olet velkaa ${formatCurrency(Math.abs(member.netBalance))}`
-                          : "Tasoitettu"}
+                          ? tGroups("youOweThem", {
+                              amount: formatCurrency(Math.abs(member.netBalance)),
+                            })
+                          : tGroups("settled")}
                     </div>
                   </div>
                 </div>
@@ -326,16 +347,14 @@ export default function SettlementForm({
             })}
           </div>
           {!selectedGroupMemberId && (
-            <p className="text-sm text-amber-600">
-              Valitse jäsen, jonka kanssa tasoitat
-            </p>
+            <p className="text-sm text-amber-600">{t("selectMemberWarning")}</p>
           )}
         </div>
 
         {selectedGroupMemberId && (
           <>
             <div className="space-y-2">
-              <Label>Kuka maksoi?</Label>
+              <Label>{t("whoPaid")}</Label>
               <RadioGroup
                 defaultValue="youPaid"
                 {...register("paymentType")}
@@ -357,12 +376,13 @@ export default function SettlementForm({
                         </AvatarFallback>
                       </Avatar>
                       <span>
-                        Sinä maksoit{" "}
-                        {
-                          groupMembers.find(
-                            (m: GroupBalanceMember) => m.userId === selectedGroupMemberId
-                          )?.name
-                        }
+                        {t("youPaidMember", {
+                          name:
+                            groupMembers.find(
+                              (m: GroupBalanceMember) =>
+                                m.userId === selectedGroupMemberId
+                            )?.name ?? "",
+                        })}
                       </span>
                     </div>
                   </Label>
@@ -386,17 +406,21 @@ export default function SettlementForm({
                         />
                         <AvatarFallback>
                           {groupMembers
-                            .find((m: GroupBalanceMember) => m.userId === selectedGroupMemberId)
+                            .find(
+                              (m: GroupBalanceMember) =>
+                                m.userId === selectedGroupMemberId
+                            )
                             ?.name.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       <span>
-                        {
-                          groupMembers.find(
-                            (m: GroupBalanceMember) => m.userId === selectedGroupMemberId
-                          )?.name
-                        }{" "}
-                        maksoi sinulle
+                        {t("memberPaidYou", {
+                          name:
+                            groupMembers.find(
+                              (m: GroupBalanceMember) =>
+                                m.userId === selectedGroupMemberId
+                            )?.name ?? "",
+                        })}
                       </span>
                     </div>
                   </Label>
@@ -405,7 +429,7 @@ export default function SettlementForm({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="amount">Summa</Label>
+              <Label htmlFor="amount">{t("amountLabel")}</Label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5">€</span>
                 <Input
@@ -424,10 +448,10 @@ export default function SettlementForm({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="note">Muistiinpano (valinnainen)</Label>
+              <Label htmlFor="note">{t("noteLabel")}</Label>
               <Textarea
                 id="note"
-                placeholder="Illallinen, vuokra jne."
+                placeholder={t("notePlaceholder")}
                 {...register("note")}
               />
             </div>
@@ -439,7 +463,7 @@ export default function SettlementForm({
           className="w-full"
           disabled={isSubmitting || !selectedGroupMemberId}
         >
-          {isSubmitting ? "Kirjataan..." : "Kirjaa tilitys"}
+          {isSubmitting ? tShared("recording") : t("submit")}
         </Button>
       </form>
     );

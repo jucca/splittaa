@@ -16,8 +16,11 @@ import { GroupBalances } from "@/components/features/groups/group-balances";
 import { GroupMembers } from "@/components/features/groups/group-members";
 import { GroupInvitesAdmin } from "@/components/features/groups/group-invites-admin";
 import type { Id } from "@/convex/_generated/dataModel";
+import { useTranslations } from "next-intl";
 
 export default function GroupExpensesPage() {
+  const t = useTranslations("groups");
+  const tShared = useTranslations("shared");
   const params = useParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("expenses");
@@ -53,7 +56,7 @@ export default function GroupExpensesPage() {
           onClick={() => router.back()}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Takaisin
+          {tShared("back")}
         </Button>
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
@@ -65,7 +68,7 @@ export default function GroupExpensesPage() {
               <h1 className="text-4xl gradient-title">{group?.name}</h1>
               <p className="text-muted-foreground">{group?.description}</p>
               <p className="text-sm text-muted-foreground mt-1">
-                {members.length} jäsentä
+                {tShared("membersCount", { count: members.length })}
               </p>
             </div>
           </div>
@@ -74,13 +77,13 @@ export default function GroupExpensesPage() {
             <Button asChild variant="outline">
               <Link href={`/settlements/group/${params.id}`}>
                 <ArrowLeftRight className="mr-2 h-4 w-4" />
-                Tasaa tilit
+                {t("settleUp")}
               </Link>
             </Button>
             <Button asChild>
               <Link href={`/expenses/new`}>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Lisää kulu
+                {t("addExpense")}
               </Link>
             </Button>
           </div>
@@ -93,7 +96,7 @@ export default function GroupExpensesPage() {
         <div className="lg:col-span-2">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-xl">Ryhmäsaldot</CardTitle>
+              <CardTitle className="text-xl">{t("groupBalancesTitle")}</CardTitle>
             </CardHeader>
             <CardContent>
               <GroupBalances
@@ -108,7 +111,7 @@ export default function GroupExpensesPage() {
         <div>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-xl">Jäsenet</CardTitle>
+              <CardTitle className="text-xl">{t("membersTitle")}</CardTitle>
             </CardHeader>
             <CardContent>
               <GroupMembers members={members} />
@@ -125,10 +128,10 @@ export default function GroupExpensesPage() {
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="expenses">
-            Kulut ({expenses.length})
+            {t("tabsExpenses", { count: expenses.length })}
           </TabsTrigger>
           <TabsTrigger value="settlements">
-            Tilitykset ({settlements.length})
+            {t("tabsSettlements", { count: settlements.length })}
           </TabsTrigger>
         </TabsList>
 

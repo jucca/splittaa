@@ -12,13 +12,14 @@
     "test:unit": "vitest run",
     "test:convex": "vitest run --config vitest.convex.config.ts",
     "test:e2e": "playwright test",
+    "check:i18n": "node scripts/check-i18n.mjs",
     "check:docs": "node scripts/check-docs.mjs",
     "check:layers": "depcruise --config .dependency-cruiser.cjs app components lib hooks",
     "check:schema-doc": "node scripts/generate-schema-doc.mjs --check",
     "generate:schema-doc": "node scripts/generate-schema-doc.mjs",
     "generate:docs": "node scripts/generate-docs.mjs",
     "typecheck:convex": "cd convex && tsc --noEmit",
-    "verify": "npm run lint && npm run check:docs && npm run check:schema-doc && npm run check:layers && npm run typecheck && npm run typecheck:convex && npm run test:unit && npm run test:convex"
+    "verify": "npm run lint && npm run check:i18n && npm run check:docs && npm run check:schema-doc && npm run check:layers && npm run typecheck && npm run typecheck:convex && npm run test:unit && npm run test:convex"
   },
   "dependencies": {
     "@clerk/backend": "^1.26.0",
@@ -46,6 +47,7 @@
     "inngest": "^3.35.0",
     "lucide-react": "^0.487.0",
     "next": "^16.2.7",
+    "next-intl": "^4.13.0",
     "next-themes": "^0.4.6",
     "qrcode": "^1.5.4",
     "react": "^19.0.0",

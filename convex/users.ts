@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { requireAuth } from "./_lib/auth";
+import { isSupportedLocale } from "./_lib/locales";
 
 export const store = mutation({
   args: {},
@@ -42,7 +43,24 @@ export const me = query({
   args: {},
   handler: async (ctx) => {
     const user = await requireAuth(ctx);
-    return { id: user._id, name: user.name, imageUrl: user.imageUrl ?? null };
+    return {
+      id: user._id,
+      name: user.name,
+      imageUrl: user.imageUrl ?? null,
+      preferredLocale: user.preferredLocale ?? null,
+    };
+  },
+});
+
+export const updatePreferredLocale = mutation({
+  args: { locale: v.string() },
+  handler: async (ctx, args) => {
+    const user = await requireAuth(ctx);
+    if (!isSupportedLocale(args.locale)) {
+      throw new Error("Invalid locale");
+    }
+    await ctx.db.patch(user._id, { preferredLocale: args.locale });
+    return { locale: args.locale };
   },
 });
 

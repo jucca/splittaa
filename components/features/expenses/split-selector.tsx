@@ -8,6 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { formatCurrency } from "@/lib/utils";
 import type { Participant, SplitRow, SplitType } from "@/lib/types/domain";
 import type { Id } from "@/convex/_generated/dataModel";
+import { useTranslations } from "next-intl";
 
 export function SplitSelector({
   type,
@@ -22,12 +23,13 @@ export function SplitSelector({
   paidByUserId: Id<"users"> | string;
   onSplitsChange?: (splits: SplitRow[]) => void;
 }) {
+  const t = useTranslations("expenses.form");
+  const tShared = useTranslations("shared");
   const { user } = useUser();
   const [splits, setSplits] = useState<SplitRow[]>([]);
   const [totalPercentage, setTotalPercentage] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
 
-  // Calculate splits when inputs change
   useEffect(() => {
     if (!amount || amount <= 0 || participants.length === 0) {
       return;
@@ -36,7 +38,6 @@ export function SplitSelector({
     let newSplits: SplitRow[] = [];
 
     if (type === "equal") {
-      // Equal splits
       const shareAmount = amount / participants.length;
       newSplits = participants.map((participant: Participant) => ({
         userId: participant.id,
@@ -48,7 +49,6 @@ export function SplitSelector({
         paid: participant.id === paidByUserId,
       }));
     } else if (type === "percentage") {
-      // Initialize percentage splits evenly
       const evenPercentage = 100 / participants.length;
       newSplits = participants.map((participant: Participant) => ({
         userId: participant.id,
@@ -60,7 +60,6 @@ export function SplitSelector({
         paid: participant.id === paidByUserId,
       }));
     } else if (type === "exact") {
-      // Initialize exact splits evenly
       const evenAmount = amount / participants.length;
       newSplits = participants.map((participant: Participant) => ({
         userId: participant.id,
@@ -75,7 +74,6 @@ export function SplitSelector({
 
     setSplits(newSplits);
 
-    // Calculate totals
     const newTotalAmount = newSplits.reduce(
       (sum: number, split: SplitRow) => sum + split.amount,
       0
@@ -88,15 +86,12 @@ export function SplitSelector({
     setTotalAmount(newTotalAmount);
     setTotalPercentage(newTotalPercentage);
 
-    // Notify parent about the split changes
     if (onSplitsChange) {
       onSplitsChange(newSplits);
     }
   }, [type, amount, participants, paidByUserId, onSplitsChange]);
 
-  // Update the percentage splits - no automatic adjustment of other values
   const updatePercentageSplit = (userId: Id<"users">, newPercentage: number) => {
-    // Update just this user's percentage and recalculate amount
     const updatedSplits = splits.map((split) => {
       if (split.userId === userId) {
         return {
@@ -110,7 +105,6 @@ export function SplitSelector({
 
     setSplits(updatedSplits);
 
-    // Recalculate totals
     const newTotalAmount = updatedSplits.reduce(
       (sum: number, split: SplitRow) => sum + split.amount,
       0
@@ -123,17 +117,14 @@ export function SplitSelector({
     setTotalAmount(newTotalAmount);
     setTotalPercentage(newTotalPercentage);
 
-    // Notify parent about the split changes
     if (onSplitsChange) {
       onSplitsChange(updatedSplits);
     }
   };
 
-  // Update the exact amount splits - no automatic adjustment of other values
   const updateExactSplit = (userId: Id<"users">, newAmount: string) => {
     const parsedAmount = parseFloat(newAmount) || 0;
 
-    // Update just this user's amount and recalculate percentage
     const updatedSplits = splits.map((split) => {
       if (split.userId === userId) {
         return {
@@ -147,7 +138,6 @@ export function SplitSelector({
 
     setSplits(updatedSplits);
 
-    // Recalculate totals
     const newTotalAmount = updatedSplits.reduce(
       (sum: number, split: SplitRow) => sum + split.amount,
       0
@@ -160,13 +150,11 @@ export function SplitSelector({
     setTotalAmount(newTotalAmount);
     setTotalPercentage(newTotalPercentage);
 
-    // Notify parent about the split changes
     if (onSplitsChange) {
       onSplitsChange(updatedSplits);
     }
   };
 
-  // Check if totals are valid
   const isPercentageValid = Math.abs(totalPercentage - 100) < 0.01;
   const isAmountValid = Math.abs(totalAmount - amount) < 0.01;
 
@@ -183,7 +171,7 @@ export function SplitSelector({
               <AvatarFallback>{split.name?.charAt(0) || "?"}</AvatarFallback>
             </Avatar>
             <span className="text-sm">
-              {split.userId === user?.id ? "Sinä" : split.name}
+              {split.userId === user?.id ? tShared("you") : split.name}
             </span>
           </div>
 
@@ -233,7 +221,7 @@ export function SplitSelector({
                 <Input
                   type="number"
                   min="0"
-                  max={amount * 2} // Allow values even higher than total for flexibility
+                  max={amount * 2}
                   step="0.01"
                   value={split.amount.toFixed(2)}
                   onChange={(e) =>
@@ -250,9 +238,8 @@ export function SplitSelector({
         </div>
       ))}
 
-      {/* Total row */}
       <div className="flex justify-between border-t pt-3 mt-3">
-        <span className="font-medium">Yhteensä</span>
+        <span className="font-medium">{tShared("total")}</span>
         <div className="text-right">
           <span
             className={`font-medium ${!isAmountValid ? "text-amber-600" : ""}`}
@@ -269,17 +256,18 @@ export function SplitSelector({
         </div>
       </div>
 
-      {/* Validation warnings */}
       {type === "percentage" && !isPercentageValid && (
         <div className="text-sm text-amber-600 mt-2">
-          Prosenttien on oltava yhteensä 100 %.
+          {t("percentMustBe100")}
         </div>
       )}
 
       {type === "exact" && !isAmountValid && (
         <div className="text-sm text-amber-600 mt-2">
-          Jaettujen summien ({formatCurrency(totalAmount)}) on oltava yhtä suuri kuin
-          kokonaissumma ({formatCurrency(amount)}).
+          {t("exactMustMatchTotal", {
+            splitTotal: formatCurrency(totalAmount),
+            total: formatCurrency(amount),
+          })}
         </div>
       )}
     </div>

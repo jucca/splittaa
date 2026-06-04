@@ -4,8 +4,8 @@ import { useConvexQuery } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-
 import type { Id } from "@/convex/_generated/dataModel";
+import { useTranslations } from "next-intl";
 
 type GroupMember = {
   id: Id<"users">;
@@ -19,12 +19,14 @@ export function GroupMembers({
 }: {
   members: GroupMember[] | null | undefined;
 }) {
+  const t = useTranslations("groups");
+  const tShared = useTranslations("shared");
   const { data: currentUser } = useConvexQuery(api.users.me);
 
   if (!members || members.length === 0) {
     return (
       <div className="text-center py-4 text-muted-foreground">
-        Ryhmässä ei ole jäseniä
+        {t("noMembers")}
       </div>
     );
   }
@@ -45,17 +47,17 @@ export function GroupMembers({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">
-                    {isCurrentUser ? "Sinä" : member.name}
+                    {isCurrentUser ? tShared("you") : member.name}
                   </span>
                   {isCurrentUser && (
                     <Badge variant="outline" className="text-xs py-0 h-5">
-                      Sinä
+                      {tShared("youBadge")}
                     </Badge>
                   )}
                 </div>
                 {isAdmin && (
                   <span className="text-xs text-muted-foreground">
-                    Ylläpitäjä
+                    {tShared("admin")}
                   </span>
                 )}
               </div>

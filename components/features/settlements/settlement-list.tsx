@@ -3,12 +3,13 @@
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { format } from "date-fns";
-import { fi } from "date-fns/locale";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeftRight } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import type { Id } from "@/convex/_generated/dataModel";
+import { useTranslations } from "next-intl";
+import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
 
 export type SettlementListItem = {
   _id: Id<"settlements">;
@@ -28,13 +29,16 @@ export function SettlementList({
   isGroupSettlement?: boolean;
   userLookupMap?: Record<string, { name?: string }>;
 }) {
+  const t = useTranslations("settlements.list");
+  const tShared = useTranslations("shared");
+  const dateFnsLocale = useDateFnsLocale();
   const { data: currentUser } = useConvexQuery(api.users.me);
 
   if (!settlements || !settlements.length) {
     return (
       <Card>
         <CardContent className="py-8 text-center text-muted-foreground">
-          Tilityksiä ei löytynyt
+          {t("empty")}
         </CardContent>
       </Card>
     );
@@ -44,8 +48,8 @@ export function SettlementList({
     return {
       name:
         userId === currentUser?.id
-          ? "Sinä"
-          : userLookupMap[userId]?.name || "Muu käyttäjä",
+          ? tShared("you")
+          : userLookupMap[userId]?.name || tShared("otherUser"),
       imageUrl: null,
       id: userId,
     };
@@ -75,15 +79,18 @@ export function SettlementList({
                   <div>
                     <h3 className="font-medium">
                       {isCurrentUserPayer
-                        ? `Sinä maksoit käyttäjälle ${receiver.name}`
+                        ? t("youPaidReceiver", { name: receiver.name })
                         : isCurrentUserReceiver
-                          ? `${payer.name} maksoi sinulle`
-                          : `${payer.name} maksoi käyttäjälle ${receiver.name}`}
+                          ? t("payerPaidYou", { payer: payer.name })
+                          : t("payerPaidReceiver", {
+                              payer: payer.name,
+                              receiver: receiver.name,
+                            })}
                     </h3>
                     <div className="flex items-center text-sm text-muted-foreground gap-2">
                       <span>
                         {format(new Date(settlement.date), "d.M.yyyy", {
-                          locale: fi,
+                          locale: dateFnsLocale,
                         })}
                       </span>
                       {settlement.note && (
@@ -102,16 +109,20 @@ export function SettlementList({
                   </div>
                   {isGroupSettlement ? (
                     <Badge variant="outline" className="mt-1">
-                      Ryhmätilitys
+                      {t("groupSettlementBadge")}
                     </Badge>
                   ) : (
                     <div className="text-sm text-muted-foreground">
                       {isCurrentUserPayer ? (
-                        <span className="text-amber-600">Sinä maksoit</span>
+                        <span className="text-amber-600">
+                          {t("youPaidLabel")}
+                        </span>
                       ) : isCurrentUserReceiver ? (
-                        <span className="text-green-600">Sinä sait</span>
+                        <span className="text-green-600">
+                          {t("youReceivedLabel")}
+                        </span>
                       ) : (
-                        <span>Maksu</span>
+                        <span>{t("paymentLabel")}</span>
                       )}
                     </div>
                   )}

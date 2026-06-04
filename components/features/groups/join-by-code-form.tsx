@@ -10,8 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Hash } from "lucide-react";
 import { toast } from "sonner";
+import { useLocale, useTranslations } from "next-intl";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
 
 export function JoinByCodeForm() {
+  const t = useTranslations("dashboard");
+  const tShared = useTranslations("shared");
+  const locale = resolveLocale(useLocale());
   const [code, setCode] = useState("");
   const router = useRouter();
   const joinByCode = useConvexMutation(api.groupInvites.joinByCode);
@@ -24,14 +30,13 @@ export function JoinByCodeForm() {
     try {
       const result = await joinByCode.mutate({ displayCode: trimmed });
       if (result.alreadyMember) {
-        toast.info("Olet jo ryhmän jäsen");
+        toast.info(t("toastAlreadyMember"));
       } else {
-        toast.success("Liityit ryhmään!");
+        toast.success(t("toastJoinedGroup"));
       }
       router.push(`/groups/${result.groupId}`);
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error(message);
+      toast.error(getConvexErrorFromUnknown(error, locale));
     }
   };
 
@@ -40,18 +45,18 @@ export function JoinByCodeForm() {
       <CardHeader className="pb-2">
         <CardTitle className="text-lg flex items-center gap-2">
           <Hash className="h-5 w-5" />
-          Liity ryhmään koodilla
+          {t("joinByCodeTitle")}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <div className="flex-1 space-y-1">
             <Label htmlFor="join-code" className="sr-only">
-              Liittymiskoodi
+              {t("joinCodeLabel")}
             </Label>
             <Input
               id="join-code"
-              placeholder="Esim. ABCD2345"
+              placeholder={t("joinCodePlaceholder")}
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
               className="font-mono tracking-widest"
@@ -59,7 +64,7 @@ export function JoinByCodeForm() {
             />
           </div>
           <Button type="submit" disabled={joinByCode.isLoading || !code.trim()}>
-            {joinByCode.isLoading ? "Liitytään..." : "Liity"}
+            {joinByCode.isLoading ? tShared("joining") : t("joinButton")}
           </Button>
         </form>
       </CardContent>

@@ -3,16 +3,20 @@
 import { useConvexQuery, useConvexMutation } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { format } from "date-fns";
-import { fi } from "date-fns/locale";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { getCategoryById, getCategoryIcon } from "@/lib/expense-categories";
+import { getCategoryIcon } from "@/lib/expense-categories";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { formatCurrency } from "@/lib/utils";
 import type { Id } from "@/convex/_generated/dataModel";
+import { useLocale, useTranslations } from "next-intl";
+import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
+import { getCategoryLabel } from "@/lib/i18n/category-label";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
 
 type ExpenseSplitRow = {
   userId: Id<"users">;
@@ -43,6 +47,11 @@ export function ExpenseList({
   otherPersonId?: Id<"users"> | null;
   userLookupMap?: Record<string, { name?: string; imageUrl?: string | null }>;
 }) {
+  const t = useTranslations("expenses.list");
+  const tShared = useTranslations("shared");
+  const tCategories = useTranslations("categories");
+  const locale = resolveLocale(useLocale());
+  const dateFnsLocale = useDateFnsLocale();
   const { data: currentUser } = useConvexQuery(api.users.me);
   const deleteExpense = useConvexMutation(api.expenses.deleteExpense);
 
@@ -50,7 +59,7 @@ export function ExpenseList({
     return (
       <Card>
         <CardContent className="py-8 text-center text-muted-foreground">
-          Kuluja ei löytynyt
+          {t("empty")}
         </CardContent>
       </Card>
     );
@@ -60,8 +69,8 @@ export function ExpenseList({
     return {
       name:
         userId === currentUser?.id
-          ? "Sinä"
-          : userLookupMap[userId]?.name || "Muu käyttäjä",
+          ? tShared("you")
+          : userLookupMap[userId]?.name || tShared("otherUser"),
       imageUrl: userLookupMap[userId]?.imageUrl ?? undefined,
       id: userId,
     };
@@ -76,18 +85,19 @@ export function ExpenseList({
   };
 
   const handleDeleteExpense = async (expense: ExpenseListItem) => {
-    const confirmed = window.confirm(
-      "Haluatko varmasti poistaa tämän kulun? Toimintoa ei voi perua."
-    );
+    const confirmed = window.confirm(t("deleteConfirm"));
 
     if (!confirmed) return;
 
     try {
       await deleteExpense.mutate({ expenseId: expense._id });
-      toast.success("Kulu poistettu onnistuneesti");
+      toast.success(t("toastDeleted"));
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error("Kulun poisto epäonnistui: " + message);
+      toast.error(
+        t("toastDeleteFailed", {
+          message: getConvexErrorFromUnknown(error, locale),
+        })
+      );
     }
   };
 
@@ -96,8 +106,8 @@ export function ExpenseList({
       {expenses.map((expense: ExpenseListItem) => {
         const payer = getUserDetails(expense.paidByUserId);
         const isCurrentUserPayer = expense.paidByUserId === currentUser?.id;
-        const category = getCategoryById(expense.category ?? "other");
-        const CategoryIcon = getCategoryIcon(category.id);
+        const categoryId = expense.category ?? "other";
+        const CategoryIcon = getCategoryIcon(categoryId);
         const showDeleteOption = canDeleteExpense(expense);
 
         return (
@@ -117,18 +127,18 @@ export function ExpenseList({
                     <div className="flex items-center text-sm text-muted-foreground gap-2">
                       <span>
                         {format(new Date(expense.date), "d.M.yyyy", {
-                          locale: fi,
+                          locale: dateFnsLocale,
                         })}
                       </span>
                       <span>•</span>
-                      <span>{category.name}</span>
+                      <span>{getCategoryLabel(tCategories, categoryId)}</span>
                       {showOtherPerson && !isGroupExpense && (
                         <>
                           <span>•</span>
                           <span>
                             {isCurrentUserPayer
-                              ? "Sinä maksoit"
-                              : `${payer.name} maksoi`}
+                              ? t("youPaid")
+                              : t("userPaid", { name: payer.name })}
                           </span>
                         </>
                       )}
@@ -162,7 +172,7 @@ export function ExpenseList({
                     </div>
                     {isGroupExpense && (
                       <Badge variant="outline" className="mt-1">
-                        Ryhmäkulu
+                        {t("groupExpenseBadge")}
                       </Badge>
                     )}
                   </div>
@@ -173,7 +183,7 @@ export function ExpenseList({
                       variant="ghost"
                       size="icon"
                       onClick={() => handleDeleteExpense(expense)}
-                      aria-label="Poista kulu"
+                      aria-label={t("deleteAria")}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>

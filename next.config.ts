@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 import { convexHttpToWebSocketOrigin } from "./lib/config/convex-connect";
+
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const clerkDomain = process.env.CLERK_JWT_ISSUER_DOMAIN
   ? new URL(process.env.CLERK_JWT_ISSUER_DOMAIN).origin
@@ -46,4 +49,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

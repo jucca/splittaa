@@ -16,8 +16,11 @@ import { SettlementList } from "@/components/features/settlements/settlement-lis
 import { formatCurrency } from "@/lib/utils";
 import { SendDebtRequestButton } from "@/components/features/debt-requests/send-debt-request-button";
 import type { Id } from "@/convex/_generated/dataModel";
+import { useTranslations } from "next-intl";
 
 export default function PersonExpensesPage() {
+  const t = useTranslations("person");
+  const tShared = useTranslations("shared");
   const params = useParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("expenses");
@@ -50,7 +53,7 @@ export default function PersonExpensesPage() {
           onClick={() => router.back()}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Takaisin
+          {tShared("back")}
         </Button>
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
@@ -71,13 +74,13 @@ export default function PersonExpensesPage() {
             <Button asChild variant="outline">
               <Link href={`/settlements/user/${params.id}`}>
                 <ArrowLeftRight className="mr-2 h-4 w-4" />
-                Tasaa tilit
+                {t("settleUp")}
               </Link>
             </Button>
             <Button asChild>
               <Link href={`/expenses/new`}>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Lisää kulu
+                {t("addExpense")}
               </Link>
             </Button>
           </div>
@@ -86,22 +89,20 @@ export default function PersonExpensesPage() {
 
       <Card className="mb-6">
         <CardHeader className="pb-2">
-          <CardTitle className="text-xl">Saldo</CardTitle>
+          <CardTitle className="text-xl">{t("balanceTitle")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               {balance === 0 ? (
-                <p>Kaikki on tasoitettu</p>
+                <p>{t("allSettled")}</p>
               ) : balance > 0 ? (
                 <p>
-                  <span className="font-medium">{otherUser?.name}</span> on
-                  sinulle velkaa
+                  {t("theyOweYou", { name: otherUser?.name ?? "" })}
                 </p>
               ) : (
                 <p>
-                  Olet velkaa{" "}
-                  <span className="font-medium">{otherUser?.name}</span>lle
+                  {t("youOweThem", { name: otherUser?.name ?? "" })}
                 </p>
               )}
             </div>
@@ -131,10 +132,10 @@ export default function PersonExpensesPage() {
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="expenses">
-            Kulut ({expenses.length})
+            {t("tabsExpenses", { count: expenses.length })}
           </TabsTrigger>
           <TabsTrigger value="settlements">
-            Tilitykset ({settlements.length})
+            {t("tabsSettlements", { count: settlements.length })}
           </TabsTrigger>
         </TabsList>
 

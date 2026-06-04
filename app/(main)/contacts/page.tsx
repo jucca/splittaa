@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus, Users, User } from "lucide-react";
 import { CreateGroupModal } from "@/components/features/contacts/create-group-modal";
 import type { FunctionReturnType } from "convex/server";
+import { useTranslations } from "next-intl";
 
 type ContactsData = NonNullable<
   FunctionReturnType<typeof api.contacts.getAllContacts>
@@ -20,6 +21,8 @@ type ContactUser = ContactsData["users"][number];
 type ContactGroup = ContactsData["groups"][number];
 
 export default function ContactsPage() {
+  const t = useTranslations("contacts");
+  const tShared = useTranslations("shared");
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -52,10 +55,10 @@ export default function ContactsPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between mb-6">
-        <h1 className="text-5xl gradient-title">Yhteystiedot</h1>
+        <h1 className="text-5xl gradient-title">{t("title")}</h1>
         <Button onClick={() => setIsCreateGroupModalOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Luo ryhmä
+          {t("createGroup")}
         </Button>
       </div>
 
@@ -63,13 +66,12 @@ export default function ContactsPage() {
         <div>
           <h2 className="text-xl font-bold mb-4 flex items-center">
             <User className="mr-2 h-5 w-5" />
-            Henkilöt
+            {t("peopleSection")}
           </h2>
           {users.length === 0 ? (
             <Card>
               <CardContent className="py-6 text-center text-muted-foreground">
-                Ei yhteystietoja vielä. Lisää kulu jonkun kanssa nähdäksesi hänet
-                täällä.
+                {t("peopleEmpty")}
               </CardContent>
             </Card>
           ) : (
@@ -105,13 +107,12 @@ export default function ContactsPage() {
         <div>
           <h2 className="text-xl font-bold mb-4 flex items-center">
             <Users className="mr-2 h-5 w-5" />
-            Ryhmät
+            {t("groupsSection")}
           </h2>
           {groups.length === 0 ? (
             <Card>
               <CardContent className="py-6 text-center text-muted-foreground">
-                Ei ryhmiä vielä. Luo ryhmä aloittaaksesi yhteisten kulujen
-                seurannan.
+                {t("groupsEmpty")}
               </CardContent>
             </Card>
           ) : (
@@ -128,7 +129,9 @@ export default function ContactsPage() {
                           <div>
                             <p className="font-medium">{group.name}</p>
                             <p className="text-sm text-muted-foreground">
-                              {group.memberCount} jäsentä
+                              {tShared("membersCount", {
+                                count: group.memberCount,
+                              })}
                             </p>
                           </div>
                         </div>

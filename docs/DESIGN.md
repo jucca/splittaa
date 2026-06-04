@@ -14,12 +14,16 @@ Product and UX constraints for Splittaa. Agents implement features; humans judge
 
 ---
 
-## Finnish UI
+## Localization (i18n)
 
-- All **user-visible** strings: Finnish (labels, toasts, validation, `ConvexError` messages surfaced to UI).
+- **Framework:** [next-intl](https://next-intl.dev) with cookie `splittaa-locale` (no URL locale prefix).
+- **Registry:** `lib/i18n/locales.ts` — `SUPPORTED_LOCALES` is the single source for codes, labels, flags, date-fns, and Clerk localizations.
+- **MVP locales:** Finnish (default) and English.
+- **Adding a language:** add `messages/{code}.json`, one row in `SUPPORTED_LOCALES`, extend `AppLocale` / `convex/_lib/locales.ts`, run `npm run check:i18n`.
+- **UI copy:** `messages/*.json` + `useTranslations` / `getTranslations`; not hardcoded in components.
 - **Code and docs:** English (identifiers, comments, agent docs).
-- **Dates and numbers:** Finnish locale conventions where formatted (`fi-FI`).
-- **No i18n framework** in Phase 1 — single locale by convention, not translation files.
+- **Dates:** `useDateFnsLocale()` from the active locale.
+- **Header:** language switcher (flag) to the right of the theme toggle; lists all supported locales dynamically.
 
 ---
 
@@ -52,6 +56,6 @@ New UI should use semantic HTML and Radix primitives already in `components/ui/`
 
 - Integer-cents currency migration
 - Full design system in Figma sync
-- Additional locales beyond Finnish
+- Localized URL paths per locale
 
 See [design-docs/core-beliefs.md](design-docs/core-beliefs.md) for engineering golden rules.

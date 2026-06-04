@@ -12,10 +12,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
 import { toast } from "sonner";
+import { useLocale, useTranslations } from "next-intl";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
 
 const PENDING_JOIN_KEY = "splittaa_pending_join_token";
 
 export default function JoinGroupPage() {
+  const t = useTranslations("join");
+  const tShared = useTranslations("shared");
+  const locale = resolveLocale(useLocale());
   const params = useParams();
   const router = useRouter();
   const token = typeof params.token === "string" ? params.token : "";
@@ -40,11 +46,10 @@ export default function JoinGroupPage() {
     try {
       await declineInvite.mutate({ token });
       sessionStorage.removeItem(PENDING_JOIN_KEY);
-      toast.success("Kutsu hylätty");
+      toast.success(t("toastInviteDeclined"));
       router.push("/dashboard");
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error(message);
+      toast.error(getConvexErrorFromUnknown(error, locale));
     }
   };
 
@@ -54,7 +59,7 @@ export default function JoinGroupPage() {
   if (!token) {
     return (
       <div className="container mx-auto py-12 max-w-md text-center">
-        <p>Virheellinen kutsulinkki.</p>
+        <p>{t("invalidLink")}</p>
       </div>
     );
   }
@@ -70,9 +75,9 @@ export default function JoinGroupPage() {
   if (!preview) {
     return (
       <div className="container mx-auto py-12 max-w-md text-center">
-        <p>Kutsua ei löytynyt.</p>
+        <p>{t("inviteNotFound")}</p>
         <Button asChild className="mt-4">
-          <Link href="/">Etusivu</Link>
+          <Link href="/">{t("homeLink")}</Link>
         </Button>
       </div>
     );
@@ -83,15 +88,15 @@ export default function JoinGroupPage() {
       <div className="container mx-auto py-12 max-w-md">
         <Card>
           <CardHeader>
-            <CardTitle>Kutsu ei ole voimassa</CardTitle>
+            <CardTitle>{t("inviteInvalidTitle")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              Kutsu ryhmään {preview.groupName} on vanhentunut tai jo käsitelty.
+              {t("inviteInvalidBody", { groupName: preview.groupName })}
             </p>
             <Button asChild>
               <Link href={isSignedIn ? "/dashboard" : "/"}>
-                {isSignedIn ? "Siirry etusivulle" : "Takaisin"}
+                {isSignedIn ? t("goDashboard") : t("goBack")}
               </Link>
             </Button>
           </CardContent>
@@ -109,9 +114,9 @@ export default function JoinGroupPage() {
               <Users className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <CardTitle>Ryhmäkutsu</CardTitle>
+              <CardTitle>{t("groupInviteTitle")}</CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
-                {preview.inviterName} kutsui sinut
+                {t("invitedBy", { inviterName: preview.inviterName })}
               </p>
             </div>
           </div>
@@ -125,28 +130,28 @@ export default function JoinGroupPage() {
               </p>
             )}
             <p className="text-sm text-muted-foreground mt-2">
-              {preview.memberCount} jäsentä ryhmässä
+              {tShared("membersInGroup", { count: preview.memberCount })}
             </p>
           </div>
 
           {!isSignedIn ? (
             <div className="space-y-3">
-              <p className="text-sm">
-                Kirjaudu tai luo tili liittyäksesi ryhmään.
-              </p>
+              <p className="text-sm">{t("signInToJoin")}</p>
               <SignUpButton mode="modal" forceRedirectUrl={signUpRedirect}>
-                <Button className="w-full">Rekisteröidy ja liity</Button>
+                <Button className="w-full">{t("signUpAndJoin")}</Button>
               </SignUpButton>
               <SignInButton mode="modal" forceRedirectUrl={signInRedirect}>
                 <Button variant="outline" className="w-full">
-                  Kirjaudu sisään
+                  {t("signIn")}
                 </Button>
               </SignInButton>
             </div>
           ) : (
             <div className="space-y-3">
               {acceptInvite.isLoading ? (
-                <p className="text-sm text-muted-foreground">Liitytään ryhmään…</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("joiningGroup")}
+                </p>
               ) : (
                 <>
                   <Button
@@ -156,7 +161,7 @@ export default function JoinGroupPage() {
                       router.push(`/groups/${result.groupId}`);
                     }}
                   >
-                    Hyväksy kutsu
+                    {t("acceptInvite")}
                   </Button>
                   {preview.kind === "direct" && (
                     <Button
@@ -165,7 +170,7 @@ export default function JoinGroupPage() {
                       onClick={handleDecline}
                       disabled={declineInvite.isLoading}
                     >
-                      Hylkää kutsu
+                      {t("declineInvite")}
                     </Button>
                   )}
                 </>

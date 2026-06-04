@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useUser } from "@clerk/nextjs";
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
@@ -21,9 +20,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
 import type { Participant } from "@/lib/types/domain";
 import type { Id } from "@/convex/_generated/dataModel";
+import { useTranslations } from "next-intl";
 
 export function ParticipantSelector({
   participants,
@@ -32,32 +31,28 @@ export function ParticipantSelector({
   participants: Participant[];
   onParticipantsChange: (participants: Participant[]) => void;
 }) {
+  const t = useTranslations("expenses.participantSelector");
+  const tShared = useTranslations("shared");
   const { data: currentUser } = useConvexQuery(api.users.me);
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Search for users
   const { data: searchResults, isLoading } = useConvexQuery(
     api.users.searchUsers,
     { query: searchQuery }
   );
 
-  // Add a participant
   const addParticipant = (user: Participant) => {
-    // Check if already added
     if (participants.some((p: Participant) => p.id === user.id)) {
       return;
     }
 
-    // Add to list
     onParticipantsChange([...participants, user]);
     setOpen(false);
     setSearchQuery("");
   };
 
-  // Remove a participant
   const removeParticipant = (userId: Id<"users">) => {
-    // Don't allow removing yourself
     if (currentUser && userId === currentUser.id) {
       return;
     }
@@ -82,7 +77,7 @@ export function ParticipantSelector({
             </Avatar>
             <span>
               {participant.id === currentUser?.id
-                ? "Sinä"
+                ? tShared("you")
                 : participant.name || participant.email}
             </span>
             {participant.id !== currentUser?.id && (
@@ -107,13 +102,13 @@ export function ParticipantSelector({
                 type="button"
               >
                 <UserPlus className="h-3.5 w-3.5" />
-                Lisää henkilö
+                {t("addPerson")}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0" align="start">
               <Command>
                 <CommandInput
-                  placeholder="Hae nimellä tai sähköpostilla..."
+                  placeholder={t("searchPlaceholder")}
                   value={searchQuery}
                   onValueChange={setSearchQuery}
                 />
@@ -121,19 +116,19 @@ export function ParticipantSelector({
                   <CommandEmpty>
                     {searchQuery.length < 2 ? (
                       <p className="py-3 px-4 text-sm text-center text-muted-foreground">
-                            Kirjoita vähintään 2 merkkiä hakeaksesi
-                          </p>
-                        ) : isLoading ? (
-                          <p className="py-3 px-4 text-sm text-center text-muted-foreground">
-                            Haetaan...
-                          </p>
-                        ) : (
-                          <p className="py-3 px-4 text-sm text-center text-muted-foreground">
-                            Käyttäjiä ei löytynyt
+                        {t("searchMinChars")}
+                      </p>
+                    ) : isLoading ? (
+                      <p className="py-3 px-4 text-sm text-center text-muted-foreground">
+                        {tShared("searching")}
+                      </p>
+                    ) : (
+                      <p className="py-3 px-4 text-sm text-center text-muted-foreground">
+                        {t("noUsersFound")}
                       </p>
                     )}
                   </CommandEmpty>
-                      <CommandGroup heading="Käyttäjät">
+                  <CommandGroup heading={t("usersHeading")}>
                     {searchResults?.map((user: Participant) => (
                       <CommandItem
                         key={user.id}

@@ -12,9 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import type { Participant } from "@/lib/types/domain";
 import type { Id } from "@/convex/_generated/dataModel";
+import { useTranslations } from "next-intl";
 
 type SelectedGroup = {
   id: Id<"groups">;
@@ -27,15 +27,15 @@ export function GroupSelector({
 }: {
   onChange?: (group: SelectedGroup) => void;
 }) {
+  const t = useTranslations("groups");
+  const tShared = useTranslations("shared");
   const [selectedGroupId, setSelectedGroupId] = useState("");
 
-  // Single query to get all data we need
   const { data, isLoading } = useConvexQuery(
     api.groups.getGroupOrMembers,
     selectedGroupId ? { groupId: selectedGroupId } : {}
   );
 
-  // When group data changes, notify parent
   useEffect(() => {
     if (data?.selectedGroup && onChange) {
       onChange(data.selectedGroup);
@@ -53,7 +53,7 @@ export function GroupSelector({
   if (!data?.groups || data.groups.length === 0) {
     return (
       <div className="text-sm text-amber-600 p-2 bg-amber-50 rounded-md">
-        Sinun täytyy luoda ryhmä ennen ryhmäkulun lisäämistä.
+        {t("createGroupNeedGroup")}
       </div>
     );
   }
@@ -62,7 +62,7 @@ export function GroupSelector({
     <div>
       <Select value={selectedGroupId} onValueChange={handleGroupChange}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Valitse ryhmä" />
+          <SelectValue placeholder={t("selectGroupPlaceholder")} />
         </SelectTrigger>
         <SelectContent>
           {data.groups.map(
@@ -74,7 +74,7 @@ export function GroupSelector({
                 </div>
                 <span>{group.name}</span>
                 <span className="text-xs text-muted-foreground">
-                  ({group.memberCount ?? 0} jäsentä)
+                  ({tShared("membersCount", { count: group.memberCount ?? 0 })})
                 </span>
               </div>
             </SelectItem>

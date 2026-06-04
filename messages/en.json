@@ -1,0 +1,502 @@
+{
+  "meta": {
+    "appTitle": "Splittaa",
+    "appDescription": "The easiest way to split expenses with friends"
+  },
+  "language": {
+    "switch": "Change language",
+    "current": "Current language: {locale}"
+  },
+  "nav": {
+    "logoAlt": "Splittaa",
+    "features": "Features",
+    "howItWorks": "How it works",
+    "dashboard": "Dashboard",
+    "inbox": "Inbox",
+    "inboxWithCount": "Inbox ({count})",
+    "activity": "Activity",
+    "settings": "Settings",
+    "signIn": "Sign in",
+    "getStarted": "Get started"
+  },
+  "theme": {
+    "toggleAria": "Dark mode",
+    "toggleSr": "Dark mode"
+  },
+  "shared": {
+    "you": "You",
+    "back": "Back",
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "creating": "Creating...",
+    "joining": "Joining...",
+    "recording": "Recording...",
+    "sending": "Sending...",
+    "searching": "Searching...",
+    "done": "Done",
+    "otherUser": "Other user",
+    "unknownUser": "Unknown user",
+    "showAll": "Show all",
+    "membersCount": "{count} members",
+    "membersInGroup": "{count} members in group",
+    "peopleCountFrom": "from {count} people",
+    "peopleCountTo": "to {count} people",
+    "optional": "(optional)",
+    "total": "Total",
+    "sumLabel": "Amount",
+    "consumptionLabel": "Spending",
+    "expenseSingular": "expense",
+    "expensePlural": "expenses",
+    "group": "Group",
+    "person": "Person",
+    "expenseKind": "Expense",
+    "settlementKind": "Settlement",
+    "newBadge": "New",
+    "admin": "Admin",
+    "youBadge": "You",
+    "youParenthetical": "(you)",
+    "daysOption": "{count} days",
+    "close": "Close"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Split expenses. Simplify life.",
+      "title": "The easiest way to split expenses with friends",
+      "subtitle": "Track shared expenses, split bills effortlessly, and settle up quickly. Stop worrying about who owes whom.",
+      "ctaStart": "Get started",
+      "ctaHowItWorks": "See how it works",
+      "heroImageAlt": "Splittaa app preview"
+    },
+    "featuresSection": {
+      "badge": "Features",
+      "title": "Everything you need to split expenses",
+      "subtitle": "Our platform gives you all the tools to manage shared expenses easily.",
+      "groupExpenses": {
+        "title": "Group expenses",
+        "description": "Create groups for roommates, trips, or events and keep spending organized."
+      },
+      "smartSettlements": {
+        "title": "Smart settlements",
+        "description": "Our algorithm minimizes the number of payments needed to settle up."
+      },
+      "spendingAnalysis": {
+        "title": "Spending insights",
+        "description": "Track spending habits and discover insights from your shared expenses."
+      },
+      "paymentReminders": {
+        "title": "Payment reminders",
+        "description": "Automatic reminders for open balances and spending insights."
+      },
+      "splitMethods": {
+        "title": "Multiple split methods",
+        "description": "Split equally, by percentage, or exact amounts — fits any situation."
+      },
+      "realtimeUpdates": {
+        "title": "Real-time updates",
+        "description": "See new expenses and payments as soon as friends add them."
+      }
+    },
+    "howItWorksSection": {
+      "badge": "How it works",
+      "title": "Splitting expenses has never been this easy",
+      "subtitle": "Follow these simple steps to start tracking and sharing expenses with friends.",
+      "step1": {
+        "title": "Create or join a group",
+        "description": "Start a group for roommates, a trip, or an event and invite friends."
+      },
+      "step2": {
+        "title": "Add expenses",
+        "description": "Record who paid and how the bill is split among members."
+      },
+      "step3": {
+        "title": "Settle up",
+        "description": "See who owes whom and record payments when debts are cleared."
+      }
+    },
+    "testimonialsSection": {
+      "badge": "Testimonials",
+      "title": "What our users say",
+      "annikki": {
+        "quote": "Splittaan avulla en enää mene sekaisin siitä, kuka maksoi mitäkin!",
+        "role": "Vuokra-asuntojen hoitaja"
+      },
+      "luigi": {
+        "quote": "Splittaan avulla pidän tarkkaa kirjaa saatavistani. Se päihittää jopa parhaat muistutussovellukset!",
+        "role": "Talous- ja velkaneuvoja"
+      },
+      "antti": {
+        "quote": "Jos minulla olisi ollut Splittaa aiemmin, Luigi ei olisi päässyt myymään kenkiäni ja takkiani! Lisään velan heti listalle.",
+        "role": "Ohjelmistokehittäjä / Mindfulness-valmentaja"
+      }
+    },
+    "ctaSection": {
+      "title": "Ready to simplify expense splitting?",
+      "subtitle": "Join thousands of users who made splitting expenses stress-free.",
+      "button": "Get started"
+    },
+    "footer": {
+      "copyright": "© {year} Splittaa. All rights reserved."
+    }
+  },
+  "join": {
+    "invalidLink": "Invalid invite link.",
+    "inviteNotFound": "Invite not found.",
+    "homeLink": "Dashboard",
+    "inviteInvalidTitle": "Invite is not valid",
+    "inviteInvalidBody": "The invite to {groupName} has expired or was already handled.",
+    "goDashboard": "Go to dashboard",
+    "goBack": "Back",
+    "groupInviteTitle": "Group invite",
+    "invitedBy": "{inviterName} invited you",
+    "signInToJoin": "Sign in or create an account to join the group.",
+    "signUpAndJoin": "Sign up and join",
+    "signIn": "Sign in",
+    "joiningGroup": "Joining group…",
+    "acceptInvite": "Accept invite",
+    "declineInvite": "Decline invite",
+    "toastInviteDeclined": "Invite declined"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "addExpense": "Add expense",
+    "totalBalance": "Total balance",
+    "balanceOwedToYou": "You are owed",
+    "balanceYouOwe": "You owe",
+    "balanceSettled": "All settled!",
+    "balanceNotOwingAnyone": "You don't owe anyone",
+    "balanceSummaryTitle": "Balance details",
+    "yourGroupsTitle": "Your groups",
+    "createNewGroup": "Create new group",
+    "pendingInvitesTitle": "Group invites ({count})",
+    "inviterLabel": "Invited by: {name}",
+    "openInvite": "Open invite",
+    "joinByCodeTitle": "Join group with code",
+    "joinCodeLabel": "Join code",
+    "joinCodePlaceholder": "e.g. ABCD2345",
+    "joinButton": "Join",
+    "expenseSummaryTitle": "Expense summary",
+    "totalThisMonth": "Total this month",
+    "totalThisYear": "Total this year",
+    "monthlySpendingCaption": "Monthly spending in {year}",
+    "monthShort": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr",
+      "may": "May",
+      "jun": "Jun",
+      "jul": "Jul",
+      "aug": "Aug",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "December"
+    },
+    "groupListEmpty": "No groups yet",
+    "groupListEmptyHint": "Create a group to start tracking shared expenses",
+    "balanceAllSettled": "Everything is settled!",
+    "toastAlreadyMember": "You are already a group member",
+    "toastJoinedGroup": "You joined the group!"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "createGroup": "Create group",
+    "peopleSection": "People",
+    "peopleEmpty": "No contacts yet. Add an expense with someone to see them here.",
+    "groupsSection": "Groups",
+    "groupsEmpty": "No groups yet. Create a group to start tracking shared expenses."
+  },
+  "groups": {
+    "settleUp": "Settle up",
+    "addExpense": "Add expense",
+    "groupBalancesTitle": "Group balances",
+    "membersTitle": "Members",
+    "tabsExpenses": "Expenses ({count})",
+    "tabsSettlements": "Settlements ({count})",
+    "balancesUnavailable": "Balance data unavailable",
+    "notMember": "You are not a member of this group",
+    "yourBalance": "Your balance",
+    "allSettledInGroup": "All settled",
+    "everyoneSettled": "Everyone is settled up!",
+    "theyOweYou": "They owe you {amount}",
+    "youOweThem": "You owe {amount}",
+    "settled": "Settled",
+    "noMembers": "No members in this group",
+    "invitesTitle": "Invites and joining",
+    "shareInviteHint": "Share a link or code so others can join the group. Valid until {expiresDate}.",
+    "qrAlt": "QR code to join the group",
+    "joinLinkLabel": "Join link",
+    "joinCodeLabel": "Join code",
+    "copyLinkAria": "Copy link",
+    "copyCodeAria": "Copy code",
+    "pendingInvites": "Pending invites",
+    "revokeInviteAria": "Revoke invite",
+    "revokeInvite": "Revoke",
+    "toastLinkCopied": "Link copied",
+    "toastCodeCopied": "Code copied",
+    "toastCopyFailed": "Copy failed",
+    "toastInviteRevoked": "Invite revoked",
+    "toastRevokeFailed": "Failed to revoke invite: {message}",
+    "createGroupNeedGroup": "You must create a group before adding a group expense.",
+    "selectGroupPlaceholder": "Select group",
+    "selectGroupToContinue": "Select a group to continue"
+  },
+  "person": {
+    "settleUp": "Settle up",
+    "addExpense": "Add expense",
+    "balanceTitle": "Balance",
+    "allSettled": "All settled",
+    "theyOweYou": "{name} owes you",
+    "youOweThem": "You owe {name}",
+    "tabsExpenses": "Expenses ({count})",
+    "tabsSettlements": "Settlements ({count})"
+  },
+  "expenses": {
+    "newPageTitle": "Add new expense",
+    "newPageSubtitle": "Record a new expense and share it with others",
+    "tabIndividual": "Personal expense",
+    "tabGroup": "Group expense",
+    "form": {
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Lunch, movie tickets, etc.",
+      "amountLabel": "Amount",
+      "categoryLabel": "Category",
+      "dateLabel": "Date",
+      "datePlaceholder": "Select date",
+      "groupLabel": "Group",
+      "participantsLabel": "Participants",
+      "addParticipantMin": "Add at least one other participant",
+      "payerLabel": "Payer",
+      "payerPlaceholder": "Select payer",
+      "splitTypeLabel": "Split method",
+      "splitEqual": "Equally",
+      "splitPercentage": "Percentages",
+      "splitExact": "Exact amounts",
+      "splitEqualHint": "Split equally among all participants",
+      "splitPercentageHint": "Split by percentage",
+      "splitExactHint": "Enter exact amounts",
+      "submit": "Create expense",
+      "splitsMismatch": "Split amounts do not match the total. Check your splits.",
+      "percentMustBe100": "Percentages must add up to 100%.",
+      "exactMustMatchTotal": "Split amounts ({splitTotal}) must equal the total ({total}).",
+      "validationDescriptionRequired": "Description is required",
+      "validationAmountRequired": "Amount is required",
+      "validationAmountPositive": "Amount must be a positive number",
+      "validationPayerRequired": "Payer is required",
+      "toastCreated": "Expense created successfully!",
+      "toastCreateFailed": "Failed to create expense: {message}"
+    },
+    "list": {
+      "empty": "No expenses found",
+      "youPaid": "You paid",
+      "userPaid": "{name} paid",
+      "groupExpenseBadge": "Group expense",
+      "deleteAria": "Delete expense",
+      "deleteConfirm": "Delete this expense? This cannot be undone.",
+      "toastDeleted": "Expense deleted successfully",
+      "toastDeleteFailed": "Failed to delete expense: {message}"
+    },
+    "participantSelector": {
+      "addPerson": "Add person",
+      "searchPlaceholder": "Search by name or email...",
+      "searchMinChars": "Type at least 2 characters to search",
+      "noUsersFound": "No users found",
+      "usersHeading": "Users"
+    },
+    "categorySelector": {
+      "noCategories": "No categories available",
+      "placeholder": "Select category"
+    }
+  },
+  "categories": {
+    "foodDrink": "Food & drink",
+    "coffee": "Coffee",
+    "groceries": "Groceries",
+    "shopping": "Shopping",
+    "travel": "Travel",
+    "transportation": "Transport",
+    "housing": "Housing",
+    "entertainment": "Entertainment",
+    "tickets": "Tickets",
+    "utilities": "Utilities",
+    "water": "Water",
+    "education": "Education",
+    "health": "Health",
+    "personal": "Personal",
+    "gifts": "Gifts",
+    "technology": "Technology",
+    "bills": "Bills & fees",
+    "baby": "Babies & kids",
+    "music": "Music",
+    "books": "Books",
+    "other": "Other",
+    "general": "General expense"
+  },
+  "settlements": {
+    "pageTitle": "Record settlement",
+    "subtitleUser": "Settlement with {name}",
+    "subtitleGroup": "Settlement in {groupName}",
+    "form": {
+      "currentBalance": "Current balance",
+      "allSettledWithUser": "All settled with {name}",
+      "theyOweYou": "{name} owes you",
+      "youOweThem": "You owe {name}",
+      "whoPaid": "Who paid?",
+      "youPaidUser": "You paid {name}",
+      "userPaidYou": "{name} paid you",
+      "youPaidMember": "You paid {name}",
+      "memberPaidYou": "{name} paid you",
+      "amountLabel": "Amount",
+      "noteLabel": "Note (optional)",
+      "notePlaceholder": "Dinner, rent, etc.",
+      "submit": "Record settlement",
+      "selectMember": "Who are you settling with?",
+      "selectMemberWarning": "Select the member you are settling with",
+      "validationAmountRequired": "Amount is required",
+      "validationAmountPositive": "Amount must be a positive number",
+      "toastSuccess": "Settlement recorded successfully!",
+      "toastFailed": "Failed to record settlement: {message}",
+      "toastSelectMember": "Select a group member to settle with",
+      "toastMemberNotFound": "Selected user was not found in the group"
+    },
+    "list": {
+      "empty": "No settlements found",
+      "youPaidReceiver": "You paid {name}",
+      "payerPaidYou": "{payer} paid you",
+      "payerPaidReceiver": "{payer} paid {receiver}",
+      "groupSettlementBadge": "Group settlement",
+      "youPaidLabel": "You paid",
+      "youReceivedLabel": "You received",
+      "paymentLabel": "Payment"
+    }
+  },
+  "activity": {
+    "pageTitle": "Activity",
+    "pageSubtitle": "Spending summary and recent events — only your share in charts.",
+    "recentEventsTitle": "Recent events",
+    "feedAria": "Recent activity",
+    "feedEmpty": "No recent activity. Add an expense or settlement to see it here.",
+    "charts": {
+      "title": "Spending summary",
+      "periodWeek": "Week",
+      "periodMonth": "Month",
+      "periodYear": "Year",
+      "periodCaption": "{period} — only your share of expenses",
+      "totalLabel": "Total",
+      "noExpensesInPeriod": "No expenses in the selected period",
+      "spendingOverTime": "Spending over time",
+      "categories": "Categories",
+      "captionMonth": "{month} {year} — each day",
+      "captionYear": "Year {year}",
+      "captionWeek": "Current week (Mon–Sun)",
+      "monthLong": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
+      },
+      "dayTooltip": "{day} {month} {year}"
+    }
+  },
+  "inbox": {
+    "pageTitle": "Inbox",
+    "pageSubtitle": "Inbox: group invites, balance reminders, and other notifications.",
+    "empty": "No messages. Group invites and balance reminders appear here.",
+    "markAllRead": "Mark all as read",
+    "markRead": "Mark as read",
+    "toastAllMarkedRead": "All messages marked as read",
+    "actions": {
+      "openInvite": "Open invite",
+      "viewBalance": "View balance",
+      "openDashboard": "Open dashboard",
+      "openSettlement": "Open settlement",
+      "markPaid": "Mark as paid",
+      "markedPaid": "Marked as paid",
+      "toastMarkedPaid": "Payment recorded ({amount}). {creditorName} will be notified.",
+      "toastRecordFailed": "Recording failed"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Adjust email reminders for open balances.",
+    "remindersCardTitle": "Balance reminders",
+    "remindersEnabled": "Reminders enabled",
+    "remindersEnabledHint": "We email only at the chosen interval while a balance remains open.",
+    "remindMeLabel": "Remind me",
+    "minAgeLabel": "Balance must be open for at least",
+    "minAgeHint": "Short-term balances are not reminded — only long-open ones.",
+    "notifyWhenIOwe": "When I owe someone",
+    "notifyWhenIOweHint": "Reminder for your unpaid debts.",
+    "notifyWhenOwed": "When someone owes me",
+    "notifyWhenOwedHint": "Reminder for money owed to you.",
+    "lastSent": "Last reminder sent: {datetime}",
+    "toastSelectReminderType": "Select at least one reminder type",
+    "toastSaved": "Settings saved",
+    "toastSaveFailed": "Save failed: {message}"
+  },
+  "contactsModal": {
+    "createTitle": "Create new group",
+    "createdTitle": "Group created",
+    "nameLabel": "Group name",
+    "namePlaceholder": "Enter group name",
+    "descriptionLabel": "Kuvaus (valinnainen)",
+    "descriptionPlaceholder": "Enter group description",
+    "inviteMembersLabel": "Invite members (optional)",
+    "inviteMembersHint": "Invitees get a link to accept or decline. You can also share a join code or QR after creation.",
+    "addInvitee": "Add invitee",
+    "createButton": "Create group",
+    "invitesSentHint": "Invites were emailed and appear in the app for invitees.",
+    "validationNameRequired": "Group name is required",
+    "toastCreatedWithInvites": "Group created! {count} invite(s) sent.",
+    "toastCreated": "Group created successfully!",
+    "toastCreateFailed": "Failed to create group: {message}"
+  },
+  "debtRequests": {
+    "sendButton": "Send debt request",
+    "dialogTitle": "Debt request",
+    "dialogDescription": "Send a request to {debtorName} ({amount}, {context}). They get an in-app message and email if available. This does not replace automatic balance reminders.",
+    "contextGroup": "in group {groupName}",
+    "contextPersonal": "in a personal split",
+    "messageLabel": "Viesti (valinnainen)",
+    "messagePlaceholder": "e.g. Please pay your share of the weekend trip",
+    "sendRequest": "Send request",
+    "toastSent": "Debt request sent to {debtorName}",
+    "toastSendFailed": "Send failed"
+  },
+  "errors": {
+    "FORBIDDEN": "You do not have permission for this action",
+    "NOT_FOUND": "Not found",
+    "UNAUTHORIZED": "Sign-in required",
+    "INVALID_INPUT": "Invalid input",
+    "generic": "Something went wrong: {message}",
+    "unknown": "Unknown error"
+  },
+  "notifications": {
+    "group_invite": {
+      "title": "Group invite",
+      "body": "You were invited to {groupName}"
+    },
+    "balance_reminder": {
+      "title": "Balance reminder",
+      "body": "You have an open balance: {summary}"
+    },
+    "debt_request": {
+      "title": "Debt request",
+      "body": "{creditorName} asks you to pay {amount}"
+    },
+    "debt_request_paid": {
+      "title": "Debt paid",
+      "body": "{debtorName} marked the debt as paid ({amount})"
+    }
+  }
+}

@@ -1,20 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { Users } from "lucide-react";
 import { formatSignedCurrency } from "@/lib/utils";
-
 import type { DashboardGroup } from "@/lib/types/domain";
+import { useTranslations } from "next-intl";
 
 export function GroupList({
   groups,
 }: {
   groups: DashboardGroup[] | null | undefined;
 }) {
+  const t = useTranslations("dashboard");
+  const tShared = useTranslations("shared");
+
   if (!groups || groups.length === 0) {
     return (
       <div className="text-center py-6">
-        <p className="text-muted-foreground">Ei ryhmiä vielä</p>
+        <p className="text-muted-foreground">{t("groupListEmpty")}</p>
         <p className="text-sm text-muted-foreground mt-1">
-          Luo ryhmä aloittaaksesi yhteisten kulujen seurannan
+          {t("groupListEmptyHint")}
         </p>
       </div>
     );
@@ -39,7 +44,7 @@ export function GroupList({
               <div>
                 <p className="font-medium">{group.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  {group.members.length} jäsentä
+                  {tShared("membersCount", { count: group.members.length })}
                 </p>
               </div>
             </div>

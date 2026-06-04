@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { format } from "date-fns";
-import { fi } from "date-fns/locale";
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,12 +15,17 @@ import {
   ChevronRight,
 } from "lucide-react";
 import type { FunctionReturnType } from "convex/server";
+import { useTranslations } from "next-intl";
+import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
 
 type ActivityEntry = FunctionReturnType<
   typeof api.activity.getRecentActivity
 >[number];
 
 export function ActivityFeed() {
+  const t = useTranslations("activity");
+  const tShared = useTranslations("shared");
+  const dateFnsLocale = useDateFnsLocale();
   const { data: items, isLoading } = useConvexQuery(
     api.activity.getRecentActivity,
     { limit: 50 }
@@ -29,7 +33,9 @@ export function ActivityFeed() {
 
   if (isLoading) {
     return (
-      <p className="text-center text-muted-foreground py-12">Ladataan…</p>
+      <p className="text-center text-muted-foreground py-12">
+        {tShared("loading")}
+      </p>
     );
   }
 
@@ -37,29 +43,35 @@ export function ActivityFeed() {
     return (
       <Card>
         <CardContent className="py-12 text-center text-muted-foreground">
-          Ei viimeaikaista toimintaa. Lisää kulu tai tilitys nähdäksesi ne
-          täällä.
+          {t("feedEmpty")}
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <ul className="flex flex-col gap-3" aria-label="Viimeaikainen toiminta">
+    <ul className="flex flex-col gap-3" aria-label={t("feedAria")}>
       {items.map((item: ActivityEntry) => (
         <li key={item.id}>
-          <ActivityRow item={item} />
+          <ActivityRow item={item} dateFnsLocale={dateFnsLocale} />
         </li>
       ))}
     </ul>
   );
 }
 
-function ActivityRow({ item }: { item: ActivityEntry }) {
+function ActivityRow({
+  item,
+  dateFnsLocale,
+}: {
+  item: ActivityEntry;
+  dateFnsLocale: ReturnType<typeof useDateFnsLocale>;
+}) {
+  const tShared = useTranslations("shared");
   const Icon = item.kind === "settlement" ? ArrowLeftRight : Receipt;
   const ContextIcon = item.contextType === "group" ? Users : User;
   const dateLabel = format(new Date(item.date), "d.M.yyyy 'klo' HH:mm", {
-    locale: fi,
+    locale: dateFnsLocale,
   });
 
   return (
@@ -81,10 +93,14 @@ function ActivityRow({ item }: { item: ActivityEntry }) {
                   <span>•</span>
                   <span className="inline-flex items-center gap-1">
                     <ContextIcon className="h-3 w-3" />
-                    {item.contextType === "group" ? "Ryhmä" : "Henkilö"}
+                    {item.contextType === "group"
+                      ? tShared("group")
+                      : tShared("person")}
                   </span>
                   <Badge variant="outline" className="text-xs">
-                    {item.kind === "expense" ? "Kulu" : "Tilitys"}
+                    {item.kind === "expense"
+                      ? tShared("expenseKind")
+                      : tShared("settlementKind")}
                   </Badge>
                 </div>
               </div>

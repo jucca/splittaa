@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -17,7 +17,6 @@ import { CategorySelector } from "./category-selector";
 import { SplitSelector } from "./split-selector";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { fi } from "date-fns/locale";
 import {
   Popover,
   PopoverContent,
@@ -28,23 +27,20 @@ import { CalendarIcon } from "lucide-react";
 import { getAllCategories } from "@/lib/expense-categories";
 import type { Participant, SplitRow, SplitType } from "@/lib/types/domain";
 import type { Id } from "@/convex/_generated/dataModel";
+import { useLocale, useTranslations } from "next-intl";
+import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
 
-const expenseSchema = z.object({
-  description: z.string().min(1, "Kuvaus on pakollinen"),
-  amount: z
-    .string()
-    .min(1, "Summa on pakollinen")
-    .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
-      message: "Summan on oltava positiivinen luku",
-    }),
-  category: z.string().optional(),
-  date: z.date(),
-  paidByUserId: z.string().min(1, "Maksaja on pakollinen"),
-  splitType: z.enum(["equal", "percentage", "exact"]),
-  groupId: z.string().optional(),
-});
-
-type ExpenseFormValues = z.infer<typeof expenseSchema>;
+type ExpenseFormValues = {
+  description: string;
+  amount: string;
+  category?: string;
+  date: Date;
+  paidByUserId: string;
+  splitType: SplitType;
+  groupId?: string;
+};
 
 export function ExpenseForm({
   type = "individual",
@@ -53,6 +49,31 @@ export function ExpenseForm({
   type?: "individual" | "group";
   onSuccess?: (id?: Id<"users"> | Id<"groups">) => void;
 }) {
+  const t = useTranslations("expenses.form");
+  const tGroups = useTranslations("groups");
+  const tShared = useTranslations("shared");
+  const locale = resolveLocale(useLocale());
+  const dateFnsLocale = useDateFnsLocale();
+
+  const expenseSchema = useMemo(
+    () =>
+      z.object({
+        description: z.string().min(1, t("validationDescriptionRequired")),
+        amount: z
+          .string()
+          .min(1, t("validationAmountRequired"))
+          .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
+            message: t("validationAmountPositive"),
+          }),
+        category: z.string().optional(),
+        date: z.date(),
+        paidByUserId: z.string().min(1, t("validationPayerRequired")),
+        splitType: z.enum(["equal", "percentage", "exact"]),
+        groupId: z.string().optional(),
+      }),
+    [t]
+  );
+
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedGroup, setSelectedGroup] = useState<{
@@ -73,7 +94,7 @@ export function ExpenseForm({
     watch,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<ExpenseFormValues>({
     resolver: zodResolver(expenseSchema),
     defaultValues: {
       description: "",
@@ -118,9 +139,7 @@ export function ExpenseForm({
       const tolerance = 0.01;
 
       if (Math.abs(totalSplitAmount - amount) > tolerance) {
-        toast.error(
-          "Jaetut summat eivät täsmää kokonaissummaan. Tarkista jaot."
-        );
+        toast.error(t("splitsMismatch"));
         return;
       }
 
@@ -140,11 +159,11 @@ export function ExpenseForm({
         groupId,
       });
 
-      toast.success("Kulu luotu onnistuneesti!");
+      toast.success(t("toastCreated"));
       reset();
 
       const otherParticipant = participants.find(
-        (p) => p.id !== currentUser.id
+        (p) => p.id !== currentUser?.id
       );
       const otherUserId = otherParticipant?.id;
 
@@ -156,8 +175,11 @@ export function ExpenseForm({
         }
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error("Kulun luonti epäonnistui: " + message);
+      toast.error(
+        t("toastCreateFailed", {
+          message: getConvexErrorFromUnknown(error, locale),
+        })
+      );
     }
   };
 
@@ -168,10 +190,10 @@ export function ExpenseForm({
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="description">Kuvaus</Label>
+            <Label htmlFor="description">{t("descriptionLabel")}</Label>
             <Input
               id="description"
-              placeholder="Lounas, elokuvaliput jne."
+              placeholder={t("descriptionPlaceholder")}
               {...register("description")}
             />
             {errors.description && (
@@ -182,7 +204,7 @@ export function ExpenseForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="amount">Summa</Label>
+            <Label htmlFor="amount">{t("amountLabel")}</Label>
             <Input
               id="amount"
               placeholder="0.00"
@@ -199,7 +221,7 @@ export function ExpenseForm({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="category">Kategoria</Label>
+            <Label htmlFor="category">{t("categoryLabel")}</Label>
 
             <CategorySelector
               categories={categories || []}
@@ -212,7 +234,7 @@ export function ExpenseForm({
           </div>
 
           <div className="space-y-2">
-            <Label>Päivämäärä</Label>
+            <Label>{t("dateLabel")}</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -224,9 +246,9 @@ export function ExpenseForm({
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {selectedDate ? (
-                    format(selectedDate, "PPP", { locale: fi })
+                    format(selectedDate, "PPP", { locale: dateFnsLocale })
                   ) : (
-                    <span>Valitse päivämäärä</span>
+                    <span>{t("datePlaceholder")}</span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -248,7 +270,7 @@ export function ExpenseForm({
 
         {type === "group" && (
           <div className="space-y-2">
-            <Label>Ryhmä</Label>
+            <Label>{t("groupLabel")}</Label>
             <GroupSelector
               onChange={(group) => {
                 if (!selectedGroup || selectedGroup.id !== group.id) {
@@ -263,7 +285,7 @@ export function ExpenseForm({
             />
             {!selectedGroup && (
               <p className="text-xs text-amber-600">
-                Valitse ryhmä jatkaaksesi
+                {tGroups("selectGroupToContinue")}
               </p>
             )}
           </div>
@@ -271,30 +293,30 @@ export function ExpenseForm({
 
         {type === "individual" && (
           <div className="space-y-2">
-            <Label>Osallistujat</Label>
+            <Label>{t("participantsLabel")}</Label>
             <ParticipantSelector
               participants={participants}
               onParticipantsChange={setParticipants}
             />
             {participants.length <= 1 && (
               <p className="text-xs text-amber-600">
-                Lisää vähintään yksi muu osallistuja
+                {t("addParticipantMin")}
               </p>
             )}
           </div>
         )}
 
         <div className="space-y-2">
-          <Label>Maksaja</Label>
+          <Label>{t("payerLabel")}</Label>
           <select
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             {...register("paidByUserId")}
           >
-            <option value="">Valitse maksaja</option>
+            <option value="">{t("payerPlaceholder")}</option>
             {participants.map((participant) => (
               <option key={participant.id} value={participant.id}>
                 {participant.id === currentUser.id
-                  ? "Sinä"
+                  ? tShared("you")
                   : participant.name}
               </option>
             ))}
@@ -307,7 +329,7 @@ export function ExpenseForm({
         </div>
 
         <div className="space-y-2">
-          <Label>Jakotapa</Label>
+          <Label>{t("splitTypeLabel")}</Label>
           <Tabs
             defaultValue="equal"
             onValueChange={(value) =>
@@ -315,13 +337,13 @@ export function ExpenseForm({
             }
           >
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="equal">Tasan</TabsTrigger>
-              <TabsTrigger value="percentage">Prosentit</TabsTrigger>
-              <TabsTrigger value="exact">Tarkat summat</TabsTrigger>
+              <TabsTrigger value="equal">{t("splitEqual")}</TabsTrigger>
+              <TabsTrigger value="percentage">{t("splitPercentage")}</TabsTrigger>
+              <TabsTrigger value="exact">{t("splitExact")}</TabsTrigger>
             </TabsList>
             <TabsContent value="equal" className="pt-4">
               <p className="text-sm text-muted-foreground">
-                Jaa tasan kaikkien osallistujien kesken
+                {t("splitEqualHint")}
               </p>
               <SplitSelector
                 type="equal"
@@ -333,7 +355,7 @@ export function ExpenseForm({
             </TabsContent>
             <TabsContent value="percentage" className="pt-4">
               <p className="text-sm text-muted-foreground">
-                Jaa prosenttiosuuksilla
+                {t("splitPercentageHint")}
               </p>
               <SplitSelector
                 type="percentage"
@@ -345,7 +367,7 @@ export function ExpenseForm({
             </TabsContent>
             <TabsContent value="exact" className="pt-4">
               <p className="text-sm text-muted-foreground">
-                Syötä tarkat summat
+                {t("splitExactHint")}
               </p>
               <SplitSelector
                 type="exact"
@@ -365,7 +387,7 @@ export function ExpenseForm({
           data-testid="expense-submit"
           disabled={isSubmitting || participants.length <= 1}
         >
-          {isSubmitting ? "Luodaan..." : "Luo kulu"}
+          {isSubmitting ? tShared("creating") : t("submit")}
         </Button>
       </div>
     </form>

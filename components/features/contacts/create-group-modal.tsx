@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -38,13 +38,14 @@ import { GroupInviteShare } from "@/components/features/groups/group-invite-shar
 import type { Participant } from "@/lib/types/domain";
 import type { Id } from "@/convex/_generated/dataModel";
 import type { FunctionReturnType } from "convex/server";
+import { useLocale, useTranslations } from "next-intl";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
 
-const groupSchema = z.object({
-  name: z.string().min(1, "Ryhmän nimi on pakollinen"),
-  description: z.string().optional(),
-});
-
-type GroupFormValues = z.infer<typeof groupSchema>;
+type GroupFormValues = {
+  name: string;
+  description?: string;
+};
 
 type CreateGroupResult = FunctionReturnType<typeof api.contacts.createGroup>;
 
@@ -57,6 +58,20 @@ export function CreateGroupModal({
   onClose: () => void;
   onSuccess?: (groupId: Id<"groups">) => void;
 }) {
+  const t = useTranslations("contactsModal");
+  const tExpenses = useTranslations("expenses.participantSelector");
+  const tShared = useTranslations("shared");
+  const locale = resolveLocale(useLocale());
+
+  const groupSchema = useMemo(
+    () =>
+      z.object({
+        name: z.string().min(1, t("validationNameRequired")),
+        description: z.string().optional(),
+      }),
+    [t]
+  );
+
   const [selectedMembers, setSelectedMembers] = useState<Participant[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [commandOpen, setCommandOpen] = useState(false);
@@ -76,7 +91,7 @@ export function CreateGroupModal({
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm({
+  } = useForm<GroupFormValues>({
     resolver: zodResolver(groupSchema),
     defaultValues: {
       name: "",
@@ -109,14 +124,17 @@ export function CreateGroupModal({
 
       if (result.directInviteCount > 0) {
         toast.success(
-          `Ryhmä luotu! ${result.directInviteCount} kutsua lähetetty.`
+          t("toastCreatedWithInvites", { count: result.directInviteCount })
         );
       } else {
-        toast.success("Ryhmä luotu onnistuneesti!");
+        toast.success(t("toastCreated"));
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error("Ryhmän luonti epäonnistui: " + message);
+      toast.error(
+        t("toastCreateFailed", {
+          message: getConvexErrorFromUnknown(error, locale),
+        })
+      );
     }
   };
 
@@ -139,14 +157,13 @@ export function CreateGroupModal({
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Ryhmä luotu</DialogTitle>
+            <DialogTitle>{t("createdTitle")}</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4">
             {createdResult.directInviteCount > 0 && (
               <p className="text-sm text-muted-foreground">
-                Kutsut lähetettiin sähköpostilla ja näkyvät sovelluksessa
-                kutsutuille käyttäjille.
+                {t("invitesSentHint")}
               </p>
             )}
 
@@ -155,7 +172,7 @@ export function CreateGroupModal({
 
           <DialogFooter>
             <Button type="button" onClick={handleDone}>
-              Valmis
+              {tShared("done")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -167,15 +184,15 @@ export function CreateGroupModal({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Luo uusi ryhmä</DialogTitle>
+          <DialogTitle>{t("createTitle")}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Ryhmän nimi</Label>
+            <Label htmlFor="name">{t("nameLabel")}</Label>
             <Input
               id="name"
-              placeholder="Anna ryhmän nimi"
+              placeholder={t("namePlaceholder")}
               {...register("name")}
             />
             {errors.name && (
@@ -184,19 +201,18 @@ export function CreateGroupModal({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Kuvaus (valinnainen)</Label>
+            <Label htmlFor="description">{t("descriptionLabel")}</Label>
             <Textarea
               id="description"
-              placeholder="Anna ryhmän kuvaus"
+              placeholder={t("descriptionPlaceholder")}
               {...register("description")}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Kutsu jäseniä (valinnainen)</Label>
+            <Label>{t("inviteMembersLabel")}</Label>
             <p className="text-xs text-muted-foreground">
-              Kutsutut saavat linkin hyväksyä tai hylätä liittymisen. Voit myös
-              jakaa liittymiskoodin tai QR-koodin luonnin jälkeen.
+              {t("inviteMembersHint")}
             </p>
             <div className="flex flex-wrap gap-2 mb-2">
               {currentUser && (
@@ -207,7 +223,9 @@ export function CreateGroupModal({
                       {currentUser.name?.charAt(0) || "?"}
                     </AvatarFallback>
                   </Avatar>
-                  <span>{currentUser.name} (sinä)</span>
+                  <span>
+                    {currentUser.name} {tShared("youParenthetical")}
+                  </span>
                 </Badge>
               )}
 
@@ -243,13 +261,13 @@ export function CreateGroupModal({
                     className="h-8 gap-1 text-xs"
                   >
                     <UserPlus className="h-3.5 w-3.5" />
-                    Lisää kutsuttava
+                    {t("addInvitee")}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="p-0" align="start" side="bottom">
                   <Command>
                     <CommandInput
-                      placeholder="Hae nimellä tai sähköpostilla..."
+                      placeholder={tExpenses("searchPlaceholder")}
                       value={searchQuery}
                       onValueChange={setSearchQuery}
                     />
@@ -257,19 +275,19 @@ export function CreateGroupModal({
                       <CommandEmpty>
                         {searchQuery.length < 2 ? (
                           <p className="py-3 px-4 text-sm text-center text-muted-foreground">
-                            Kirjoita vähintään 2 merkkiä hakeaksesi
+                            {tExpenses("searchMinChars")}
                           </p>
                         ) : isSearching ? (
                           <p className="py-3 px-4 text-sm text-center text-muted-foreground">
-                            Haetaan...
+                            {tShared("searching")}
                           </p>
                         ) : (
                           <p className="py-3 px-4 text-sm text-center text-muted-foreground">
-                            Käyttäjiä ei löytynyt
+                            {tExpenses("noUsersFound")}
                           </p>
                         )}
                       </CommandEmpty>
-                      <CommandGroup heading="Käyttäjät">
+                      <CommandGroup heading={tExpenses("usersHeading")}>
                         {searchResults?.map((user: Participant) => (
                           <CommandItem
                             key={user.id}
@@ -302,10 +320,10 @@ export function CreateGroupModal({
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={handleClose}>
-              Peruuta
+              {tShared("cancel")}
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Luodaan..." : "Luo ryhmä"}
+              {isSubmitting ? tShared("creating") : t("createButton")}
             </Button>
           </DialogFooter>
         </form>

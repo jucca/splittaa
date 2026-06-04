@@ -12,8 +12,11 @@ import SettlementForm, {
   type GroupSettlementData,
   type UserSettlementData,
 } from "@/components/features/settlements/settlement-form";
+import { useTranslations } from "next-intl";
 
 export default function SettlementPage() {
+  const t = useTranslations("settlements");
+  const tShared = useTranslations("shared");
   const params = useParams();
   const router = useRouter();
   const type = params.type as "user" | "group";
@@ -52,15 +55,15 @@ export default function SettlementPage() {
         onClick={() => router.back()}
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Takaisin
+        {tShared("back")}
       </Button>
 
       <div className="mb-6">
-        <h1 className="text-5xl gradient-title">Kirjaa tilitys</h1>
+        <h1 className="text-5xl gradient-title">{t("pageTitle")}</h1>
         <p className="text-muted-foreground mt-1">
           {type === "user"
-            ? `Tilitys käyttäjän ${data?.counterpart?.name} kanssa`
-            : `Tilitys ryhmässä ${data?.group?.name}`}
+            ? t("subtitleUser", { name: data?.counterpart?.name ?? "" })
+            : t("subtitleGroup", { groupName: data?.group?.name ?? "" })}
         </p>
       </div>
 

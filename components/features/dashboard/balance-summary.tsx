@@ -1,11 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { SendDebtRequestButton } from "@/components/features/debt-requests/send-debt-request-button";
 import type { Id } from "@/convex/_generated/dataModel";
-
 import type { UserBalances } from "@/lib/types/domain";
+import { useTranslations } from "next-intl";
 
 type BalanceItem = {
   userId: string;
@@ -19,6 +21,8 @@ export function BalanceSummary({
 }: {
   balances: UserBalances | null | undefined;
 }) {
+  const t = useTranslations("dashboard");
+
   if (!balances) return null;
 
   const { oweDetails } = balances;
@@ -29,7 +33,7 @@ export function BalanceSummary({
     <div className="space-y-4">
       {!hasOwed && !hasOwing && (
         <div className="text-center py-6">
-          <p className="text-muted-foreground">Kaikki on tasoitettu!</p>
+          <p className="text-muted-foreground">{t("balanceAllSettled")}</p>
         </div>
       )}
 
@@ -37,7 +41,7 @@ export function BalanceSummary({
         <div>
           <h3 className="text-sm font-medium flex items-center mb-3">
             <ArrowUpCircle className="h-4 w-4 text-green-500 mr-2" />
-            Sinulle ollaan velkaa
+            {t("balanceOwedToYou")}
           </h3>
           <div className="space-y-3">
             {oweDetails.youAreOwedBy.map((item: BalanceItem) => (
@@ -76,7 +80,7 @@ export function BalanceSummary({
         <div>
           <h3 className="text-sm font-medium flex items-center mb-3">
             <ArrowDownCircle className="h-4 w-4 text-red-500 mr-2" />
-            Olet velkaa
+            {t("balanceYouOwe")}
           </h3>
           <div className="space-y-3">
             {oweDetails.youOwe.map((item: BalanceItem) => (

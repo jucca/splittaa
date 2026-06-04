@@ -48,7 +48,8 @@ Migration: remove wrapper import; drop manual `isLoading` where Suspense or `und
 ## Providers
 
 - **ClerkProvider** + **ConvexProviderWithClerk** in root layout — auth token forwarded to Convex.
-- **Toasts:** `sonner` for mutation errors; map known `ConvexError` codes to Finnish messages.
+- **Toasts:** `sonner` for mutation errors; map known `ConvexError` codes via `lib/i18n/convex-errors.ts` for the active locale.
+- **i18n:** `useTranslations('namespace')` in client islands; `getTranslations` in Server Components. Locale from cookie via `i18n/request.ts` (`localePrefix: never` — do not add `createIntlMiddleware`; it rewrites `/` to `/fi` and causes 404). Switch locale with `useSwitchLocale()` (cookie + refresh; strips stray `/en` or `/fi` from the URL). Legacy `/en/...` bookmarks redirect to the real path in `middleware.ts` and set the locale cookie. Language switcher: `data-testid="language-switcher"`. Parity check: `npm run check:i18n`.
 
 ---
 

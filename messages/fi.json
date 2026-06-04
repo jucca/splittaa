@@ -1,0 +1,502 @@
+{
+  "meta": {
+    "appTitle": "Splittaa",
+    "appDescription": "Helpoin tapa jakaa kulut ystävien kanssa"
+  },
+  "language": {
+    "switch": "Vaihda kieli",
+    "current": "Nykyinen kieli: {locale}"
+  },
+  "nav": {
+    "logoAlt": "Splittaa",
+    "features": "Ominaisuudet",
+    "howItWorks": "Näin se toimii",
+    "dashboard": "Etusivu",
+    "inbox": "Viestit",
+    "inboxWithCount": "Viestit ({count})",
+    "activity": "Toiminta",
+    "settings": "Asetukset",
+    "signIn": "Kirjaudu",
+    "getStarted": "Aloita"
+  },
+  "theme": {
+    "toggleAria": "Tummatila",
+    "toggleSr": "Tummatila"
+  },
+  "shared": {
+    "you": "Sinä",
+    "back": "Takaisin",
+    "loading": "Ladataan…",
+    "cancel": "Peruuta",
+    "save": "Tallenna",
+    "saving": "Tallennetaan…",
+    "creating": "Luodaan...",
+    "joining": "Liitytään...",
+    "recording": "Kirjataan...",
+    "sending": "Lähetetään...",
+    "searching": "Haetaan...",
+    "done": "Valmis",
+    "otherUser": "Muu käyttäjä",
+    "unknownUser": "Tuntematon käyttäjä",
+    "showAll": "Näytä kaikki",
+    "membersCount": "{count} jäsentä",
+    "membersInGroup": "{count} jäsentä ryhmässä",
+    "peopleCountFrom": "{count} henkilöltä",
+    "peopleCountTo": "{count} henkilölle",
+    "optional": "(valinnainen)",
+    "total": "Yhteensä",
+    "sumLabel": "Summa",
+    "consumptionLabel": "Kulutus",
+    "expenseSingular": "kulu",
+    "expensePlural": "kulua",
+    "group": "Ryhmä",
+    "person": "Henkilö",
+    "expenseKind": "Kulu",
+    "settlementKind": "Tilitys",
+    "newBadge": "Uusi",
+    "admin": "Ylläpitäjä",
+    "youBadge": "Sinä",
+    "youParenthetical": "(sinä)",
+    "daysOption": "{count} päivää",
+    "close": "Sulje"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Jaa kulut. Yksinkertaista elämää.",
+      "title": "Helpoin tapa jakaa kulut ystävien kanssa",
+      "subtitle": "Seuraa yhteisiä kuluja, jaa laskut vaivatta ja tasaa tilit nopeasti. Unohda huoli siitä, kuka on kenelle velkaa.",
+      "ctaStart": "Aloita",
+      "ctaHowItWorks": "Katso miten se toimii",
+      "heroImageAlt": "Splittaa-sovelluksen esittelykuva"
+    },
+    "featuresSection": {
+      "badge": "Ominaisuudet",
+      "title": "Kaikki mitä tarvitset kulujen jakamiseen",
+      "subtitle": "Alustamme tarjoaa kaikki työkalut yhteisten kulujen hoitamiseen helposti.",
+      "groupExpenses": {
+        "title": "Ryhmäkulut",
+        "description": "Luo ryhmiä kämppäkavereille, matkoille tai tapahtumille ja pidä kulut järjestyksessä."
+      },
+      "smartSettlements": {
+        "title": "Älykkäät tilitykset",
+        "description": "Algoritmimme minimoi maksujen määrän tilien tasoittamisessa."
+      },
+      "spendingAnalysis": {
+        "title": "Kuluanalyysi",
+        "description": "Seuraa kulutustottumuksia ja löydä oivalluksia yhteisistä kuluistasi."
+      },
+      "paymentReminders": {
+        "title": "Maksumuistutukset",
+        "description": "Automaattiset muistutukset avoimista veloista ja oivalluksia kulutuksesta."
+      },
+      "splitMethods": {
+        "title": "Useita jakotapoja",
+        "description": "Jaa tasan, prosenttiosuuksilla tai tarkoilla summilla – sopii mihin tahansa tilanteeseen."
+      },
+      "realtimeUpdates": {
+        "title": "Reaaliaikaiset päivitykset",
+        "description": "Näe uudet kulut ja maksut heti, kun ystäväsi lisäävät ne."
+      }
+    },
+    "howItWorksSection": {
+      "badge": "Näin se toimii",
+      "title": "Kulujen jakaminen ei ole koskaan ollut näin helppoa",
+      "subtitle": "Noudata näitä yksinkertaisia vaiheita aloittaaksesi kulujen seurannan ja jakamisen ystävien kanssa.",
+      "step1": {
+        "title": "Luo tai liity ryhmään",
+        "description": "Perusta ryhmä kämppäkavereille, matkalle tai tapahtumaan ja kutsu ystäviä mukaan."
+      },
+      "step2": {
+        "title": "Lisää kuluja",
+        "description": "Kirjaa kuka maksoi ja miten lasku jaetaan jäsenten kesken."
+      },
+      "step3": {
+        "title": "Tasaa tilit",
+        "description": "Katso kuka on kenelle velkaa ja kirjaa maksut, kun velat on maksettu."
+      }
+    },
+    "testimonialsSection": {
+      "badge": "Asiakaspalautteet",
+      "title": "Mitä käyttäjämme sanovat",
+      "annikki": {
+        "quote": "Splittaan avulla en enää mene sekaisin siitä, kuka maksoi mitäkin!",
+        "role": "Vuokra-asuntojen hoitaja"
+      },
+      "luigi": {
+        "quote": "Splittaan avulla pidän tarkkaa kirjaa saatavistani. Se päihittää jopa parhaat muistutussovellukset!",
+        "role": "Talous- ja velkaneuvoja"
+      },
+      "antti": {
+        "quote": "Jos minulla olisi ollut Splittaa aiemmin, Luigi ei olisi päässyt myymään kenkiäni ja takkiani! Lisään velan heti listalle.",
+        "role": "Ohjelmistokehittäjä / Mindfulness-valmentaja"
+      }
+    },
+    "ctaSection": {
+      "title": "Valmis yksinkertaistamaan kulujen jakamista?",
+      "subtitle": "Liity tuhansien käyttäjien joukkoon, jotka ovat tehneet kulujen jakamisesta stressitöntä.",
+      "button": "Aloita"
+    },
+    "footer": {
+      "copyright": "© {year} Splittaa. Kaikki oikeudet pidätetään."
+    }
+  },
+  "join": {
+    "invalidLink": "Virheellinen kutsulinkki.",
+    "inviteNotFound": "Kutsua ei löytynyt.",
+    "homeLink": "Etusivu",
+    "inviteInvalidTitle": "Kutsu ei ole voimassa",
+    "inviteInvalidBody": "Kutsu ryhmään {groupName} on vanhentunut tai jo käsitelty.",
+    "goDashboard": "Siirry etusivulle",
+    "goBack": "Takaisin",
+    "groupInviteTitle": "Ryhmäkutsu",
+    "invitedBy": "{inviterName} kutsui sinut",
+    "signInToJoin": "Kirjaudu tai luo tili liittyäksesi ryhmään.",
+    "signUpAndJoin": "Rekisteröidy ja liity",
+    "signIn": "Kirjaudu sisään",
+    "joiningGroup": "Liitytään ryhmään…",
+    "acceptInvite": "Hyväksy kutsu",
+    "declineInvite": "Hylkää kutsu",
+    "toastInviteDeclined": "Kutsu hylätty"
+  },
+  "dashboard": {
+    "title": "Etusivu",
+    "addExpense": "Lisää kulu",
+    "totalBalance": "Kokonaissaldo",
+    "balanceOwedToYou": "Sinulle ollaan velkaa",
+    "balanceYouOwe": "Olet velkaa",
+    "balanceSettled": "Kaikki tasoitettu!",
+    "balanceNotOwingAnyone": "Et ole velkaa kenellekään",
+    "balanceSummaryTitle": "Saldotiedot",
+    "yourGroupsTitle": "Ryhmäsi",
+    "createNewGroup": "Luo uusi ryhmä",
+    "pendingInvitesTitle": "Ryhmäkutsut ({count})",
+    "inviterLabel": "Kutsuja: {name}",
+    "openInvite": "Avaa kutsu",
+    "joinByCodeTitle": "Liity ryhmään koodilla",
+    "joinCodeLabel": "Liittymiskoodi",
+    "joinCodePlaceholder": "Esim. ABCD2345",
+    "joinButton": "Liity",
+    "expenseSummaryTitle": "Kuluyhteenveto",
+    "totalThisMonth": "Yhteensä tässä kuussa",
+    "totalThisYear": "Yhteensä tänä vuonna",
+    "monthlySpendingCaption": "Kuukausikulutus vuonna {year}",
+    "monthShort": {
+      "jan": "tammi",
+      "feb": "helmi",
+      "mar": "maalis",
+      "apr": "huhti",
+      "may": "touko",
+      "jun": "kesä",
+      "jul": "heinä",
+      "aug": "elo",
+      "sep": "syys",
+      "oct": "loka",
+      "nov": "marras",
+      "dec": "joulukuu"
+    },
+    "groupListEmpty": "Ei ryhmiä vielä",
+    "groupListEmptyHint": "Luo ryhmä aloittaaksesi yhteisten kulujen seurannan",
+    "balanceAllSettled": "Kaikki on tasoitettu!",
+    "toastAlreadyMember": "Olet jo ryhmän jäsen",
+    "toastJoinedGroup": "Liityit ryhmään!"
+  },
+  "contacts": {
+    "title": "Yhteystiedot",
+    "createGroup": "Luo ryhmä",
+    "peopleSection": "Henkilöt",
+    "peopleEmpty": "Ei yhteystietoja vielä. Lisää kulu jonkun kanssa nähdäksesi hänet täällä.",
+    "groupsSection": "Ryhmät",
+    "groupsEmpty": "Ei ryhmiä vielä. Luo ryhmä aloittaaksesi yhteisten kulujen seurannan."
+  },
+  "groups": {
+    "settleUp": "Tasaa tilit",
+    "addExpense": "Lisää kulu",
+    "groupBalancesTitle": "Ryhmäsaldot",
+    "membersTitle": "Jäsenet",
+    "tabsExpenses": "Kulut ({count})",
+    "tabsSettlements": "Tilitykset ({count})",
+    "balancesUnavailable": "Saldotietoja ei saatavilla",
+    "notMember": "Et kuulu tähän ryhmään",
+    "yourBalance": "Saldosi",
+    "allSettledInGroup": "Kaikki on tasoitettu",
+    "everyoneSettled": "Kaikilla on tilit tasattu!",
+    "theyOweYou": "He ovat sinulle velkaa {amount}",
+    "youOweThem": "Olet velkaa {amount}",
+    "settled": "Tasoitettu",
+    "noMembers": "Ryhmässä ei ole jäseniä",
+    "invitesTitle": "Kutsut ja liittyminen",
+    "shareInviteHint": "Jaa linkki tai koodi, jotta muut voivat liittyä ryhmään. Voimassa {expiresDate} asti.",
+    "qrAlt": "QR-koodi ryhmään liittymistä varten",
+    "joinLinkLabel": "Liittymislinkki",
+    "joinCodeLabel": "Liittymiskoodi",
+    "copyLinkAria": "Kopioi linkki",
+    "copyCodeAria": "Kopioi koodi",
+    "pendingInvites": "Odottavat kutsut",
+    "revokeInviteAria": "Peru kutsu",
+    "revokeInvite": "Peru",
+    "toastLinkCopied": "Linkki kopioitu",
+    "toastCodeCopied": "Koodi kopioitu",
+    "toastCopyFailed": "Kopiointi epäonnistui",
+    "toastInviteRevoked": "Kutsu peruttu",
+    "toastRevokeFailed": "Kutsun peruminen epäonnistui: {message}",
+    "createGroupNeedGroup": "Sinun täytyy luoda ryhmä ennen ryhmäkulun lisäämistä.",
+    "selectGroupPlaceholder": "Valitse ryhmä",
+    "selectGroupToContinue": "Valitse ryhmä jatkaaksesi"
+  },
+  "person": {
+    "settleUp": "Tasaa tilit",
+    "addExpense": "Lisää kulu",
+    "balanceTitle": "Saldo",
+    "allSettled": "Kaikki on tasoitettu",
+    "theyOweYou": "{name} on sinulle velkaa",
+    "youOweThem": "Olet velkaa {name}lle",
+    "tabsExpenses": "Kulut ({count})",
+    "tabsSettlements": "Tilitykset ({count})"
+  },
+  "expenses": {
+    "newPageTitle": "Lisää uusi kulu",
+    "newPageSubtitle": "Kirjaa uusi kulu ja jaa se muiden kanssa",
+    "tabIndividual": "Henkilökohtainen kulu",
+    "tabGroup": "Ryhmäkulu",
+    "form": {
+      "descriptionLabel": "Kuvaus",
+      "descriptionPlaceholder": "Lounas, elokuvaliput jne.",
+      "amountLabel": "Summa",
+      "categoryLabel": "Kategoria",
+      "dateLabel": "Päivämäärä",
+      "datePlaceholder": "Valitse päivämäärä",
+      "groupLabel": "Ryhmä",
+      "participantsLabel": "Osallistujat",
+      "addParticipantMin": "Lisää vähintään yksi muu osallistuja",
+      "payerLabel": "Maksaja",
+      "payerPlaceholder": "Valitse maksaja",
+      "splitTypeLabel": "Jakotapa",
+      "splitEqual": "Tasan",
+      "splitPercentage": "Prosentit",
+      "splitExact": "Tarkat summat",
+      "splitEqualHint": "Jaa tasan kaikkien osallistujien kesken",
+      "splitPercentageHint": "Jaa prosenttiosuuksilla",
+      "splitExactHint": "Syötä tarkat summat",
+      "submit": "Luo kulu",
+      "splitsMismatch": "Jaetut summat eivät täsmää kokonaissummaan. Tarkista jaot.",
+      "percentMustBe100": "Prosenttien on oltava yhteensä 100 %.",
+      "exactMustMatchTotal": "Jaettujen summien ({splitTotal}) on oltava yhtä suuri kuin kokonaissumma ({total}).",
+      "validationDescriptionRequired": "Kuvaus on pakollinen",
+      "validationAmountRequired": "Summa on pakollinen",
+      "validationAmountPositive": "Summan on oltava positiivinen luku",
+      "validationPayerRequired": "Maksaja on pakollinen",
+      "toastCreated": "Kulu luotu onnistuneesti!",
+      "toastCreateFailed": "Kulun luonti epäonnistui: {message}"
+    },
+    "list": {
+      "empty": "Kuluja ei löytynyt",
+      "youPaid": "Sinä maksoit",
+      "userPaid": "{name} maksoi",
+      "groupExpenseBadge": "Ryhmäkulu",
+      "deleteAria": "Poista kulu",
+      "deleteConfirm": "Haluatko varmasti poistaa tämän kulun? Toimintoa ei voi perua.",
+      "toastDeleted": "Kulu poistettu onnistuneesti",
+      "toastDeleteFailed": "Kulun poisto epäonnistui: {message}"
+    },
+    "participantSelector": {
+      "addPerson": "Lisää henkilö",
+      "searchPlaceholder": "Hae nimellä tai sähköpostilla...",
+      "searchMinChars": "Kirjoita vähintään 2 merkkiä hakeaksesi",
+      "noUsersFound": "Käyttäjiä ei löytynyt",
+      "usersHeading": "Käyttäjät"
+    },
+    "categorySelector": {
+      "noCategories": "Kategorioita ei saatavilla",
+      "placeholder": "Valitse kategoria"
+    }
+  },
+  "categories": {
+    "foodDrink": "Ruoka ja juoma",
+    "coffee": "Kahvi",
+    "groceries": "Ruokaostokset",
+    "shopping": "Ostokset",
+    "travel": "Matkustus",
+    "transportation": "Liikenne",
+    "housing": "Asuminen",
+    "entertainment": "Viihde",
+    "tickets": "Liput",
+    "utilities": "Palvelut",
+    "water": "Vesi",
+    "education": "Koulutus",
+    "health": "Terveys",
+    "personal": "Henkilökohtainen",
+    "gifts": "Lahjat",
+    "technology": "Teknologia",
+    "bills": "Laskut ja maksut",
+    "baby": "Vauvat ja lapset",
+    "music": "Musiikki",
+    "books": "Kirjat",
+    "other": "Muu",
+    "general": "Yleinen kulu"
+  },
+  "settlements": {
+    "pageTitle": "Kirjaa tilitys",
+    "subtitleUser": "Tilitys käyttäjän {name} kanssa",
+    "subtitleGroup": "Tilitys ryhmässä {groupName}",
+    "form": {
+      "currentBalance": "Nykyinen saldo",
+      "allSettledWithUser": "Kaikki on tasoitettu käyttäjän {name} kanssa",
+      "theyOweYou": "{name} on sinulle velkaa",
+      "youOweThem": "Olet velkaa {name}lle",
+      "whoPaid": "Kuka maksoi?",
+      "youPaidUser": "Sinä maksoit käyttäjälle {name}",
+      "userPaidYou": "{name} maksoi sinulle",
+      "youPaidMember": "Sinä maksoit {name}",
+      "memberPaidYou": "{name} maksoi sinulle",
+      "amountLabel": "Summa",
+      "noteLabel": "Muistiinpano (valinnainen)",
+      "notePlaceholder": "Illallinen, vuokra jne.",
+      "submit": "Kirjaa tilitys",
+      "selectMember": "Kenen kanssa tasoitat?",
+      "selectMemberWarning": "Valitse jäsen, jonka kanssa tasoitat",
+      "validationAmountRequired": "Summa on pakollinen",
+      "validationAmountPositive": "Summan on oltava positiivinen luku",
+      "toastSuccess": "Tilitys kirjattu onnistuneesti!",
+      "toastFailed": "Tilityksen kirjaus epäonnistui: {message}",
+      "toastSelectMember": "Valitse ryhmän jäsen, jonka kanssa tasoitat",
+      "toastMemberNotFound": "Valittua käyttäjää ei löytynyt ryhmästä"
+    },
+    "list": {
+      "empty": "Tilityksiä ei löytynyt",
+      "youPaidReceiver": "Sinä maksoit käyttäjälle {name}",
+      "payerPaidYou": "{payer} maksoi sinulle",
+      "payerPaidReceiver": "{payer} maksoi käyttäjälle {receiver}",
+      "groupSettlementBadge": "Ryhmätilitys",
+      "youPaidLabel": "Sinä maksoit",
+      "youReceivedLabel": "Sinä sait",
+      "paymentLabel": "Maksu"
+    }
+  },
+  "activity": {
+    "pageTitle": "Toiminta",
+    "pageSubtitle": "Kulutusyhteenveto ja viimeisimmät tapahtumat — vain sinun osuutesi kaavioissa.",
+    "recentEventsTitle": "Viimeisimmät tapahtumat",
+    "feedAria": "Viimeaikainen toiminta",
+    "feedEmpty": "Ei viimeaikaista toimintaa. Lisää kulu tai tilitys nähdäksesi ne täällä.",
+    "charts": {
+      "title": "Kulutusyhteenveto",
+      "periodWeek": "Viikko",
+      "periodMonth": "Kuukausi",
+      "periodYear": "Vuosi",
+      "periodCaption": "{period} — vain sinun osuutesi kuluista",
+      "totalLabel": "Yhteensä",
+      "noExpensesInPeriod": "Ei kuluja valitulla jaksolla",
+      "spendingOverTime": "Kulutus ajassa",
+      "categories": "Kategoriat",
+      "captionMonth": "{month} {year} — jokainen päivä",
+      "captionYear": "Vuosi {year}",
+      "captionWeek": "Kuluva viikko (ma–su)",
+      "monthLong": {
+        "january": "tammikuu",
+        "february": "helmikuu",
+        "march": "maaliskuu",
+        "april": "huhtikuu",
+        "may": "toukokuu",
+        "june": "kesäkuu",
+        "july": "heinäkuu",
+        "august": "elokuu",
+        "september": "syyskuu",
+        "october": "lokakuu",
+        "november": "marraskuu",
+        "december": "joulukuu"
+      },
+      "dayTooltip": "{day}. {month} {year}"
+    }
+  },
+  "inbox": {
+    "pageTitle": "Viestit",
+    "pageSubtitle": "Postilaatikko: ryhmäkutsut, saldomuistutukset ja muut ilmoitukset. Sähköpostit ja etusivun kutsulista toimivat kuten ennenkin.",
+    "empty": "Ei viestejä. Ryhmäkutsut ja saldomuistutukset näkyvät täällä.",
+    "markAllRead": "Merkitse kaikki luetuiksi",
+    "markRead": "Merkitse luetuksi",
+    "toastAllMarkedRead": "Kaikki viestit merkitty luetuiksi",
+    "actions": {
+      "openInvite": "Avaa kutsu",
+      "viewBalance": "Näytä saldo",
+      "openDashboard": "Avaa etusivu",
+      "openSettlement": "Avaa tilitys",
+      "markPaid": "Merkitse maksetuksi",
+      "markedPaid": "Maksetuksi merkitty",
+      "toastMarkedPaid": "Maksu kirjattu ({amount}). {creditorName} saa ilmoituksen.",
+      "toastRecordFailed": "Kirjaus epäonnistui"
+    }
+  },
+  "settings": {
+    "title": "Asetukset",
+    "subtitle": "Säädä sähköpostimuistutuksia avoimista saldoista.",
+    "remindersCardTitle": "Saldomuistutukset",
+    "remindersEnabled": "Muistutukset käytössä",
+    "remindersEnabledHint": "Lähetämme sähköpostia vain valituin välein, jos saldo on edelleen auki.",
+    "remindMeLabel": "Muistuta minua",
+    "minAgeLabel": "Velan on oltava avoinna vähintään",
+    "minAgeHint": "Lyhytaikaisia saldoja ei muistuteta — vain pitkään avoinna olleet.",
+    "notifyWhenIOwe": "Kun olen velkaa jollekulle",
+    "notifyWhenIOweHint": "Muistutus omista maksamattomista veloista.",
+    "notifyWhenOwed": "Kun joku on velkaa minulle",
+    "notifyWhenOwedHint": "Muistutus saatavistasi (esim. muistuta kaveria).",
+    "lastSent": "Viimeisin muistutus lähetetty: {datetime}",
+    "toastSelectReminderType": "Valitse vähintään yksi muistutustyyppi",
+    "toastSaved": "Asetukset tallennettu",
+    "toastSaveFailed": "Tallennus epäonnistui: {message}"
+  },
+  "contactsModal": {
+    "createTitle": "Luo uusi ryhmä",
+    "createdTitle": "Ryhmä luotu",
+    "nameLabel": "Ryhmän nimi",
+    "namePlaceholder": "Anna ryhmän nimi",
+    "descriptionLabel": "Kuvaus (valinnainen)",
+    "descriptionPlaceholder": "Anna ryhmän kuvaus",
+    "inviteMembersLabel": "Kutsu jäseniä (valinnainen)",
+    "inviteMembersHint": "Kutsutut saavat linkin hyväksyä tai hylätä liittymisen. Voit myös jakaa liittymiskoodin tai QR-koodin luonnin jälkeen.",
+    "addInvitee": "Lisää kutsuttava",
+    "createButton": "Luo ryhmä",
+    "invitesSentHint": "Kutsut lähetettiin sähköpostilla ja näkyvät sovelluksessa kutsutuille käyttäjille.",
+    "validationNameRequired": "Ryhmän nimi on pakollinen",
+    "toastCreatedWithInvites": "Ryhmä luotu! {count} kutsua lähetetty.",
+    "toastCreated": "Ryhmä luotu onnistuneesti!",
+    "toastCreateFailed": "Ryhmän luonti epäonnistui: {message}"
+  },
+  "debtRequests": {
+    "sendButton": "Lähetä velkapyyntö",
+    "dialogTitle": "Velkapyyntö",
+    "dialogDescription": "Lähetä erillinen pyyntö käyttäjälle {debtorName} ({amount}, {context}). Velallinen saa viestin postilaatikkoon ja sähköpostilla, jos osoite on tiedossa. Tämä ei korvaa automaattista saldomuistutusta.",
+    "contextGroup": "ryhmässä {groupName}",
+    "contextPersonal": "henkilökohtaisessa jaossa",
+    "messageLabel": "Viesti (valinnainen)",
+    "messagePlaceholder": "Esim. Muistathan maksaa viikonloppureissun osuutesi",
+    "sendRequest": "Lähetä pyyntö",
+    "toastSent": "Velkapyyntö lähetetty käyttäjälle {debtorName}",
+    "toastSendFailed": "Lähetys epäonnistui"
+  },
+  "errors": {
+    "FORBIDDEN": "Ei oikeutta tähän toimintoon",
+    "NOT_FOUND": "Ei löytynyt",
+    "UNAUTHORIZED": "Kirjautuminen vaaditaan",
+    "INVALID_INPUT": "Virheelliset tiedot",
+    "generic": "Jokin meni pieleen: {message}",
+    "unknown": "Tuntematon virhe"
+  },
+  "notifications": {
+    "group_invite": {
+      "title": "Ryhmäkutsu",
+      "body": "Sinut on kutsuttu ryhmään {groupName}"
+    },
+    "balance_reminder": {
+      "title": "Saldomuistutus",
+      "body": "Sinulla on avoin saldo: {summary}"
+    },
+    "debt_request": {
+      "title": "Velkapyyntö",
+      "body": "{creditorName} pyytää sinua maksamaan {amount}"
+    },
+    "debt_request_paid": {
+      "title": "Velka maksettu",
+      "body": "{debtorName} merkitsi velan maksetuksi ({amount})"
+    }
+  }
+}

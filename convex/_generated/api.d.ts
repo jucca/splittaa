@@ -14,6 +14,7 @@ import type * as _lib_automation from "../_lib/automation.js";
 import type * as _lib_balances from "../_lib/balances.js";
 import type * as _lib_debtRequests from "../_lib/debtRequests.js";
 import type * as _lib_invites from "../_lib/invites.js";
+import type * as _lib_locales from "../_lib/locales.js";
 import type * as _lib_money from "../_lib/money.js";
 import type * as _lib_notifications from "../_lib/notifications.js";
 import type * as _lib_personal from "../_lib/personal.js";
@@ -50,6 +51,7 @@ declare const fullApi: ApiFromModules<{
   "_lib/balances": typeof _lib_balances;
   "_lib/debtRequests": typeof _lib_debtRequests;
   "_lib/invites": typeof _lib_invites;
+  "_lib/locales": typeof _lib_locales;
   "_lib/money": typeof _lib_money;
   "_lib/notifications": typeof _lib_notifications;
   "_lib/personal": typeof _lib_personal;

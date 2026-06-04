@@ -7,6 +7,7 @@ export default defineSchema({
     email: v.string(),
     tokenIdentifier: v.string(),
     imageUrl: v.optional(v.string()),
+    preferredLocale: v.optional(v.string()),
     reminderSettings: v.optional(
       v.object({
         enabled: v.boolean(),

@@ -19,8 +19,12 @@ import { BalanceSummary } from "@/components/features/dashboard/balance-summary"
 import { GroupList } from "@/components/features/dashboard/group-list";
 import { PendingGroupInvites } from "@/components/features/groups/pending-group-invites";
 import { JoinByCodeForm } from "@/components/features/groups/join-by-code-form";
+import { useTranslations } from "next-intl";
 
 export default function Dashboard() {
+  const t = useTranslations("dashboard");
+  const tShared = useTranslations("shared");
+
   const { data: balances, isLoading: balancesLoading } = useConvexQuery(
     api.dashboard.getUserBalances
   );
@@ -53,11 +57,11 @@ export default function Dashboard() {
           <PendingGroupInvites />
 
           <div className="flex  justify-between flex-col sm:flex-row sm:items-center gap-4">
-            <h1 className="text-5xl gradient-title">Etusivu</h1>
+            <h1 className="text-5xl gradient-title">{t("title")}</h1>
             <Button asChild>
               <Link href="/expenses/new">
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Lisää kulu
+                {t("addExpense")}
               </Link>
             </Button>
           </div>
@@ -66,7 +70,7 @@ export default function Dashboard() {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Kokonaissaldo
+                  {t("totalBalance")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -88,10 +92,10 @@ export default function Dashboard() {
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   {balances?.totalBalance > 0
-                    ? "Sinulle ollaan velkaa"
+                    ? t("balanceOwedToYou")
                     : balances?.totalBalance < 0
-                      ? "Olet velkaa"
-                      : "Kaikki tasoitettu!"}
+                      ? t("balanceYouOwe")
+                      : t("balanceSettled")}
                 </p>
               </CardContent>
             </Card>
@@ -99,7 +103,7 @@ export default function Dashboard() {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Sinulle ollaan velkaa
+                  {t("balanceOwedToYou")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -107,7 +111,9 @@ export default function Dashboard() {
                   {formatCurrency(balances?.youAreOwed)}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {balances?.oweDetails?.youAreOwedBy?.length || 0} henkilöltä
+                  {tShared("peopleCountFrom", {
+                    count: balances?.oweDetails?.youAreOwedBy?.length || 0,
+                  })}
                 </p>
               </CardContent>
             </Card>
@@ -115,7 +121,7 @@ export default function Dashboard() {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Olet velkaa
+                  {t("balanceYouOwe")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -125,14 +131,16 @@ export default function Dashboard() {
                       {formatCurrency(balances?.youOwe)}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {balances?.oweDetails?.youOwe?.length || 0} henkilölle
+                      {tShared("peopleCountTo", {
+                        count: balances?.oweDetails?.youOwe?.length || 0,
+                      })}
                     </p>
                   </>
                 ) : (
                   <>
                     <div className="text-2xl font-bold">{formatCurrency(0)}</div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Et ole velkaa kenellekään
+                      {t("balanceNotOwingAnyone")}
                     </p>
                   </>
                 )}
@@ -152,10 +160,10 @@ export default function Dashboard() {
               <Card>
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <CardTitle>Saldotiedot</CardTitle>
+                    <CardTitle>{t("balanceSummaryTitle")}</CardTitle>
                     <Button variant="link" asChild className="p-0">
                       <Link href="/contacts">
-                        Näytä kaikki
+                        {tShared("showAll")}
                         <ChevronRight className="ml-1 h-4 w-4" />
                       </Link>
                     </Button>
@@ -171,10 +179,10 @@ export default function Dashboard() {
               <Card>
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <CardTitle>Ryhmäsi</CardTitle>
+                    <CardTitle>{t("yourGroupsTitle")}</CardTitle>
                     <Button variant="link" asChild className="p-0">
                       <Link href="/contacts">
-                        Näytä kaikki
+                        {tShared("showAll")}
                         <ChevronRight className="ml-1 h-4 w-4" />
                       </Link>
                     </Button>
@@ -187,7 +195,7 @@ export default function Dashboard() {
                   <Button variant="outline" asChild className="w-full">
                     <Link href="/contacts?createGroup=true">
                       <Users className="mr-2 h-4 w-4" />
-                      Luo uusi ryhmä
+                      {t("createNewGroup")}
                     </Link>
                   </Button>
                 </CardFooter>

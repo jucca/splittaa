@@ -6,11 +6,15 @@ import { useConvexQuery } from "@/hooks/use-convex-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Inbox } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function InboxNavLink({ className }: { className?: string }) {
   const { data: unreadCount } = useConvexQuery(api.notifications.getUnreadCount);
+  const t = useTranslations("nav");
 
-  const label = unreadCount ? `Viestit (${unreadCount})` : "Viestit";
+  const label = unreadCount
+    ? t("inboxWithCount", { count: unreadCount })
+    : t("inbox");
 
   return (
     <Link href="/viestit" className={className}>

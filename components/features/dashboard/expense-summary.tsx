@@ -11,8 +11,23 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
-
 import type { MonthlySpendingItem } from "@/lib/types/domain";
+import { useTranslations } from "next-intl";
+
+const MONTH_KEYS = [
+  "jan",
+  "feb",
+  "mar",
+  "apr",
+  "may",
+  "jun",
+  "jul",
+  "aug",
+  "sep",
+  "oct",
+  "nov",
+  "dec",
+] as const;
 
 export function ExpenseSummary({
   monthlySpending,
@@ -21,26 +36,15 @@ export function ExpenseSummary({
   monthlySpending: MonthlySpendingItem[] | null | undefined;
   totalSpent: number | null | undefined;
 }) {
-  const monthNames = [
-    "tammi",
-    "helmi",
-    "maalis",
-    "huhti",
-    "touko",
-    "kesä",
-    "heinä",
-    "elo",
-    "syys",
-    "loka",
-    "marras",
-    "joulu",
-  ];
+  const t = useTranslations("dashboard");
+  const tShared = useTranslations("shared");
 
   const chartData =
     monthlySpending?.map((item: MonthlySpendingItem) => {
       const date = new Date(item.month);
+      const monthKey = MONTH_KEYS[date.getMonth()];
       return {
-        name: monthNames[date.getMonth()],
+        name: t(`monthShort.${monthKey}`),
         amount: item.total,
       };
     }) || [];
@@ -51,18 +55,22 @@ export function ExpenseSummary({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Kuluyhteenveto</CardTitle>
+        <CardTitle>{t("expenseSummaryTitle")}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-muted rounded-lg p-4">
-            <p className="text-sm text-muted-foreground">Yhteensä tässä kuussa</p>
+            <p className="text-sm text-muted-foreground">
+              {t("totalThisMonth")}
+            </p>
             <h3 className="text-2xl font-bold mt-1">
               {formatCurrency(monthlySpending?.[currentMonth]?.total || 0)}
             </h3>
           </div>
           <div className="bg-muted rounded-lg p-4">
-            <p className="text-sm text-muted-foreground">Yhteensä tänä vuonna</p>
+            <p className="text-sm text-muted-foreground">
+              {t("totalThisYear")}
+            </p>
             <h3 className="text-2xl font-bold mt-1">
               {formatCurrency(totalSpent || 0)}
             </h3>
@@ -78,9 +86,9 @@ export function ExpenseSummary({
               <Tooltip
                 formatter={(value) => [
                   formatCurrency(typeof value === "number" ? value : Number(value)),
-                  "Summa",
+                  tShared("sumLabel"),
                 ]}
-                labelFormatter={() => "Kulutus"}
+                labelFormatter={() => tShared("consumptionLabel")}
               />
               <Bar dataKey="amount" fill="#36d7b7" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -88,7 +96,7 @@ export function ExpenseSummary({
         </div>
 
         <p className="text-xs text-muted-foreground text-center mt-2">
-          Kuukausikulutus vuonna {currentYear}
+          {t("monthlySpendingCaption", { year: currentYear })}
         </p>
       </CardContent>
     </Card>

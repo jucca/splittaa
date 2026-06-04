@@ -4,10 +4,6 @@ import Link from "next/link";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import type { FunctionReturnType } from "convex/server";
-
-type InboxMessage = FunctionReturnType<
-  typeof api.notifications.listMyNotifications
->[number];
 import { useConvexMutation, useConvexQuery } from "@/hooks/use-convex-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,12 +13,101 @@ import { Bell, CheckCircle2, Mail, Send, Wallet } from "lucide-react";
 import { DebtRequestActions } from "@/components/features/inbox/debt-request-actions";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
-import { fi } from "date-fns/locale";
+import { useTranslations } from "next-intl";
+import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
+import { formatCurrency } from "@/lib/utils";
+import { useLocale } from "next-intl";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
+
+type InboxMessage = FunctionReturnType<
+  typeof api.notifications.listMyNotifications
+>[number];
+
+const TRANSLATED_NOTIFICATION_TYPES = [
+  "group_invite",
+  "balance_reminder",
+  "debt_request",
+  "debt_request_paid",
+] as const;
+
+type TranslatedNotificationType =
+  (typeof TRANSLATED_NOTIFICATION_TYPES)[number];
+
+function isTranslatedType(
+  type: string
+): type is TranslatedNotificationType {
+  return (TRANSLATED_NOTIFICATION_TYPES as readonly string[]).includes(type);
+}
+
+function getNotificationDisplay(
+  message: InboxMessage,
+  tNotif: ReturnType<typeof useTranslations<"notifications">>
+): { title: string; body: string } {
+  if (!isTranslatedType(message.type)) {
+    return { title: message.title, body: message.body };
+  }
+
+  try {
+    switch (message.type) {
+      case "group_invite": {
+        const fromTitle = message.title.replace(/^Kutsu ryhmään:\s*/i, "").trim();
+        const fromBody = message.body.match(/ryhmään ([^.]+)/)?.[1]?.trim();
+        const groupName = fromTitle || fromBody;
+        if (groupName) {
+          return {
+            title: tNotif("group_invite.title"),
+            body: tNotif("group_invite.body", { groupName }),
+          };
+        }
+        break;
+      }
+      case "balance_reminder":
+        return {
+          title: tNotif("balance_reminder.title"),
+          body: tNotif("balance_reminder.body", { summary: message.body }),
+        };
+      case "debt_request": {
+        if (message.debtRequestAmount != null) {
+          const match = message.body.match(/^(.+?) pyytää sinua maksamaan/);
+          const creditorName = match?.[1]?.trim();
+          if (creditorName) {
+            return {
+              title: tNotif("debt_request.title"),
+              body: tNotif("debt_request.body", {
+                creditorName,
+                amount: formatCurrency(message.debtRequestAmount),
+              }),
+            };
+          }
+        }
+        break;
+      }
+      case "debt_request_paid": {
+        const match = message.body.match(/^(.+?) merkitsi/);
+        const debtorName = match?.[1]?.trim();
+        const amountMatch = message.body.match(/\(([^)]+)\)/);
+        const amount = amountMatch?.[1]?.trim();
+        if (debtorName && amount) {
+          return {
+            title: tNotif("debt_request_paid.title"),
+            body: tNotif("debt_request_paid.body", { debtorName, amount }),
+          };
+        }
+        break;
+      }
+    }
+  } catch {
+    // fall through to server strings
+  }
+
+  return { title: message.title, body: message.body };
+}
 
 function NotificationIcon({
   type,
 }: {
-  type: "group_invite" | "balance_reminder" | "debt_request" | "debt_request_paid";
+  type: TranslatedNotificationType;
 }) {
   if (type === "group_invite") {
     return <Mail className="h-5 w-5 text-primary shrink-0" />;
@@ -37,6 +122,11 @@ function NotificationIcon({
 }
 
 export function InboxFeed() {
+  const t = useTranslations("inbox");
+  const tNotif = useTranslations("notifications");
+  const tShared = useTranslations("shared");
+  const locale = resolveLocale(useLocale());
+  const dateFnsLocale = useDateFnsLocale();
   const { data: messages, isLoading } = useConvexQuery(
     api.notifications.listMyNotifications,
     { limit: 50 }
@@ -51,8 +141,7 @@ export function InboxFeed() {
     try {
       await markAsRead.mutate({ notificationId });
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error(message);
+      toast.error(getConvexErrorFromUnknown(error, locale));
     }
   };
 
@@ -60,11 +149,10 @@ export function InboxFeed() {
     try {
       const result = await markAllAsRead.mutate({});
       if (result.updated > 0) {
-        toast.success("Kaikki viestit merkitty luetuiksi");
+        toast.success(t("toastAllMarkedRead"));
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error(message);
+      toast.error(getConvexErrorFromUnknown(error, locale));
     }
   };
 
@@ -81,7 +169,7 @@ export function InboxFeed() {
       <Card>
         <CardContent className="py-12 text-center text-muted-foreground">
           <Bell className="h-10 w-10 mx-auto mb-3 opacity-40" />
-          <p>Ei viestejä. Ryhmäkutsut ja saldomuistutukset näkyvät täällä.</p>
+          <p>{t("empty")}</p>
         </CardContent>
       </Card>
     );
@@ -98,86 +186,96 @@ export function InboxFeed() {
             onClick={handleMarkAllRead}
             disabled={markAllAsRead.isLoading}
           >
-            Merkitse kaikki luetuiksi
+            {t("markAllRead")}
           </Button>
         </div>
       )}
 
       <ul className="space-y-3" data-testid="inbox-feed">
-        {messages.map((message: InboxMessage) => (
-          <li key={message.id}>
-            <Card
-              className={
-                message.isRead ? "opacity-80" : "border-primary/30 bg-primary/5"
-              }
-            >
-              <CardContent className="p-4">
-                <div className="flex gap-3">
-                  <NotificationIcon type={message.type} />
-                  <div className="flex-1 min-w-0 space-y-2">
-                    <div className="flex flex-wrap items-start justify-between gap-2">
-                      <div>
-                        <p className="font-medium leading-snug">{message.title}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                          {formatDistanceToNow(message.createdAt, {
-                            addSuffix: true,
-                            locale: fi,
-                          })}
-                        </p>
+        {messages.map((message: InboxMessage) => {
+          const { title, body } = getNotificationDisplay(message, tNotif);
+
+          return (
+            <li key={message.id}>
+              <Card
+                className={
+                  message.isRead
+                    ? "opacity-80"
+                    : "border-primary/30 bg-primary/5"
+                }
+              >
+                <CardContent className="p-4">
+                  <div className="flex gap-3">
+                    {isTranslatedType(message.type) ? (
+                      <NotificationIcon type={message.type} />
+                    ) : (
+                      <Bell className="h-5 w-5 text-muted-foreground shrink-0" />
+                    )}
+                    <div className="flex-1 min-w-0 space-y-2">
+                      <div className="flex flex-wrap items-start justify-between gap-2">
+                        <div>
+                          <p className="font-medium leading-snug">{title}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            {formatDistanceToNow(message.createdAt, {
+                              addSuffix: true,
+                              locale: dateFnsLocale,
+                            })}
+                          </p>
+                        </div>
+                        {!message.isRead && (
+                          <Badge variant="secondary">{tShared("newBadge")}</Badge>
+                        )}
                       </div>
-                      {!message.isRead && (
-                        <Badge variant="secondary">Uusi</Badge>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground">{message.body}</p>
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {message.type === "debt_request" ? (
-                        <DebtRequestActions
-                          notificationId={message.id}
-                          href={message.href}
-                          canMarkPaid={message.canMarkPaid}
-                          debtRequestRespondedAt={message.debtRequestRespondedAt}
-                          settlementHref={
-                            message.debtRequestCreditorId
-                              ? message.debtRequestGroupId
-                                ? `/settlements/group/${message.debtRequestGroupId}`
-                                : `/settlements/user/${message.debtRequestCreditorId}`
-                              : (message.href ?? undefined)
-                          }
-                        />
-                      ) : (
-                        <>
-                          {message.href && (
-                            <Button size="sm" asChild>
-                              <Link href={message.href}>
-                                {message.type === "group_invite"
-                                  ? "Avaa kutsu"
-                                  : message.type === "debt_request_paid"
-                                    ? "Näytä saldo"
-                                    : "Avaa etusivu"}
-                              </Link>
-                            </Button>
-                          )}
-                          {!message.isRead && (
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleMarkRead(message.id)}
-                              disabled={markAsRead.isLoading}
-                            >
-                              Merkitse luetuksi
-                            </Button>
-                          )}
-                        </>
-                      )}
+                      <p className="text-sm text-muted-foreground">{body}</p>
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {message.type === "debt_request" ? (
+                          <DebtRequestActions
+                            notificationId={message.id}
+                            href={message.href}
+                            canMarkPaid={message.canMarkPaid}
+                            debtRequestRespondedAt={message.debtRequestRespondedAt}
+                            settlementHref={
+                              message.debtRequestCreditorId
+                                ? message.debtRequestGroupId
+                                  ? `/settlements/group/${message.debtRequestGroupId}`
+                                  : `/settlements/user/${message.debtRequestCreditorId}`
+                                : (message.href ?? undefined)
+                            }
+                          />
+                        ) : (
+                          <>
+                            {message.href && (
+                              <Button size="sm" asChild>
+                                <Link href={message.href}>
+                                  {message.type === "group_invite"
+                                    ? t("actions.openInvite")
+                                    : message.type === "debt_request_paid"
+                                      ? t("actions.viewBalance")
+                                      : t("actions.openDashboard")}
+                                </Link>
+                              </Button>
+                            )}
+                            {!message.isRead && (
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleMarkRead(message.id)}
+                                disabled={markAsRead.isLoading}
+                              >
+                                {t("markRead")}
+                              </Button>
+                            )}
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </li>
-        ))}
+                </CardContent>
+              </Card>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { api } from "@/convex/_generated/api";
 import { useConvexMutation, useConvexQuery } from "@/hooks/use-convex-query";
 import { Button } from "@/components/ui/button";
@@ -20,22 +20,36 @@ import type {
   ReminderIntervalDays,
   ReminderMinAgeDays,
 } from "@/lib/reminder-settings";
+import { useLocale, useTranslations } from "next-intl";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
 
-const INTERVAL_OPTIONS: { value: ReminderIntervalDays; label: string }[] = [
-  { value: 3, label: "3 päivää" },
-  { value: 7, label: "7 päivää" },
-  { value: 14, label: "14 päivää" },
-  { value: 30, label: "30 päivää" },
-];
-
-const MIN_AGE_OPTIONS: { value: ReminderMinAgeDays; label: string }[] = [
-  { value: 3, label: "3 päivää" },
-  { value: 7, label: "7 päivää" },
-  { value: 14, label: "14 päivää" },
-  { value: 30, label: "30 päivää" },
-];
+const INTERVAL_VALUES: ReminderIntervalDays[] = [3, 7, 14, 30];
+const MIN_AGE_VALUES: ReminderMinAgeDays[] = [3, 7, 14, 30];
 
 export default function SettingsPage() {
+  const t = useTranslations("settings");
+  const tShared = useTranslations("shared");
+  const locale = resolveLocale(useLocale());
+
+  const intervalOptions = useMemo(
+    () =>
+      INTERVAL_VALUES.map((value) => ({
+        value,
+        label: tShared("daysOption", { count: value }),
+      })),
+    [tShared]
+  );
+
+  const minAgeOptions = useMemo(
+    () =>
+      MIN_AGE_VALUES.map((value) => ({
+        value,
+        label: tShared("daysOption", { count: value }),
+      })),
+    [tShared]
+  );
+
   const { data: settings, isLoading } = useConvexQuery(
     api.settings.getReminderSettings
   );
@@ -62,7 +76,7 @@ export default function SettingsPage() {
 
   const handleSave = async () => {
     if (!notifyWhenIOwe && !notifyWhenOwedToMe) {
-      toast.error("Valitse vähintään yksi muistutustyyppi");
+      toast.error(t("toastSelectReminderType"));
       return;
     }
     try {
@@ -74,19 +88,24 @@ export default function SettingsPage() {
         notifyWhenOwedToMe,
       });
       setDirty(false);
-      toast.success("Asetukset tallennettu");
+      toast.success(t("toastSaved"));
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error("Tallennus epäonnistui: " + message);
+      toast.error(
+        t("toastSaveFailed", {
+          message: getConvexErrorFromUnknown(error, locale),
+        })
+      );
     }
   };
+
+  const dateTimeLocale = locale === "fi" ? "fi-FI" : "en-US";
 
   return (
     <div className="container mx-auto py-6 max-w-lg space-y-6">
       <Button variant="outline" size="sm" asChild>
         <Link href="/dashboard">
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Takaisin
+          {tShared("back")}
         </Link>
       </Button>
 
@@ -95,28 +114,27 @@ export default function SettingsPage() {
           <Bell className="h-7 w-7 text-primary" />
         </div>
         <div>
-          <h1 className="text-4xl gradient-title">Asetukset</h1>
-          <p className="text-muted-foreground mt-1">
-            Säädä sähköpostimuistutuksia avoimista saldoista.
-          </p>
+          <h1 className="text-4xl gradient-title">{t("title")}</h1>
+          <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Saldomuistutukset</CardTitle>
+          <CardTitle>{t("remindersCardTitle")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {isLoading ? (
-            <p className="text-muted-foreground text-sm">Ladataan…</p>
+            <p className="text-muted-foreground text-sm">{tShared("loading")}</p>
           ) : (
             <>
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <Label htmlFor="reminders-enabled">Muistutukset käytössä</Label>
+                  <Label htmlFor="reminders-enabled">
+                    {t("remindersEnabled")}
+                  </Label>
                   <p className="text-sm text-muted-foreground">
-                    Lähetämme sähköpostia vain valituin välein, jos saldo on
-                    edelleen auki.
+                    {t("remindersEnabledHint")}
                   </p>
                 </div>
                 <input
@@ -132,7 +150,7 @@ export default function SettingsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Muistuta minua</Label>
+                <Label>{t("remindMeLabel")}</Label>
                 <Select
                   value={String(intervalDays)}
                   onValueChange={(v) => {
@@ -145,7 +163,7 @@ export default function SettingsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {INTERVAL_OPTIONS.map((opt) => (
+                    {intervalOptions.map((opt) => (
                       <SelectItem key={opt.value} value={String(opt.value)}>
                         {opt.label}
                       </SelectItem>
@@ -155,7 +173,7 @@ export default function SettingsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Velan on oltava avoinna vähintään</Label>
+                <Label>{t("minAgeLabel")}</Label>
                 <Select
                   value={String(minAgeDays)}
                   onValueChange={(v) => {
@@ -168,7 +186,7 @@ export default function SettingsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {MIN_AGE_OPTIONS.map((opt) => (
+                    {minAgeOptions.map((opt) => (
                       <SelectItem key={opt.value} value={String(opt.value)}>
                         {opt.label}
                       </SelectItem>
@@ -176,17 +194,16 @@ export default function SettingsPage() {
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                  Lyhytaikaisia saldoja ei muistuteta — vain pitkään avoinna
-                  olleet.
+                  {t("minAgeHint")}
                 </p>
               </div>
 
               <div className="space-y-4 rounded-lg border p-4">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <Label htmlFor="notify-owe">Kun olen velkaa jollekulle</Label>
+                    <Label htmlFor="notify-owe">{t("notifyWhenIOwe")}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Muistutus omista maksamattomista veloista.
+                      {t("notifyWhenIOweHint")}
                     </p>
                   </div>
                   <input
@@ -204,11 +221,9 @@ export default function SettingsPage() {
 
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <Label htmlFor="notify-owed">
-                      Kun joku on velkaa minulle
-                    </Label>
+                    <Label htmlFor="notify-owed">{t("notifyWhenOwed")}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Muistutus saatavistasi (esim. muistuta kaveria).
+                      {t("notifyWhenOwedHint")}
                     </p>
                   </div>
                   <input
@@ -227,8 +242,11 @@ export default function SettingsPage() {
 
               {settings?.lastSentAt && (
                 <p className="text-xs text-muted-foreground">
-                  Viimeisin muistutus lähetetty:{" "}
-                  {new Date(settings.lastSentAt).toLocaleString("fi-FI")}
+                  {t("lastSent", {
+                    datetime: new Date(settings.lastSentAt).toLocaleString(
+                      dateTimeLocale
+                    ),
+                  })}
                 </p>
               )}
 
@@ -236,7 +254,7 @@ export default function SettingsPage() {
                 onClick={handleSave}
                 disabled={!dirty || updateSettings.isLoading}
               >
-                {updateSettings.isLoading ? "Tallennetaan…" : "Tallenna"}
+                {updateSettings.isLoading ? tShared("saving") : tShared("save")}
               </Button>
             </>
           )}

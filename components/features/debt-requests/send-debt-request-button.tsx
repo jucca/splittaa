@@ -19,6 +19,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Send } from "lucide-react";
 import { toast } from "sonner";
 import { formatCurrency } from "@/lib/utils";
+import { useLocale, useTranslations } from "next-intl";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
 
 type SendDebtRequestButtonProps = {
   debtorUserId: Id<"users">;
@@ -41,6 +44,9 @@ export function SendDebtRequestButton({
   size = "sm",
   className,
 }: SendDebtRequestButtonProps) {
+  const t = useTranslations("debtRequests");
+  const tShared = useTranslations("shared");
+  const locale = resolveLocale(useLocale());
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const sendDebtRequest = useConvexMutation(api.debtRequests.sendDebtRequest);
@@ -52,21 +58,21 @@ export function SendDebtRequestButton({
         groupId,
         message: message.trim() || undefined,
       });
-      toast.success(`Velkapyyntö lähetetty käyttäjälle ${debtorName}`);
+      toast.success(t("toastSent", { debtorName }));
       setOpen(false);
       setMessage("");
     } catch (error) {
       const data = (error as { data?: { code?: string; message?: string } })
         ?.data;
-      const fallback =
-        error instanceof Error ? error.message : "Lähetys epäonnistui";
-      toast.error(data?.message ?? fallback);
+      toast.error(
+        data?.message ?? getConvexErrorFromUnknown(error, locale) ?? t("toastSendFailed")
+      );
     }
   };
 
   const contextLabel = groupName
-    ? `ryhmässä ${groupName}`
-    : "henkilökohtaisessa jaossa";
+    ? t("contextGroup", { groupName })
+    : t("contextPersonal");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -79,24 +85,25 @@ export function SendDebtRequestButton({
           data-testid="send-debt-request"
         >
           <Send className="h-4 w-4 mr-1" />
-          Lähetä velkapyyntö
+          {t("sendButton")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Velkapyyntö</DialogTitle>
+          <DialogTitle>{t("dialogTitle")}</DialogTitle>
           <DialogDescription>
-            Lähetä erillinen pyyntö käyttäjälle {debtorName} (
-            {formatCurrency(amount)} {contextLabel}). Velallinen saa viestin
-            postilaatikkoon ja sähköpostilla, jos osoite on tiedossa. Tämä ei
-            korvaa automaattista saldomuistutusta.
+            {t("dialogDescription", {
+              debtorName,
+              amount: formatCurrency(amount),
+              context: contextLabel,
+            })}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-2">
-          <Label htmlFor="debt-request-message">Viesti (valinnainen)</Label>
+          <Label htmlFor="debt-request-message">{t("messageLabel")}</Label>
           <Textarea
             id="debt-request-message"
-            placeholder="Esim. Muistathan maksaa viikonloppureissun osuutesi"
+            placeholder={t("messagePlaceholder")}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             maxLength={500}
@@ -105,14 +112,14 @@ export function SendDebtRequestButton({
         </div>
         <DialogFooter>
           <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-            Peruuta
+            {tShared("cancel")}
           </Button>
           <Button
             type="button"
             onClick={handleSend}
             disabled={sendDebtRequest.isLoading}
           >
-            {sendDebtRequest.isLoading ? "Lähetetään..." : "Lähetä pyyntö"}
+            {sendDebtRequest.isLoading ? tShared("sending") : t("sendRequest")}
           </Button>
         </DialogFooter>
       </DialogContent>

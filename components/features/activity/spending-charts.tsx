@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import {
@@ -17,49 +17,26 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getCategoryById } from "@/lib/expense-categories";
 import { formatCurrency } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+import { getCategoryLabel } from "@/lib/i18n/category-label";
 
 type SpendingPeriod = "week" | "month" | "year";
 
-const PERIOD_LABELS: Record<SpendingPeriod, string> = {
-  week: "Viikko",
-  month: "Kuukausi",
-  year: "Vuosi",
-};
-
-const MONTH_NAMES = [
-  "tammikuu",
-  "helmikuu",
-  "maaliskuu",
-  "huhtikuu",
-  "toukokuu",
-  "kesäkuu",
-  "heinäkuu",
-  "elokuu",
-  "syyskuu",
-  "lokakuu",
-  "marraskuu",
-  "joulukuu",
-];
-
-function monthDayTooltipLabel(dayLabel: string): string {
-  const day = Number.parseInt(dayLabel, 10);
-  const now = new Date();
-  if (!Number.isFinite(day)) return dayLabel;
-  return `${day}. ${MONTH_NAMES[now.getMonth()]} ${now.getFullYear()}`;
-}
-
-function periodChartCaption(period: SpendingPeriod): string | null {
-  const now = new Date();
-  if (period === "month") {
-    return `${MONTH_NAMES[now.getMonth()]} ${now.getFullYear()} — jokainen päivä`;
-  }
-  if (period === "year") {
-    return `Vuosi ${now.getFullYear()}`;
-  }
-  return "Kuluva viikko (ma–su)";
-}
+const MONTH_LONG_KEYS = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
+] as const;
 
 const CHART_COLORS = [
   "#36d7b7",
@@ -72,17 +49,61 @@ const CHART_COLORS = [
 ];
 
 export function SpendingCharts() {
+  const t = useTranslations("activity.charts");
+  const tShared = useTranslations("shared");
+  const tCategories = useTranslations("categories");
   const [period, setPeriod] = useState<SpendingPeriod>("month");
   const summary = useQuery(api.activity.getSpendingSummary, { period });
+
+  const periodLabels: Record<SpendingPeriod, string> = {
+    week: t("periodWeek"),
+    month: t("periodMonth"),
+    year: t("periodYear"),
+  };
+
+  const monthDayTooltipLabel = (dayLabel: string) => {
+    const day = Number.parseInt(dayLabel, 10);
+    const now = new Date();
+    if (!Number.isFinite(day)) return dayLabel;
+    const monthKey = MONTH_LONG_KEYS[now.getMonth()];
+    return t("dayTooltip", {
+      day,
+      month: t(`monthLong.${monthKey}`),
+      year: now.getFullYear(),
+    });
+  };
+
+  const periodChartCaption = (p: SpendingPeriod): string | null => {
+    const now = new Date();
+    if (p === "month") {
+      const monthKey = MONTH_LONG_KEYS[now.getMonth()];
+      return t("captionMonth", {
+        month: t(`monthLong.${monthKey}`),
+        year: now.getFullYear(),
+      });
+    }
+    if (p === "year") {
+      return t("captionYear", { year: now.getFullYear() });
+    }
+    return t("captionWeek");
+  };
+
+  const categoryData = useMemo(() => {
+    if (!summary) return [];
+    return summary.byCategory.map((c) => ({
+      name: getCategoryLabel(tCategories, c.categoryId),
+      amount: c.amount,
+    }));
+  }, [summary, tCategories]);
 
   if (summary === undefined) {
     return (
       <Card data-testid="spending-charts-loading">
         <CardHeader>
-          <CardTitle>Kulutusyhteenveto</CardTitle>
+          <CardTitle>{t("title")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">Ladataan…</p>
+          <p className="text-sm text-muted-foreground">{tShared("loading")}</p>
         </CardContent>
       </Card>
     );
@@ -93,37 +114,32 @@ export function SpendingCharts() {
     amount: b.amount,
   }));
 
-  const categoryData = summary.byCategory.map((c) => ({
-    name: getCategoryById(c.categoryId).name,
-    amount: c.amount,
-  }));
-
   const isEmpty = summary.totalAmount === 0;
 
   return (
     <Card>
       <CardHeader className="space-y-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <CardTitle>Kulutusyhteenveto</CardTitle>
+          <CardTitle>{t("title")}</CardTitle>
           <Tabs
             value={period}
             onValueChange={(v) => setPeriod(v as SpendingPeriod)}
           >
             <TabsList>
               <TabsTrigger value="week" data-testid="spending-period-week">
-                Viikko
+                {t("periodWeek")}
               </TabsTrigger>
               <TabsTrigger value="month" data-testid="spending-period-month">
-                Kuukausi
+                {t("periodMonth")}
               </TabsTrigger>
               <TabsTrigger value="year" data-testid="spending-period-year">
-                Vuosi
+                {t("periodYear")}
               </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
         <p className="text-sm text-muted-foreground">
-          {PERIOD_LABELS[period]} — vain sinun osuutesi kuluista
+          {t("periodCaption", { period: periodLabels[period] })}
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -131,19 +147,21 @@ export function SpendingCharts() {
           className="bg-muted rounded-lg p-4"
           data-testid="spending-total"
         >
-          <p className="text-sm text-muted-foreground">Yhteensä</p>
+          <p className="text-sm text-muted-foreground">{t("totalLabel")}</p>
           <p className="text-2xl font-bold mt-1">
             {formatCurrency(summary.totalAmount)}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
             {summary.expenseCount}{" "}
-            {summary.expenseCount === 1 ? "kulu" : "kulua"}
+            {summary.expenseCount === 1
+              ? tShared("expenseSingular")
+              : tShared("expensePlural")}
           </p>
         </div>
 
         {isEmpty ? (
           <p className="text-sm text-muted-foreground text-center py-8">
-            Ei kuluja valitulla jaksolla
+            {t("noExpensesInPeriod")}
           </p>
         ) : (
           <>
@@ -151,7 +169,7 @@ export function SpendingCharts() {
               className={period === "month" ? "h-64" : "h-56"}
               data-testid="spending-chart-time"
             >
-              <p className="text-sm font-medium mb-1">Kulutus ajassa</p>
+              <p className="text-sm font-medium mb-1">{t("spendingOverTime")}</p>
               <p className="text-xs text-muted-foreground mb-2">
                 {periodChartCaption(period)}
               </p>
@@ -177,7 +195,7 @@ export function SpendingCharts() {
                         formatCurrency(
                           typeof value === "number" ? value : Number(value)
                         ),
-                        "Summa",
+                        tShared("sumLabel"),
                       ]}
                       labelFormatter={(label) => monthDayTooltipLabel(label)}
                     />
@@ -199,7 +217,7 @@ export function SpendingCharts() {
                         formatCurrency(
                           typeof value === "number" ? value : Number(value)
                         ),
-                        "Summa",
+                        tShared("sumLabel"),
                       ]}
                     />
                     <Bar
@@ -214,7 +232,7 @@ export function SpendingCharts() {
 
             {categoryData.length > 0 && (
               <div className="h-56" data-testid="spending-chart-category">
-                <p className="text-sm font-medium mb-2">Kategoriat</p>
+                <p className="text-sm font-medium mb-2">{t("categories")}</p>
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -239,7 +257,7 @@ export function SpendingCharts() {
                         formatCurrency(
                           typeof value === "number" ? value : Number(value)
                         ),
-                        "Summa",
+                        tShared("sumLabel"),
                       ]}
                     />
                   </PieChart>

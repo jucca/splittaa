@@ -9,6 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { formatCurrency } from "@/lib/utils";
+import { useLocale, useTranslations } from "next-intl";
+import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { resolveLocale } from "@/lib/i18n/locales";
 
 type DebtRequestActionsProps = {
   notificationId: Id<"notifications">;
@@ -25,6 +28,10 @@ export function DebtRequestActions({
   debtRequestRespondedAt,
   settlementHref,
 }: DebtRequestActionsProps) {
+  const t = useTranslations("inbox.actions");
+  const tInbox = useTranslations("inbox");
+  const tShared = useTranslations("shared");
+  const locale = resolveLocale(useLocale());
   const respond = useConvexMutation(api.debtRequests.respondToDebtRequest);
   const markAsRead = useConvexMutation(api.notifications.markAsRead);
 
@@ -32,7 +39,10 @@ export function DebtRequestActions({
     try {
       const result = await respond.mutate({ notificationId });
       toast.success(
-        `Maksu kirjattu (${formatCurrency(result.amount)}). ${result.creditorName} saa ilmoituksen.`
+        t("toastMarkedPaid", {
+          amount: formatCurrency(result.amount),
+          creditorName: result.creditorName,
+        })
       );
     } catch (error) {
       const data = (error as { data?: { code?: string; message?: string } })
@@ -41,9 +51,9 @@ export function DebtRequestActions({
         toast.info(data.message);
         return;
       }
-      const fallback =
-        error instanceof Error ? error.message : "Kirjaus epäonnistui";
-      toast.error(data?.message ?? fallback);
+      toast.error(
+        data?.message ?? getConvexErrorFromUnknown(error, locale) ?? t("toastRecordFailed")
+      );
     }
   };
 
@@ -51,7 +61,7 @@ export function DebtRequestActions({
     return (
       <Badge variant="outline" className="text-green-700 border-green-200">
         <CheckCircle2 className="h-3 w-3 mr-1" />
-        Maksetuksi merkitty
+        {t("markedPaid")}
       </Badge>
     );
   }
@@ -68,12 +78,12 @@ export function DebtRequestActions({
           disabled={respond.isLoading}
           data-testid="mark-debt-request-paid"
         >
-          {respond.isLoading ? "Kirjataan..." : "Merkitse maksetuksi"}
+          {respond.isLoading ? tShared("recording") : t("markPaid")}
         </Button>
       )}
       {tilitysLink && (
         <Button size="sm" variant="outline" asChild>
-          <Link href={tilitysLink}>Avaa tilitys</Link>
+          <Link href={tilitysLink}>{t("openSettlement")}</Link>
         </Button>
       )}
       <Button
@@ -83,7 +93,7 @@ export function DebtRequestActions({
         onClick={() => markAsRead.mutate({ notificationId })}
         disabled={markAsRead.isLoading}
       >
-        Merkitse luetuksi
+        {tInbox("markRead")}
       </Button>
     </div>
   );

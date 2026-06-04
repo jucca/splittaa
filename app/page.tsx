@@ -55,15 +55,14 @@ export default async function LandingPage() {
         </div>
 
         <div className="container mx-auto max-w-5xl overflow-hidden rounded-xl shadow-xl">
-          <div className="gradient p-1 aspect-[16/9]">
-            <Image
-              src="/hero.png"
-              width={1280}
-              height={720}
-              alt={t("hero.heroImageAlt")}
-              className="rounded-lg mx-auto"
-              priority
-            />
+          <div
+            className="gradient p-1 aspect-[16/9] rounded-lg flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-teal-50"
+            role="img"
+            aria-label={t("hero.heroImageAlt")}
+          >
+            <p className="text-center text-muted-foreground px-8 md:text-lg max-w-xl">
+              {t("hero.subtitle")}
+            </p>
           </div>
         </div>
       </section>

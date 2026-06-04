@@ -25,7 +25,7 @@ export default function Header() {
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src={"/logos/logo.png"}
+            src="/logos/logo.svg"
             alt={t("logoAlt")}
             width={200}
             height={60}

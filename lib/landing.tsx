@@ -88,6 +88,6 @@ export const LANDING_TESTIMONIALS: {
   image: string;
 }[] = [
   { key: "annikki", name: "Annikki Komulainen", image: "/testimonials/ansku.png" },
-  { key: "luigi", name: "Luigi Bolognese", image: "/testimonials/luigi.jpg" },
+  { key: "luigi", name: "Luigi Bolognese", image: "/testimonials/luigi.png" },
   { key: "antti", name: "Antti Kukkonen", image: "/testimonials/antti.png" },
 ];

@@ -26,7 +26,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/logos/logo-s.png" sizes="any" />
+        <link rel="icon" href="/logos/logo-s.svg" type="image/svg+xml" />
       </head>
       <body className={`${inter.className}`}>
         <NextIntlClientProvider locale={locale} messages={messages}>

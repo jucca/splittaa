@@ -1,0 +1,508 @@
+{
+  "meta": {
+    "appTitle": "Splittaa",
+    "appDescription": "Der einfachste Weg, Ausgaben mit Freunden zu teilen"
+  },
+  "language": {
+    "switch": "Sprache ändern",
+    "current": "Aktuelle Sprache: {locale}"
+  },
+  "nav": {
+    "logoAlt": "Splittaa",
+    "features": "Funktionen",
+    "howItWorks": "So funktioniert's",
+    "dashboard": "Übersicht",
+    "inbox": "Posteingang",
+    "inboxWithCount": "Posteingang ({count})",
+    "activity": "Aktivität",
+    "settings": "Einstellungen",
+    "signIn": "Anmelden",
+    "getStarted": "Loslegen"
+  },
+  "theme": {
+    "toggleAria": "Dunkelmodus",
+    "toggleSr": "Dunkelmodus"
+  },
+  "shared": {
+    "you": "Du",
+    "back": "Zurück",
+    "loading": "Laden…",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "saving": "Speichern…",
+    "creating": "Erstellen...",
+    "joining": "Beitreten...",
+    "recording": "Erfassen...",
+    "sending": "Senden...",
+    "searching": "Suchen...",
+    "done": "Fertig",
+    "otherUser": "Anderer Benutzer",
+    "unknownUser": "Unbekannter Benutzer",
+    "showAll": "Alle anzeigen",
+    "membersCount": "{count} Mitglieder",
+    "membersInGroup": "{count} Mitglieder in der Gruppe",
+    "peopleCountFrom": "von {count} Personen",
+    "peopleCountTo": "an {count} Personen",
+    "optional": "(optional)",
+    "total": "Gesamt",
+    "sumLabel": "Betrag",
+    "consumptionLabel": "Ausgaben",
+    "expenseSingular": "Ausgabe",
+    "expensePlural": "Ausgaben",
+    "group": "Gruppe",
+    "person": "Person",
+    "expenseKind": "Ausgabe",
+    "settlementKind": "Ausgleich",
+    "newBadge": "Neu",
+    "admin": "Admin",
+    "youBadge": "Du",
+    "youParenthetical": "(du)",
+    "daysOption": "{count} Tage",
+    "close": "Schließen"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Ausgaben teilen. Leben vereinfachen.",
+      "title": "Der einfachste Weg, Ausgaben mit Freunden zu teilen",
+      "subtitle": "Gemeinsame Ausgaben verfolgen, Rechnungen mühelos aufteilen und schnell ausgleichen. Kein Stress mehr darüber, wer wem was schuldet.",
+      "ctaStart": "Loslegen",
+      "ctaHowItWorks": "So funktioniert's",
+      "heroImageAlt": "Splittaa-App-Vorschau"
+    },
+    "featuresSection": {
+      "badge": "Funktionen",
+      "title": "Alles, was du zum Teilen von Ausgaben brauchst",
+      "subtitle": "Unsere Plattform bietet dir alle Werkzeuge, um gemeinsame Ausgaben einfach zu verwalten.",
+      "groupExpenses": {
+        "title": "Gruppenausgaben",
+        "description": "Erstelle Gruppen für Mitbewohner, Reisen oder Events und behalte Ausgaben im Blick."
+      },
+      "smartSettlements": {
+        "title": "Intelligente Ausgleiche",
+        "description": "Unser Algorithmus minimiert die Anzahl der Zahlungen zum Ausgleichen."
+      },
+      "spendingAnalysis": {
+        "title": "Ausgabenanalyse",
+        "description": "Verfolge Ausgewohnheiten und entdecke Einblicke in gemeinsame Ausgaben."
+      },
+      "paymentReminders": {
+        "title": "Zahlungserinnerungen",
+        "description": "Automatische Erinnerungen für offene Salden und Ausgabeneinblicke."
+      },
+      "splitMethods": {
+        "title": "Mehrere Aufteilungsarten",
+        "description": "Gleichmäßig, prozentual oder mit genauen Beträgen — passt zu jeder Situation."
+      },
+      "realtimeUpdates": {
+        "title": "Echtzeit-Updates",
+        "description": "Sieh neue Ausgaben und Zahlungen, sobald Freunde sie hinzufügen."
+      }
+    },
+    "howItWorksSection": {
+      "badge": "So funktioniert's",
+      "title": "Ausgaben teilen war noch nie so einfach",
+      "subtitle": "Folge diesen einfachen Schritten, um Ausgaben mit Freunden zu verfolgen und zu teilen.",
+      "step1": {
+        "title": "Gruppe erstellen oder beitreten",
+        "description": "Starte eine Gruppe für Mitbewohner, eine Reise oder ein Event und lade Freunde ein."
+      },
+      "step2": {
+        "title": "Ausgaben hinzufügen",
+        "description": "Erfasse, wer bezahlt hat und wie die Rechnung unter den Mitgliedern aufgeteilt wird."
+      },
+      "step3": {
+        "title": "Ausgleichen",
+        "description": "Sieh, wer wem was schuldet, und erfasse Zahlungen, wenn Schulden beglichen sind."
+      }
+    },
+    "testimonialsSection": {
+      "badge": "Erfahrungsberichte",
+      "title": "Was unsere Nutzer sagen",
+      "annikki": {
+        "quote": "Mit Splittaa verliere ich nicht mehr den Überblick darüber, wer was bezahlt hat!",
+        "role": "Hausverwalterin"
+      },
+      "luigi": {
+        "quote": "Mit Splittaa führe ich genaue Buch über meine Forderungen. Besser als die besten Erinnerungs-Apps!",
+        "role": "Finanz- und Schuldberater"
+      },
+      "antti": {
+        "quote": "Hätte ich Splittaa früher gehabt, hätte Luigi meine Schuhe und meine Jacke nicht verkaufen können! Die Schuld kommt sofort auf die Liste.",
+        "role": "Softwareentwickler / Achtsamkeits-Coach"
+      }
+    },
+    "ctaSection": {
+      "title": "Bereit, das Teilen von Ausgaben zu vereinfachen?",
+      "subtitle": "Schließe dich Tausenden Nutzern an, die das Teilen von Ausgaben stressfrei gemacht haben.",
+      "button": "Loslegen"
+    },
+    "footer": {
+      "copyright": "© {year} Splittaa. Alle Rechte vorbehalten."
+    }
+  },
+  "join": {
+    "invalidLink": "Ungültiger Einladungslink.",
+    "inviteNotFound": "Einladung nicht gefunden.",
+    "homeLink": "Übersicht",
+    "inviteInvalidTitle": "Einladung ist ungültig",
+    "inviteInvalidBody": "Die Einladung zur Gruppe {groupName} ist abgelaufen oder wurde bereits bearbeitet.",
+    "goDashboard": "Zur Übersicht",
+    "goBack": "Zurück",
+    "groupInviteTitle": "Gruppeneinladung",
+    "invitedBy": "{inviterName} hat dich eingeladen",
+    "signInToJoin": "Melde dich an oder erstelle ein Konto, um der Gruppe beizutreten.",
+    "signUpAndJoin": "Registrieren und beitreten",
+    "signIn": "Anmelden",
+    "joiningGroup": "Gruppe beitreten…",
+    "acceptInvite": "Einladung annehmen",
+    "declineInvite": "Einladung ablehnen",
+    "toastInviteDeclined": "Einladung abgelehnt"
+  },
+  "dashboard": {
+    "title": "Übersicht",
+    "addExpense": "Ausgabe hinzufügen",
+    "totalBalance": "Gesamtsaldo",
+    "balanceOwedToYou": "Dir steht zu",
+    "balanceYouOwe": "Du schuldest",
+    "balanceSettled": "Alles ausgeglichen!",
+    "balanceNotOwingAnyone": "Du schuldest niemandem etwas",
+    "balanceSummaryTitle": "Saldo-Details",
+    "yourGroupsTitle": "Deine Gruppen",
+    "createNewGroup": "Neue Gruppe erstellen",
+    "pendingInvitesTitle": "Gruppeneinladungen ({count})",
+    "inviterLabel": "Eingeladen von: {name}",
+    "openInvite": "Einladung öffnen",
+    "joinByCodeTitle": "Gruppe mit Code beitreten",
+    "joinCodeLabel": "Beitrittscode",
+    "joinCodePlaceholder": "z. B. ABCD2345",
+    "joinButton": "Beitreten",
+    "expenseSummaryTitle": "Ausgabenübersicht",
+    "totalThisMonth": "Gesamt diesen Monat",
+    "totalThisYear": "Gesamt dieses Jahr",
+    "monthlySpendingCaption": "Monatliche Ausgaben {year}",
+    "monthShort": {
+      "jan": "Jan.",
+      "feb": "Feb.",
+      "mar": "März",
+      "apr": "Apr.",
+      "may": "Mai",
+      "jun": "Juni",
+      "jul": "Juli",
+      "aug": "Aug.",
+      "sep": "Sept.",
+      "oct": "Okt.",
+      "nov": "Nov.",
+      "dec": "Dez."
+    },
+    "groupListEmpty": "Noch keine Gruppen",
+    "groupListEmptyHint": "Erstelle eine Gruppe, um gemeinsame Ausgaben zu verfolgen",
+    "balanceAllSettled": "Alles ist ausgeglichen!",
+    "toastAlreadyMember": "Du bist bereits Gruppenmitglied",
+    "toastJoinedGroup": "Du bist der Gruppe beigetreten!"
+  },
+  "contacts": {
+    "title": "Kontakte",
+    "createGroup": "Gruppe erstellen",
+    "peopleSection": "Personen",
+    "peopleEmpty": "Noch keine Kontakte. Füge eine Ausgabe mit jemandem hinzu, um sie hier zu sehen.",
+    "groupsSection": "Gruppen",
+    "groupsEmpty": "Noch keine Gruppen. Erstelle eine Gruppe, um gemeinsame Ausgaben zu verfolgen."
+  },
+  "groups": {
+    "settleUp": "Ausgleichen",
+    "addExpense": "Ausgabe hinzufügen",
+    "groupBalancesTitle": "Gruppensalden",
+    "membersTitle": "Mitglieder",
+    "tabsExpenses": "Ausgaben ({count})",
+    "tabsSettlements": "Ausgleiche ({count})",
+    "balancesUnavailable": "Saldo-Daten nicht verfügbar",
+    "notMember": "Du bist kein Mitglied dieser Gruppe",
+    "yourBalance": "Dein Saldo",
+    "allSettledInGroup": "Alles ausgeglichen",
+    "everyoneSettled": "Alle sind ausgeglichen!",
+    "theyOweYou": "Sie schulden dir {amount}",
+    "youOweThem": "Du schuldest {amount}",
+    "settled": "Ausgeglichen",
+    "noMembers": "Keine Mitglieder in dieser Gruppe",
+    "invitesTitle": "Einladungen und Beitritt",
+    "shareInviteHint": "Teile einen Link oder Code, damit andere der Gruppe beitreten können. Gültig bis {expiresDate}.",
+    "qrAlt": "QR-Code zum Beitreten der Gruppe",
+    "joinLinkLabel": "Beitrittslink",
+    "joinCodeLabel": "Beitrittscode",
+    "copyLinkAria": "Link kopieren",
+    "copyCodeAria": "Code kopieren",
+    "pendingInvites": "Ausstehende Einladungen",
+    "revokeInviteAria": "Einladung widerrufen",
+    "revokeInvite": "Widerrufen",
+    "toastLinkCopied": "Link kopiert",
+    "toastCodeCopied": "Code kopiert",
+    "toastCopyFailed": "Kopieren fehlgeschlagen",
+    "toastInviteRevoked": "Einladung widerrufen",
+    "toastRevokeFailed": "Einladung konnte nicht widerrufen werden: {message}",
+    "createGroupNeedGroup": "Du musst eine Gruppe erstellen, bevor du eine Gruppenausgabe hinzufügst.",
+    "selectGroupPlaceholder": "Gruppe auswählen",
+    "selectGroupToContinue": "Wähle eine Gruppe, um fortzufahren"
+  },
+  "person": {
+    "settleUp": "Ausgleichen",
+    "addExpense": "Ausgabe hinzufügen",
+    "balanceTitle": "Saldo",
+    "allSettled": "Alles ausgeglichen",
+    "theyOweYou": "{name} schuldet dir",
+    "youOweThem": "Du schuldest {name}",
+    "tabsExpenses": "Ausgaben ({count})",
+    "tabsSettlements": "Ausgleiche ({count})"
+  },
+  "expenses": {
+    "newPageTitle": "Neue Ausgabe hinzufügen",
+    "newPageSubtitle": "Erfasse eine Ausgabe für dich oder teile sie mit anderen",
+    "tabIndividual": "Persönliche Ausgabe",
+    "tabGroup": "Gruppenausgabe",
+    "form": {
+      "descriptionLabel": "Beschreibung",
+      "descriptionPlaceholder": "Mittagessen, Kinokarten usw.",
+      "amountLabel": "Betrag",
+      "categoryLabel": "Kategorie",
+      "dateLabel": "Datum",
+      "datePlaceholder": "Datum auswählen",
+      "groupLabel": "Gruppe",
+      "participantsLabel": "Teilnehmer",
+      "participantsOptionalHint": "Speichere die Ausgabe nur für dich oder füge unten weitere Teilnehmer hinzu.",
+      "payerLabel": "Zahler",
+      "payerPlaceholder": "Zahler auswählen",
+      "splitTypeLabel": "Aufteilungsart",
+      "splitEqual": "Gleichmäßig",
+      "splitPercentage": "Prozente",
+      "splitExact": "Genaue Beträge",
+      "splitEqualHint": "Gleichmäßig unter allen Teilnehmern aufteilen",
+      "splitPercentageHint": "Prozentual aufteilen",
+      "splitExactHint": "Genaue Beträge eingeben",
+      "submit": "Ausgabe erstellen",
+      "splitsMismatch": "Aufteilungsbeträge stimmen nicht mit dem Gesamtbetrag überein. Prüfe deine Aufteilungen.",
+      "percentMustBe100": "Prozente müssen zusammen 100 % ergeben.",
+      "exactMustMatchTotal": "Aufteilungsbeträge ({splitTotal}) müssen dem Gesamtbetrag ({total}) entsprechen.",
+      "validationDescriptionRequired": "Beschreibung ist erforderlich",
+      "validationAmountRequired": "Betrag ist erforderlich",
+      "validationAmountPositive": "Betrag muss eine positive Zahl sein",
+      "validationPayerRequired": "Zahler ist erforderlich",
+      "toastCreated": "Ausgabe erfolgreich erstellt!",
+      "toastCreateFailed": "Ausgabe konnte nicht erstellt werden: {message}"
+    },
+    "list": {
+      "empty": "Keine Ausgaben gefunden",
+      "youPaid": "Du hast bezahlt",
+      "userPaid": "{name} hat bezahlt",
+      "groupExpenseBadge": "Gruppenausgabe",
+      "deleteAria": "Ausgabe löschen",
+      "deleteConfirm": "Diese Ausgabe löschen? Das kann nicht rückgängig gemacht werden.",
+      "toastDeleted": "Ausgabe erfolgreich gelöscht",
+      "toastDeleteFailed": "Ausgabe konnte nicht gelöscht werden: {message}"
+    },
+    "participantSelector": {
+      "addPerson": "Person hinzufügen",
+      "searchPlaceholder": "Nach Name oder E-Mail suchen...",
+      "searchMinChars": "Mindestens 2 Zeichen eingeben, um zu suchen",
+      "noUsersFound": "Keine Benutzer gefunden",
+      "usersHeading": "Benutzer"
+    },
+    "categorySelector": {
+      "noCategories": "Keine Kategorien verfügbar",
+      "placeholder": "Kategorie auswählen"
+    }
+  },
+  "categories": {
+    "foodDrink": "Essen und Trinken",
+    "coffee": "Kaffee",
+    "groceries": "Lebensmittel",
+    "shopping": "Einkaufen",
+    "travel": "Reisen",
+    "transportation": "Transport",
+    "housing": "Wohnen",
+    "entertainment": "Unterhaltung",
+    "tickets": "Tickets",
+    "utilities": "Nebenkosten",
+    "water": "Wasser",
+    "education": "Bildung",
+    "health": "Gesundheit",
+    "personal": "Persönlich",
+    "gifts": "Geschenke",
+    "technology": "Technologie",
+    "bills": "Rechnungen und Gebühren",
+    "baby": "Babys und Kinder",
+    "music": "Musik",
+    "books": "Bücher",
+    "other": "Sonstiges",
+    "general": "Allgemeine Ausgabe"
+  },
+  "settlements": {
+    "pageTitle": "Ausgleich erfassen",
+    "subtitleUser": "Ausgleich mit {name}",
+    "subtitleGroup": "Ausgleich in {groupName}",
+    "form": {
+      "currentBalance": "Aktueller Saldo",
+      "allSettledWithUser": "Alles ausgeglichen mit {name}",
+      "theyOweYou": "{name} schuldet dir",
+      "youOweThem": "Du schuldest {name}",
+      "whoPaid": "Wer hat bezahlt?",
+      "youPaidUser": "Du hast {name} bezahlt",
+      "userPaidYou": "{name} hat dich bezahlt",
+      "youPaidMember": "Du hast {name} bezahlt",
+      "memberPaidYou": "{name} hat dich bezahlt",
+      "amountLabel": "Betrag",
+      "noteLabel": "Notiz (optional)",
+      "notePlaceholder": "Abendessen, Miete usw.",
+      "submit": "Ausgleich erfassen",
+      "selectMember": "Mit wem gleichst du aus?",
+      "selectMemberWarning": "Wähle das Mitglied, mit dem du ausgleichst",
+      "validationAmountRequired": "Betrag ist erforderlich",
+      "validationAmountPositive": "Betrag muss eine positive Zahl sein",
+      "toastSuccess": "Ausgleich erfolgreich erfasst!",
+      "toastFailed": "Ausgleich konnte nicht erfasst werden: {message}",
+      "toastSelectMember": "Wähle ein Gruppenmitglied zum Ausgleichen",
+      "toastMemberNotFound": "Ausgewählter Benutzer wurde in der Gruppe nicht gefunden"
+    },
+    "list": {
+      "empty": "Keine Ausgleiche gefunden",
+      "youPaidReceiver": "Du hast {name} bezahlt",
+      "payerPaidYou": "{payer} hat dich bezahlt",
+      "payerPaidReceiver": "{payer} hat {receiver} bezahlt",
+      "groupSettlementBadge": "Gruppenausgleich",
+      "youPaidLabel": "Du hast bezahlt",
+      "youReceivedLabel": "Du hast erhalten",
+      "paymentLabel": "Zahlung"
+    }
+  },
+  "activity": {
+    "pageTitle": "Aktivität",
+    "pageSubtitle": "Ausgabenübersicht und letzte Ereignisse — nur dein Anteil in den Diagrammen.",
+    "recentEventsTitle": "Letzte Ereignisse",
+    "feedAria": "Letzte Aktivität",
+    "feedEmpty": "Keine letzte Aktivität. Füge eine Ausgabe oder einen Ausgleich hinzu, um sie hier zu sehen.",
+    "charts": {
+      "title": "Ausgabenübersicht",
+      "periodWeek": "Woche",
+      "periodMonth": "Monat",
+      "periodYear": "Jahr",
+      "periodCaption": "{period} — nur dein Anteil der Ausgaben",
+      "totalLabel": "Gesamt",
+      "noExpensesInPeriod": "Keine Ausgaben im gewählten Zeitraum",
+      "spendingOverTime": "Ausgaben im Zeitverlauf",
+      "categories": "Kategorien",
+      "captionMonth": "{month} {year} — jeden Tag",
+      "captionYear": "Jahr {year}",
+      "captionWeek": "Aktuelle Woche (Mo–So)",
+      "monthLong": {
+        "january": "Januar",
+        "february": "Februar",
+        "march": "März",
+        "april": "April",
+        "may": "Mai",
+        "june": "Juni",
+        "july": "Juli",
+        "august": "August",
+        "september": "September",
+        "october": "Oktober",
+        "november": "November",
+        "december": "Dezember"
+      },
+      "dayTooltip": "{day}. {month} {year}"
+    }
+  },
+  "inbox": {
+    "pageTitle": "Posteingang",
+    "pageSubtitle": "Posteingang: Gruppeneinladungen, Saldenerinnerungen und andere Benachrichtigungen.",
+    "empty": "Keine Nachrichten. Gruppeneinladungen und Saldenerinnerungen erscheinen hier.",
+    "markAllRead": "Alle als gelesen markieren",
+    "markRead": "Als gelesen markieren",
+    "toastAllMarkedRead": "Alle Nachrichten als gelesen markiert",
+    "actions": {
+      "openInvite": "Einladung öffnen",
+      "viewBalance": "Saldo anzeigen",
+      "openDashboard": "Übersicht öffnen",
+      "openSettlement": "Ausgleich öffnen",
+      "markPaid": "Als bezahlt markieren",
+      "markedPaid": "Als bezahlt markiert",
+      "toastMarkedPaid": "Zahlung erfasst ({amount}). {creditorName} wird benachrichtigt.",
+      "toastRecordFailed": "Erfassung fehlgeschlagen"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "subtitle": "Sprache und E-Mail-Erinnerungen für offene Salden anpassen.",
+    "languageCardTitle": "Sprache",
+    "languageLabel": "Oberflächensprache",
+    "languageHint": "Wählen Sie die Anzeigesprache für Splittaa. Sie können auch über die Flagge in der Kopfzeile wechseln.",
+    "currencyCardTitle": "Währung",
+    "currencyLabel": "Standardwährung",
+    "currencyHint": "Alle Beträge und Salden werden in dieser Währung angezeigt. Neue Ausgaben werden ebenfalls in dieser Währung erfasst.",
+    "remindersCardTitle": "Saldenerinnerungen",
+    "remindersEnabled": "Erinnerungen aktiviert",
+    "remindersEnabledHint": "Wir senden E-Mails nur im gewählten Intervall, solange ein Saldo offen ist.",
+    "remindMeLabel": "Erinnere mich",
+    "minAgeLabel": "Saldo muss mindestens offen sein",
+    "minAgeHint": "Kurzfristige Salden werden nicht erinnert — nur lang offene.",
+    "notifyWhenIOwe": "Wenn ich jemandem schulde",
+    "notifyWhenIOweHint": "Erinnerung für deine unbezahlten Schulden.",
+    "notifyWhenOwed": "Wenn mir jemand schuldet",
+    "notifyWhenOwedHint": "Erinnerung für Geld, das dir zusteht.",
+    "lastSent": "Letzte Erinnerung gesendet: {datetime}",
+    "toastSelectReminderType": "Wähle mindestens einen Erinnerungstyp",
+    "toastSaved": "Einstellungen gespeichert",
+    "toastSaveFailed": "Speichern fehlgeschlagen: {message}"
+  },
+  "contactsModal": {
+    "createTitle": "Neue Gruppe erstellen",
+    "createdTitle": "Gruppe erstellt",
+    "nameLabel": "Gruppenname",
+    "namePlaceholder": "Gruppenname eingeben",
+    "descriptionLabel": "Beschreibung (optional)",
+    "descriptionPlaceholder": "Gruppenbeschreibung eingeben",
+    "inviteMembersLabel": "Mitglieder einladen (optional)",
+    "inviteMembersHint": "Eingeladene erhalten einen Link zum Annehmen oder Ablehnen. Du kannst nach der Erstellung auch einen Beitrittscode oder QR teilen.",
+    "addInvitee": "Eingeladenen hinzufügen",
+    "createButton": "Gruppe erstellen",
+    "invitesSentHint": "Einladungen wurden per E-Mail gesendet und erscheinen in der App für Eingeladene.",
+    "validationNameRequired": "Gruppenname ist erforderlich",
+    "toastCreatedWithInvites": "Gruppe erstellt! {count} Einladung(en) gesendet.",
+    "toastCreated": "Gruppe erfolgreich erstellt!",
+    "toastCreateFailed": "Gruppe konnte nicht erstellt werden: {message}"
+  },
+  "debtRequests": {
+    "sendButton": "Zahlungsanfrage senden",
+    "dialogTitle": "Zahlungsanfrage",
+    "dialogDescription": "Sende eine Anfrage an {debtorName} ({amount}, {context}). Sie erhalten eine App-Nachricht und E-Mail, falls verfügbar. Dies ersetzt keine automatischen Saldenerinnerungen.",
+    "contextGroup": "in der Gruppe {groupName}",
+    "contextPersonal": "in einer persönlichen Aufteilung",
+    "messageLabel": "Nachricht (optional)",
+    "messagePlaceholder": "z. B. Bitte zahle deinen Anteil am Wochenendtrip",
+    "sendRequest": "Anfrage senden",
+    "toastSent": "Zahlungsanfrage an {debtorName} gesendet",
+    "toastSendFailed": "Senden fehlgeschlagen"
+  },
+  "errors": {
+    "FORBIDDEN": "Du hast keine Berechtigung für diese Aktion",
+    "NOT_FOUND": "Nicht gefunden",
+    "UNAUTHORIZED": "Anmeldung erforderlich",
+    "INVALID_INPUT": "Ungültige Eingabe",
+    "generic": "Etwas ist schiefgelaufen: {message}",
+    "unknown": "Unbekannter Fehler"
+  },
+  "notifications": {
+    "group_invite": {
+      "title": "Gruppeneinladung",
+      "body": "Du wurdest zur Gruppe {groupName} eingeladen"
+    },
+    "balance_reminder": {
+      "title": "Saldenerinnerung",
+      "body": "Du hast einen offenen Saldo: {summary}"
+    },
+    "debt_request": {
+      "title": "Zahlungsanfrage",
+      "body": "{creditorName} bittet dich, {amount} zu zahlen"
+    },
+    "debt_request_paid": {
+      "title": "Schuld bezahlt",
+      "body": "{debtorName} hat die Schuld als bezahlt markiert ({amount})"
+    }
+  }
+}

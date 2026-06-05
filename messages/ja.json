@@ -1,0 +1,508 @@
+{
+  "meta": {
+    "appTitle": "Splittaa",
+    "appDescription": "友達との割り勘を最も簡単にする方法"
+  },
+  "language": {
+    "switch": "言語を変更",
+    "current": "現在の言語: {locale}"
+  },
+  "nav": {
+    "logoAlt": "Splittaa",
+    "features": "機能",
+    "howItWorks": "使い方",
+    "dashboard": "ダッシュボード",
+    "inbox": "受信トレイ",
+    "inboxWithCount": "受信トレイ ({count})",
+    "activity": "アクティビティ",
+    "settings": "設定",
+    "signIn": "ログイン",
+    "getStarted": "始める"
+  },
+  "theme": {
+    "toggleAria": "ダークモード",
+    "toggleSr": "ダークモード"
+  },
+  "shared": {
+    "you": "あなた",
+    "back": "戻る",
+    "loading": "読み込み中…",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "saving": "保存中…",
+    "creating": "作成中...",
+    "joining": "参加中...",
+    "recording": "記録中...",
+    "sending": "送信中...",
+    "searching": "検索中...",
+    "done": "完了",
+    "otherUser": "他のユーザー",
+    "unknownUser": "不明なユーザー",
+    "showAll": "すべて表示",
+    "membersCount": "{count}人のメンバー",
+    "membersInGroup": "グループに{count}人のメンバー",
+    "peopleCountFrom": "{count}人から",
+    "peopleCountTo": "{count}人へ",
+    "optional": "（任意）",
+    "total": "合計",
+    "sumLabel": "金額",
+    "consumptionLabel": "支出",
+    "expenseSingular": "支出",
+    "expensePlural": "支出",
+    "group": "グループ",
+    "person": "個人",
+    "expenseKind": "支出",
+    "settlementKind": "精算",
+    "newBadge": "新着",
+    "admin": "管理者",
+    "youBadge": "あなた",
+    "youParenthetical": "（あなた）",
+    "daysOption": "{count}日",
+    "close": "閉じる"
+  },
+  "landing": {
+    "hero": {
+      "badge": "割り勘を。生活をシンプルに。",
+      "title": "友達との割り勘を最も簡単にする方法",
+      "subtitle": "共有の支出を追跡し、請求を簡単に分割して、すぐに精算。誰が誰にいくら借りているか心配する必要はありません。",
+      "ctaStart": "始める",
+      "ctaHowItWorks": "使い方を見る",
+      "heroImageAlt": "Splittaaアプリのプレビュー"
+    },
+    "featuresSection": {
+      "badge": "機能",
+      "title": "割り勘に必要なすべて",
+      "subtitle": "共有の支出を簡単に管理するためのツールをすべて提供します。",
+      "groupExpenses": {
+        "title": "グループ支出",
+        "description": "ルームメイト、旅行、イベント用のグループを作成し、支出を整理しましょう。"
+      },
+      "smartSettlements": {
+        "title": "スマート精算",
+        "description": "アルゴリズムが精算に必要な支払い回数を最小化します。"
+      },
+      "spendingAnalysis": {
+        "title": "支出分析",
+        "description": "支出習慣を追跡し、共有支出からインサイトを発見します。"
+      },
+      "paymentReminders": {
+        "title": "支払いリマインダー",
+        "description": "未精算残高の自動リマインダーと支出インサイト。"
+      },
+      "splitMethods": {
+        "title": "複数の分割方法",
+        "description": "均等、パーセンテージ、正確な金額で分割 — あらゆる状況に対応。"
+      },
+      "realtimeUpdates": {
+        "title": "リアルタイム更新",
+        "description": "友達が追加した新しい支出と支払いをすぐに確認できます。"
+      }
+    },
+    "howItWorksSection": {
+      "badge": "使い方",
+      "title": "割り勘がこれほど簡単になったことはありません",
+      "subtitle": "これらの簡単なステップに従って、友達との支出の追跡と共有を始めましょう。",
+      "step1": {
+        "title": "グループを作成または参加",
+        "description": "ルームメイト、旅行、イベント用のグループを作成し、友達を招待します。"
+      },
+      "step2": {
+        "title": "支出を追加",
+        "description": "誰が支払ったか、請求をメンバー間でどう分割するかを記録します。"
+      },
+      "step3": {
+        "title": "精算する",
+        "description": "誰が誰にいくら借りているかを確認し、借金が清算されたら支払いを記録します。"
+      }
+    },
+    "testimonialsSection": {
+      "badge": "お客様の声",
+      "title": "ユーザーの声",
+      "annikki": {
+        "quote": "Splittaaのおかげで、誰が何を払ったか迷わなくなりました！",
+        "role": "賃貸物件管理者"
+      },
+      "luigi": {
+        "quote": "Splittaaで未収金を正確に管理しています。最高のリマインダーアプリより優れています！",
+        "role": "財務・債務アドバイザー"
+      },
+      "antti": {
+        "quote": "Splittaaがもっと早くあれば、Luigiは私の靴とコートを売れなかったはず！すぐに借金リストに追加します。",
+        "role": "ソフトウェア開発者 / マインドフルネスコーチ"
+      }
+    },
+    "ctaSection": {
+      "title": "割り勘をシンプルにする準備はできましたか？",
+      "subtitle": "割り勘をストレスフリーにした何千人ものユーザーに参加しましょう。",
+      "button": "始める"
+    },
+    "footer": {
+      "copyright": "© {year} Splittaa. 無断転載を禁じます。"
+    }
+  },
+  "join": {
+    "invalidLink": "招待リンクが無効です。",
+    "inviteNotFound": "招待が見つかりません。",
+    "homeLink": "ダッシュボード",
+    "inviteInvalidTitle": "招待は無効です",
+    "inviteInvalidBody": "{groupName}への招待は期限切れか、すでに処理されています。",
+    "goDashboard": "ダッシュボードへ",
+    "goBack": "戻る",
+    "groupInviteTitle": "グループ招待",
+    "invitedBy": "{inviterName}があなたを招待しました",
+    "signInToJoin": "グループに参加するにはログインまたはアカウントを作成してください。",
+    "signUpAndJoin": "登録して参加",
+    "signIn": "ログイン",
+    "joiningGroup": "グループに参加中…",
+    "acceptInvite": "招待を承諾",
+    "declineInvite": "招待を辞退",
+    "toastInviteDeclined": "招待を辞退しました"
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "addExpense": "支出を追加",
+    "totalBalance": "合計残高",
+    "balanceOwedToYou": "あなたに借りている",
+    "balanceYouOwe": "あなたの借金",
+    "balanceSettled": "すべて精算済み！",
+    "balanceNotOwingAnyone": "誰にも借りていません",
+    "balanceSummaryTitle": "残高の詳細",
+    "yourGroupsTitle": "あなたのグループ",
+    "createNewGroup": "新しいグループを作成",
+    "pendingInvitesTitle": "グループ招待 ({count})",
+    "inviterLabel": "招待者: {name}",
+    "openInvite": "招待を開く",
+    "joinByCodeTitle": "コードでグループに参加",
+    "joinCodeLabel": "参加コード",
+    "joinCodePlaceholder": "例: ABCD2345",
+    "joinButton": "参加",
+    "expenseSummaryTitle": "支出サマリー",
+    "totalThisMonth": "今月の合計",
+    "totalThisYear": "今年の合計",
+    "monthlySpendingCaption": "{year}年の月別支出",
+    "monthShort": {
+      "jan": "1月",
+      "feb": "2月",
+      "mar": "3月",
+      "apr": "4月",
+      "may": "5月",
+      "jun": "6月",
+      "jul": "7月",
+      "aug": "8月",
+      "sep": "9月",
+      "oct": "10月",
+      "nov": "11月",
+      "dec": "12月"
+    },
+    "groupListEmpty": "まだグループがありません",
+    "groupListEmptyHint": "グループを作成して共有支出の追跡を始めましょう",
+    "balanceAllSettled": "すべて精算済みです！",
+    "toastAlreadyMember": "すでにグループのメンバーです",
+    "toastJoinedGroup": "グループに参加しました！"
+  },
+  "contacts": {
+    "title": "連絡先",
+    "createGroup": "グループを作成",
+    "peopleSection": "人",
+    "peopleEmpty": "まだ連絡先がありません。誰かと支出を追加するとここに表示されます。",
+    "groupsSection": "グループ",
+    "groupsEmpty": "まだグループがありません。グループを作成して共有支出の追跡を始めましょう。"
+  },
+  "groups": {
+    "settleUp": "精算する",
+    "addExpense": "支出を追加",
+    "groupBalancesTitle": "グループ残高",
+    "membersTitle": "メンバー",
+    "tabsExpenses": "支出 ({count})",
+    "tabsSettlements": "精算 ({count})",
+    "balancesUnavailable": "残高データが利用できません",
+    "notMember": "このグループのメンバーではありません",
+    "yourBalance": "あなたの残高",
+    "allSettledInGroup": "すべて精算済み",
+    "everyoneSettled": "全員精算済みです！",
+    "theyOweYou": "あなたに{amount}借りています",
+    "youOweThem": "あなたは{amount}借りています",
+    "settled": "精算済み",
+    "noMembers": "このグループにメンバーがいません",
+    "invitesTitle": "招待と参加",
+    "shareInviteHint": "リンクまたはコードを共有して他の人がグループに参加できるようにします。{expiresDate}まで有効。",
+    "qrAlt": "グループ参加用QRコード",
+    "joinLinkLabel": "参加リンク",
+    "joinCodeLabel": "参加コード",
+    "copyLinkAria": "リンクをコピー",
+    "copyCodeAria": "コードをコピー",
+    "pendingInvites": "保留中の招待",
+    "revokeInviteAria": "招待を取り消す",
+    "revokeInvite": "取り消す",
+    "toastLinkCopied": "リンクをコピーしました",
+    "toastCodeCopied": "コードをコピーしました",
+    "toastCopyFailed": "コピーに失敗しました",
+    "toastInviteRevoked": "招待を取り消しました",
+    "toastRevokeFailed": "招待の取り消しに失敗しました: {message}",
+    "createGroupNeedGroup": "グループ支出を追加する前にグループを作成する必要があります。",
+    "selectGroupPlaceholder": "グループを選択",
+    "selectGroupToContinue": "続行するにはグループを選択してください"
+  },
+  "person": {
+    "settleUp": "精算する",
+    "addExpense": "支出を追加",
+    "balanceTitle": "残高",
+    "allSettled": "すべて精算済み",
+    "theyOweYou": "{name}があなたに借りています",
+    "youOweThem": "あなたは{name}に借りています",
+    "tabsExpenses": "支出 ({count})",
+    "tabsSettlements": "精算 ({count})"
+  },
+  "expenses": {
+    "newPageTitle": "新しい支出を追加",
+    "newPageSubtitle": "自分用の支出を記録するか、他の人と共有します",
+    "tabIndividual": "個人の支出",
+    "tabGroup": "グループ支出",
+    "form": {
+      "descriptionLabel": "説明",
+      "descriptionPlaceholder": "ランチ、映画チケットなど",
+      "amountLabel": "金額",
+      "categoryLabel": "カテゴリ",
+      "dateLabel": "日付",
+      "datePlaceholder": "日付を選択",
+      "groupLabel": "グループ",
+      "participantsLabel": "参加者",
+      "participantsOptionalHint": "自分だけの支出として保存するか、下から他の参加者を追加できます。",
+      "payerLabel": "支払者",
+      "payerPlaceholder": "支払者を選択",
+      "splitTypeLabel": "分割方法",
+      "splitEqual": "均等",
+      "splitPercentage": "パーセンテージ",
+      "splitExact": "正確な金額",
+      "splitEqualHint": "すべての参加者で均等に分割",
+      "splitPercentageHint": "パーセンテージで分割",
+      "splitExactHint": "正確な金額を入力",
+      "submit": "支出を作成",
+      "splitsMismatch": "分割金額が合計と一致しません。分割を確認してください。",
+      "percentMustBe100": "パーセンテージの合計は100%である必要があります。",
+      "exactMustMatchTotal": "分割金額（{splitTotal}）は合計（{total}）と一致する必要があります。",
+      "validationDescriptionRequired": "説明は必須です",
+      "validationAmountRequired": "金額は必須です",
+      "validationAmountPositive": "金額は正の数である必要があります",
+      "validationPayerRequired": "支払者は必須です",
+      "toastCreated": "支出を作成しました！",
+      "toastCreateFailed": "支出の作成に失敗しました: {message}"
+    },
+    "list": {
+      "empty": "支出が見つかりません",
+      "youPaid": "あなたが支払いました",
+      "userPaid": "{name}が支払いました",
+      "groupExpenseBadge": "グループ支出",
+      "deleteAria": "支出を削除",
+      "deleteConfirm": "この支出を削除しますか？元に戻せません。",
+      "toastDeleted": "支出を削除しました",
+      "toastDeleteFailed": "支出の削除に失敗しました: {message}"
+    },
+    "participantSelector": {
+      "addPerson": "人を追加",
+      "searchPlaceholder": "名前またはメールで検索...",
+      "searchMinChars": "検索するには2文字以上入力してください",
+      "noUsersFound": "ユーザーが見つかりません",
+      "usersHeading": "ユーザー"
+    },
+    "categorySelector": {
+      "noCategories": "利用可能なカテゴリがありません",
+      "placeholder": "カテゴリを選択"
+    }
+  },
+  "categories": {
+    "foodDrink": "食事・飲み物",
+    "coffee": "コーヒー",
+    "groceries": "食料品",
+    "shopping": "ショッピング",
+    "travel": "旅行",
+    "transportation": "交通",
+    "housing": "住居",
+    "entertainment": "娯楽",
+    "tickets": "チケット",
+    "utilities": "光熱費",
+    "water": "水道",
+    "education": "教育",
+    "health": "健康",
+    "personal": "個人",
+    "gifts": "ギフト",
+    "technology": "テクノロジー",
+    "bills": "請求・手数料",
+    "baby": "赤ちゃん・子供",
+    "music": "音楽",
+    "books": "本",
+    "other": "その他",
+    "general": "一般支出"
+  },
+  "settlements": {
+    "pageTitle": "精算を記録",
+    "subtitleUser": "{name}との精算",
+    "subtitleGroup": "{groupName}での精算",
+    "form": {
+      "currentBalance": "現在の残高",
+      "allSettledWithUser": "{name}とはすべて精算済み",
+      "theyOweYou": "{name}があなたに借りています",
+      "youOweThem": "あなたは{name}に借りています",
+      "whoPaid": "誰が支払いましたか？",
+      "youPaidUser": "あなたが{name}に支払いました",
+      "userPaidYou": "{name}があなたに支払いました",
+      "youPaidMember": "あなたが{name}に支払いました",
+      "memberPaidYou": "{name}があなたに支払いました",
+      "amountLabel": "金額",
+      "noteLabel": "メモ（任意）",
+      "notePlaceholder": "夕食、家賃など",
+      "submit": "精算を記録",
+      "selectMember": "誰と精算しますか？",
+      "selectMemberWarning": "精算するメンバーを選択してください",
+      "validationAmountRequired": "金額は必須です",
+      "validationAmountPositive": "金額は正の数である必要があります",
+      "toastSuccess": "精算を記録しました！",
+      "toastFailed": "精算の記録に失敗しました: {message}",
+      "toastSelectMember": "精算するグループメンバーを選択してください",
+      "toastMemberNotFound": "選択したユーザーはグループに見つかりませんでした"
+    },
+    "list": {
+      "empty": "精算が見つかりません",
+      "youPaidReceiver": "あなたが{name}に支払いました",
+      "payerPaidYou": "{payer}があなたに支払いました",
+      "payerPaidReceiver": "{payer}が{receiver}に支払いました",
+      "groupSettlementBadge": "グループ精算",
+      "youPaidLabel": "あなたが支払いました",
+      "youReceivedLabel": "あなたが受け取りました",
+      "paymentLabel": "支払い"
+    }
+  },
+  "activity": {
+    "pageTitle": "アクティビティ",
+    "pageSubtitle": "支出サマリーと最近のイベント — グラフにはあなたの分のみ表示。",
+    "recentEventsTitle": "最近のイベント",
+    "feedAria": "最近のアクティビティ",
+    "feedEmpty": "最近のアクティビティがありません。支出または精算を追加するとここに表示されます。",
+    "charts": {
+      "title": "支出サマリー",
+      "periodWeek": "週",
+      "periodMonth": "月",
+      "periodYear": "年",
+      "periodCaption": "{period} — 支出のあなたの分のみ",
+      "totalLabel": "合計",
+      "noExpensesInPeriod": "選択した期間に支出がありません",
+      "spendingOverTime": "時系列の支出",
+      "categories": "カテゴリ",
+      "captionMonth": "{year}年{month} — 日別",
+      "captionYear": "{year}年",
+      "captionWeek": "今週（月〜日）",
+      "monthLong": {
+        "january": "1月",
+        "february": "2月",
+        "march": "3月",
+        "april": "4月",
+        "may": "5月",
+        "june": "6月",
+        "july": "7月",
+        "august": "8月",
+        "september": "9月",
+        "october": "10月",
+        "november": "11月",
+        "december": "12月"
+      },
+      "dayTooltip": "{year}年{month}{day}日"
+    }
+  },
+  "inbox": {
+    "pageTitle": "受信トレイ",
+    "pageSubtitle": "受信トレイ: グループ招待、残高リマインダー、その他の通知。",
+    "empty": "メッセージがありません。グループ招待と残高リマインダーはここに表示されます。",
+    "markAllRead": "すべて既読にする",
+    "markRead": "既読にする",
+    "toastAllMarkedRead": "すべてのメッセージを既読にしました",
+    "actions": {
+      "openInvite": "招待を開く",
+      "viewBalance": "残高を表示",
+      "openDashboard": "ダッシュボードを開く",
+      "openSettlement": "精算を開く",
+      "markPaid": "支払済みにする",
+      "markedPaid": "支払済みにしました",
+      "toastMarkedPaid": "支払いを記録しました（{amount}）。{creditorName}に通知されます。",
+      "toastRecordFailed": "記録に失敗しました"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "subtitle": "言語と未精算残高のメールリマインダーを調整します。",
+    "languageCardTitle": "言語",
+    "languageLabel": "表示言語",
+    "languageHint": "Splittaaの表示言語を選択します。ヘッダーの国旗アイコンからも変更できます。",
+    "currencyCardTitle": "通貨",
+    "currencyLabel": "デフォルト通貨",
+    "currencyHint": "すべての金額と残高はこの通貨で表示されます。新しい支出もこの通貨で記録されます。",
+    "remindersCardTitle": "残高リムインダー",
+    "remindersEnabled": "リマインダー有効",
+    "remindersEnabledHint": "残高が未精算の間、選択した間隔でのみメールを送信します。",
+    "remindMeLabel": "リマインドする",
+    "minAgeLabel": "残高が開いている期間の最小",
+    "minAgeHint": "短期の残高はリマインドされません — 長期間開いているもののみ。",
+    "notifyWhenIOwe": "誰かに借りているとき",
+    "notifyWhenIOweHint": "未払いの借金のリマインダー。",
+    "notifyWhenOwed": "誰かが借りているとき",
+    "notifyWhenOwedHint": "あなたに借りている金額のリマインダー。",
+    "lastSent": "最後のリマインダー送信: {datetime}",
+    "toastSelectReminderType": "少なくとも1つのリマインダータイプを選択してください",
+    "toastSaved": "設定を保存しました",
+    "toastSaveFailed": "保存に失敗しました: {message}"
+  },
+  "contactsModal": {
+    "createTitle": "新しいグループを作成",
+    "createdTitle": "グループを作成しました",
+    "nameLabel": "グループ名",
+    "namePlaceholder": "グループ名を入力",
+    "descriptionLabel": "説明（任意）",
+    "descriptionPlaceholder": "グループの説明を入力",
+    "inviteMembersLabel": "メンバーを招待（任意）",
+    "inviteMembersHint": "招待者は承諾または辞退するリンクを受け取ります。作成後に参加コードやQRも共有できます。",
+    "addInvitee": "招待者を追加",
+    "createButton": "グループを作成",
+    "invitesSentHint": "招待はメールで送信され、招待者のアプリにも表示されます。",
+    "validationNameRequired": "グループ名は必須です",
+    "toastCreatedWithInvites": "グループを作成しました！{count}件の招待を送信しました。",
+    "toastCreated": "グループを作成しました！",
+    "toastCreateFailed": "グループの作成に失敗しました: {message}"
+  },
+  "debtRequests": {
+    "sendButton": "借金リクエストを送信",
+    "dialogTitle": "借金リクエスト",
+    "dialogDescription": "{debtorName}にリクエストを送信します（{amount}、{context}）。アプリ内メッセージと、利用可能な場合はメールが届きます。自動残高リマインダーの代わりにはなりません。",
+    "contextGroup": "グループ {groupName} で",
+    "contextPersonal": "個人の分割で",
+    "messageLabel": "メッセージ（任意）",
+    "messagePlaceholder": "例: 週末旅行の分をお支払いください",
+    "sendRequest": "リクエストを送信",
+    "toastSent": "{debtorName}に借金リクエストを送信しました",
+    "toastSendFailed": "送信に失敗しました"
+  },
+  "errors": {
+    "FORBIDDEN": "この操作の権限がありません",
+    "NOT_FOUND": "見つかりません",
+    "UNAUTHORIZED": "ログインが必要です",
+    "INVALID_INPUT": "無効な入力",
+    "generic": "問題が発生しました: {message}",
+    "unknown": "不明なエラー"
+  },
+  "notifications": {
+    "group_invite": {
+      "title": "グループ招待",
+      "body": "{groupName}に招待されました"
+    },
+    "balance_reminder": {
+      "title": "残高リマインダー",
+      "body": "未精算の残高があります: {summary}"
+    },
+    "debt_request": {
+      "title": "借金リクエスト",
+      "body": "{creditorName}が{amount}の支払いを求めています"
+    },
+    "debt_request_paid": {
+      "title": "借金支払済み",
+      "body": "{debtorName}が借金を支払済みにしました（{amount}）"
+    }
+  }
+}

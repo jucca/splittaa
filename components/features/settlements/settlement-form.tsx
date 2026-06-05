@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useLocale, useTranslations } from "next-intl";
 import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
@@ -28,6 +28,8 @@ type SettlementFormValues = {
 export type UserSettlementData = {
   counterpart: { userId: Id<"users">; name: string; imageUrl?: string | null };
   netBalance: number;
+  displayCurrency?: string;
+  balanceParts?: { currency: string; amount: number }[];
 };
 
 type GroupBalanceMember = {
@@ -55,6 +57,7 @@ export default function SettlementForm({
   const tGroups = useTranslations("groups");
   const tShared = useTranslations("shared");
   const locale = resolveLocale(useLocale());
+  const { format, currencySymbol } = useMoney();
 
   const settlementSchema = useMemo(
     () =>
@@ -198,14 +201,14 @@ export default function SettlementForm({
             <div className="flex justify-between items-center">
               <p>{t("theyOweYou", { name: otherUser.name })}</p>
               <span className="text-xl font-bold text-green-600">
-                {formatCurrency(netBalance)}
+                {format(netBalance)}
               </span>
             </div>
           ) : (
             <div className="flex justify-between items-center">
               <p>{t("youOweThem", { name: otherUser.name })}</p>
               <span className="text-xl font-bold text-red-600">
-                {formatCurrency(Math.abs(netBalance))}
+                {format(Math.abs(netBalance))}
               </span>
             </div>
           )}
@@ -258,7 +261,7 @@ export default function SettlementForm({
         <div className="space-y-2">
           <Label htmlFor="amount">{t("amountLabel")}</Label>
           <div className="relative">
-            <span className="absolute left-3 top-2.5">€</span>
+            <span className="absolute left-3 top-2.5">{currencySymbol}</span>
             <Input
               id="amount"
               placeholder="0.00"
@@ -333,11 +336,11 @@ export default function SettlementForm({
                     >
                       {isOwing
                         ? tGroups("theyOweYou", {
-                            amount: formatCurrency(Math.abs(member.netBalance)),
+                            amount: format(Math.abs(member.netBalance)),
                           })
                         : isOwed
                           ? tGroups("youOweThem", {
-                              amount: formatCurrency(Math.abs(member.netBalance)),
+                              amount: format(Math.abs(member.netBalance)),
                             })
                           : tGroups("settled")}
                     </div>
@@ -431,7 +434,7 @@ export default function SettlementForm({
             <div className="space-y-2">
               <Label htmlFor="amount">{t("amountLabel")}</Label>
               <div className="relative">
-                <span className="absolute left-3 top-2.5">€</span>
+                <span className="absolute left-3 top-2.5">{currencySymbol}</span>
                 <Input
                   id="amount"
                   placeholder="0.00"

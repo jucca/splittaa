@@ -22,7 +22,10 @@ import type {
 } from "@/lib/reminder-settings";
 import { useLocale, useTranslations } from "next-intl";
 import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
-import { resolveLocale } from "@/lib/i18n/locales";
+import { getIntlDateTimeLocale, resolveLocale } from "@/lib/i18n/locales";
+import { LanguageSettings } from "@/components/layout/language-settings";
+import { CurrencySettings } from "@/components/layout/currency-settings";
+import { HoverHint } from "@/components/ui/hover-hint";
 
 const INTERVAL_VALUES: ReminderIntervalDays[] = [3, 7, 14, 30];
 const MIN_AGE_VALUES: ReminderMinAgeDays[] = [3, 7, 14, 30];
@@ -98,7 +101,7 @@ export default function SettingsPage() {
     }
   };
 
-  const dateTimeLocale = locale === "fi" ? "fi-FI" : "en-US";
+  const dateTimeLocale = getIntlDateTimeLocale(locale);
 
   return (
     <div className="container mx-auto py-6 max-w-lg space-y-6">
@@ -119,6 +122,10 @@ export default function SettingsPage() {
         </div>
       </div>
 
+      <LanguageSettings />
+
+      <CurrencySettings />
+
       <Card>
         <CardHeader>
           <CardTitle>{t("remindersCardTitle")}</CardTitle>
@@ -137,16 +144,21 @@ export default function SettingsPage() {
                     {t("remindersEnabledHint")}
                   </p>
                 </div>
-                <input
-                  id="reminders-enabled"
-                  type="checkbox"
-                  className="h-5 w-5 rounded border"
-                  checked={enabled}
-                  onChange={(e) => {
-                    setEnabled(e.target.checked);
-                    markDirty();
-                  }}
-                />
+                <HoverHint
+                  label={`${t("remindersEnabled")} — ${t("remindersEnabledHint")}`}
+                  side="left"
+                >
+                  <input
+                    id="reminders-enabled"
+                    type="checkbox"
+                    className="h-5 w-5 rounded border"
+                    checked={enabled}
+                    onChange={(e) => {
+                      setEnabled(e.target.checked);
+                      markDirty();
+                    }}
+                  />
+                </HoverHint>
               </div>
 
               <div className="space-y-2">
@@ -159,9 +171,11 @@ export default function SettingsPage() {
                   }}
                   disabled={!enabled}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
+                  <HoverHint label={t("remindMeLabel")} side="top">
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </HoverHint>
                   <SelectContent>
                     {intervalOptions.map((opt) => (
                       <SelectItem key={opt.value} value={String(opt.value)}>
@@ -182,9 +196,14 @@ export default function SettingsPage() {
                   }}
                   disabled={!enabled}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
+                  <HoverHint
+                    label={`${t("minAgeLabel")} — ${t("minAgeHint")}`}
+                    side="top"
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </HoverHint>
                   <SelectContent>
                     {minAgeOptions.map((opt) => (
                       <SelectItem key={opt.value} value={String(opt.value)}>
@@ -206,17 +225,22 @@ export default function SettingsPage() {
                       {t("notifyWhenIOweHint")}
                     </p>
                   </div>
-                  <input
-                    id="notify-owe"
-                    type="checkbox"
-                    className="h-5 w-5 rounded border"
-                    checked={notifyWhenIOwe}
-                    onChange={(e) => {
-                      setNotifyWhenIOwe(e.target.checked);
-                      markDirty();
-                    }}
-                    disabled={!enabled}
-                  />
+                  <HoverHint
+                    label={`${t("notifyWhenIOwe")} — ${t("notifyWhenIOweHint")}`}
+                    side="left"
+                  >
+                    <input
+                      id="notify-owe"
+                      type="checkbox"
+                      className="h-5 w-5 rounded border"
+                      checked={notifyWhenIOwe}
+                      onChange={(e) => {
+                        setNotifyWhenIOwe(e.target.checked);
+                        markDirty();
+                      }}
+                      disabled={!enabled}
+                    />
+                  </HoverHint>
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
@@ -226,17 +250,22 @@ export default function SettingsPage() {
                       {t("notifyWhenOwedHint")}
                     </p>
                   </div>
-                  <input
-                    id="notify-owed"
-                    type="checkbox"
-                    className="h-5 w-5 rounded border"
-                    checked={notifyWhenOwedToMe}
-                    onChange={(e) => {
-                      setNotifyWhenOwedToMe(e.target.checked);
-                      markDirty();
-                    }}
-                    disabled={!enabled}
-                  />
+                  <HoverHint
+                    label={`${t("notifyWhenOwed")} — ${t("notifyWhenOwedHint")}`}
+                    side="left"
+                  >
+                    <input
+                      id="notify-owed"
+                      type="checkbox"
+                      className="h-5 w-5 rounded border"
+                      checked={notifyWhenOwedToMe}
+                      onChange={(e) => {
+                        setNotifyWhenOwedToMe(e.target.checked);
+                        markDirty();
+                      }}
+                      disabled={!enabled}
+                    />
+                  </HoverHint>
                 </div>
               </div>
 

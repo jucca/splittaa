@@ -17,7 +17,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import { useTranslations } from "next-intl";
 import { getCategoryLabel } from "@/lib/i18n/category-label";
 
@@ -52,6 +52,7 @@ export function SpendingCharts() {
   const t = useTranslations("activity.charts");
   const tShared = useTranslations("shared");
   const tCategories = useTranslations("categories");
+  const { format } = useMoney();
   const [period, setPeriod] = useState<SpendingPeriod>("month");
   const summary = useQuery(api.activity.getSpendingSummary, { period });
 
@@ -149,7 +150,7 @@ export function SpendingCharts() {
         >
           <p className="text-sm text-muted-foreground">{t("totalLabel")}</p>
           <p className="text-2xl font-bold mt-1">
-            {formatCurrency(summary.totalAmount)}
+            {format(summary.totalAmount)}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
             {summary.expenseCount}{" "}
@@ -192,7 +193,7 @@ export function SpendingCharts() {
                     <YAxis tick={{ fontSize: 11 }} width={48} />
                     <Tooltip
                       formatter={(value) => [
-                        formatCurrency(
+                        format(
                           typeof value === "number" ? value : Number(value)
                         ),
                         tShared("sumLabel"),
@@ -214,7 +215,7 @@ export function SpendingCharts() {
                     <YAxis tick={{ fontSize: 11 }} width={48} />
                     <Tooltip
                       formatter={(value) => [
-                        formatCurrency(
+                        format(
                           typeof value === "number" ? value : Number(value)
                         ),
                         tShared("sumLabel"),
@@ -254,7 +255,7 @@ export function SpendingCharts() {
                     </Pie>
                     <Tooltip
                       formatter={(value) => [
-                        formatCurrency(
+                        format(
                           typeof value === "number" ? value : Number(value)
                         ),
                         tShared("sumLabel"),

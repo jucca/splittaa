@@ -10,7 +10,12 @@ import {
   deliverDebtRequestNotification,
   deliverDebtRequestPaidNotification,
 } from "./_lib/notifications";
-import { applySettlementToBalances } from "./_lib/balances";
+import {
+  applySettlementToBalances,
+  listBalancesBetweenUsers,
+} from "./_lib/balances";
+import { resolveCurrency, type SupportedCurrencyCode } from "./_lib/currencies";
+import { convertWithStoredRates } from "./_lib/exchange";
 import { getSiteUrlFromEnv } from "./_lib/invites";
 import { internal } from "./_generated/api";
 const MAX_MESSAGE_LENGTH = 500;
@@ -39,12 +44,13 @@ export const sendDebtRequest = mutation({
       });
     }
 
-    const amount = await getAmountDebtorOwesCreditor(
-      ctx,
-      creditor._id,
-      args.debtorUserId,
-      args.groupId
-    );
+    const { amount, currency: amountCurrency } =
+      await getAmountDebtorOwesCreditor(
+        ctx,
+        creditor._id,
+        args.debtorUserId,
+        args.groupId
+      );
 
     if (amount <= 0) {
       throw new ConvexError({
@@ -79,6 +85,7 @@ export const sendDebtRequest = mutation({
       creditorId: creditor._id,
       creditorName: creditor.name,
       amount,
+      amountCurrency,
       href,
       dedupeKey,
       message,
@@ -143,7 +150,7 @@ export const respondToDebtRequest = mutation({
     }
 
     const groupId = notification.debtRequestGroupId;
-    const currentOwed = await getAmountDebtorOwesCreditor(
+    const { amount: currentOwed } = await getAmountDebtorOwesCreditor(
       ctx,
       creditorId,
       debtor._id,
@@ -163,11 +170,32 @@ export const respondToDebtRequest = mutation({
       });
     }
 
+    const balanceParts = await listBalancesBetweenUsers(
+      ctx,
+      debtor._id,
+      creditorId,
+      groupId
+        ? { scopeType: "group", scopeGroupId: groupId }
+        : { scopeType: "personal" }
+    );
+    const primaryDebt = balanceParts
+      .filter((p) => p.amount < 0)
+      .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))[0];
+    const debtCurrency = (primaryDebt?.currency ??
+      "EUR") as SupportedCurrencyCode;
     const requested = notification.debtRequestAmount ?? currentOwed;
-    const amount = Math.min(requested, currentOwed);
+    const amountInDebtCurrency = Math.min(requested, currentOwed);
+    const settlementCurrency = resolveCurrency(debtor.preferredCurrency);
+    const amount = await convertWithStoredRates(
+      ctx,
+      amountInDebtCurrency,
+      debtCurrency,
+      settlementCurrency
+    );
 
     const settlementId = await ctx.db.insert("settlements", {
       amount,
+      currency: settlementCurrency,
       note: "Velkapyyntö – merkitty maksetuksi viestistä",
       date: respondedAt,
       paidByUserId: debtor._id,
@@ -182,6 +210,7 @@ export const respondToDebtRequest = mutation({
         paidByUserId: debtor._id,
         receivedByUserId: creditorId,
         amount,
+        currency: settlementCurrency,
         groupId,
       },
       1
@@ -202,6 +231,7 @@ export const respondToDebtRequest = mutation({
       creditorUserId: creditorId,
       debtorName: debtor.name,
       amount,
+      amountCurrency: settlementCurrency,
       href: creditorHref,
       groupName: group?.name,
     });

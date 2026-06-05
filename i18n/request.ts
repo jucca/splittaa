@@ -7,16 +7,7 @@ import {
 } from "../lib/i18n/locale-codes";
 
 async function loadMessages(locale: AppLocale) {
-  switch (locale) {
-    case "fi":
-      return (await import("../messages/fi.json")).default;
-    case "en":
-      return (await import("../messages/en.json")).default;
-    default: {
-      const _exhaustive: never = locale;
-      return _exhaustive;
-    }
-  }
+  return (await import(`../messages/${locale}.json`)).default;
 }
 
 export default getRequestConfig(async () => {

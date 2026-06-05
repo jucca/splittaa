@@ -2,7 +2,7 @@
 
 import { useConvexQuery, useConvexMutation } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
-import { format } from "date-fns";
+import { format as formatDate } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,7 @@ import { getCategoryIcon } from "@/lib/expense-categories";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useLocale, useTranslations } from "next-intl";
 import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
@@ -27,6 +27,7 @@ export type ExpenseListItem = {
   _id: Id<"expenses">;
   description: string;
   amount: number;
+  currency?: string;
   category?: string;
   date: number;
   paidByUserId: Id<"users">;
@@ -48,6 +49,7 @@ export function ExpenseList({
   userLookupMap?: Record<string, { name?: string; imageUrl?: string | null }>;
 }) {
   const t = useTranslations("expenses.list");
+  const { format: formatAmount } = useMoney();
   const tShared = useTranslations("shared");
   const tCategories = useTranslations("categories");
   const locale = resolveLocale(useLocale());
@@ -126,7 +128,7 @@ export function ExpenseList({
                     <h3 className="font-medium">{expense.description}</h3>
                     <div className="flex items-center text-sm text-muted-foreground gap-2">
                       <span>
-                        {format(new Date(expense.date), "d.M.yyyy", {
+                        {formatDate(new Date(expense.date), "d.M.yyyy", {
                           locale: dateFnsLocale,
                         })}
                       </span>
@@ -155,7 +157,7 @@ export function ExpenseList({
                                 variant="outline"
                                 className="text-xs"
                               >
-                                {user.name}: {formatCurrency(split.amount)}
+                                {user.name}: {formatAmount(split.amount, expense.currency)}
                               </Badge>
                             );
                           }
@@ -168,7 +170,7 @@ export function ExpenseList({
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <div className="font-medium">
-                      {formatCurrency(expense.amount)}
+                      {formatAmount(expense.amount, expense.currency)}
                     </div>
                     {isGroupExpense && (
                       <Badge variant="outline" className="mt-1">

@@ -10,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import type { MonthlySpendingItem } from "@/lib/types/domain";
 import { useTranslations } from "next-intl";
 
@@ -38,6 +38,7 @@ export function ExpenseSummary({
 }) {
   const t = useTranslations("dashboard");
   const tShared = useTranslations("shared");
+  const { format } = useMoney();
 
   const chartData =
     monthlySpending?.map((item: MonthlySpendingItem) => {
@@ -64,7 +65,7 @@ export function ExpenseSummary({
               {t("totalThisMonth")}
             </p>
             <h3 className="text-2xl font-bold mt-1">
-              {formatCurrency(monthlySpending?.[currentMonth]?.total || 0)}
+              {format(monthlySpending?.[currentMonth]?.total || 0)}
             </h3>
           </div>
           <div className="bg-muted rounded-lg p-4">
@@ -72,7 +73,7 @@ export function ExpenseSummary({
               {t("totalThisYear")}
             </p>
             <h3 className="text-2xl font-bold mt-1">
-              {formatCurrency(totalSpent || 0)}
+              {format(totalSpent || 0)}
             </h3>
           </div>
         </div>
@@ -85,7 +86,7 @@ export function ExpenseSummary({
               <YAxis />
               <Tooltip
                 formatter={(value) => [
-                  formatCurrency(typeof value === "number" ? value : Number(value)),
+                  format(typeof value === "number" ? value : Number(value)),
                   tShared("sumLabel"),
                 ]}
                 labelFormatter={() => tShared("consumptionLabel")}

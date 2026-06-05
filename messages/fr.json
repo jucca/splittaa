@@ -1,0 +1,508 @@
+{
+  "meta": {
+    "appTitle": "Splittaa",
+    "appDescription": "Le moyen le plus simple de partager les dépenses entre amis"
+  },
+  "language": {
+    "switch": "Changer de langue",
+    "current": "Langue actuelle : {locale}"
+  },
+  "nav": {
+    "logoAlt": "Splittaa",
+    "features": "Fonctionnalités",
+    "howItWorks": "Comment ça marche",
+    "dashboard": "Tableau de bord",
+    "inbox": "Boîte de réception",
+    "inboxWithCount": "Boîte de réception ({count})",
+    "activity": "Activité",
+    "settings": "Paramètres",
+    "signIn": "Se connecter",
+    "getStarted": "Commencer"
+  },
+  "theme": {
+    "toggleAria": "Mode sombre",
+    "toggleSr": "Mode sombre"
+  },
+  "shared": {
+    "you": "Vous",
+    "back": "Retour",
+    "loading": "Chargement…",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "creating": "Création...",
+    "joining": "Adhésion...",
+    "recording": "Enregistrement...",
+    "sending": "Envoi...",
+    "searching": "Recherche...",
+    "done": "Terminé",
+    "otherUser": "Autre utilisateur",
+    "unknownUser": "Utilisateur inconnu",
+    "showAll": "Tout afficher",
+    "membersCount": "{count} membres",
+    "membersInGroup": "{count} membres dans le groupe",
+    "peopleCountFrom": "de {count} personnes",
+    "peopleCountTo": "à {count} personnes",
+    "optional": "(facultatif)",
+    "total": "Total",
+    "sumLabel": "Montant",
+    "consumptionLabel": "Dépenses",
+    "expenseSingular": "dépense",
+    "expensePlural": "dépenses",
+    "group": "Groupe",
+    "person": "Personne",
+    "expenseKind": "Dépense",
+    "settlementKind": "Règlement",
+    "newBadge": "Nouveau",
+    "admin": "Admin",
+    "youBadge": "Vous",
+    "youParenthetical": "(vous)",
+    "daysOption": "{count} jours",
+    "close": "Fermer"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Partagez les dépenses. Simplifiez la vie.",
+      "title": "Le moyen le plus simple de partager les dépenses entre amis",
+      "subtitle": "Suivez les dépenses communes, partagez les factures sans effort et réglez les comptes rapidement. Ne vous souciez plus de savoir qui doit quoi à qui.",
+      "ctaStart": "Commencer",
+      "ctaHowItWorks": "Voir comment ça marche",
+      "heroImageAlt": "Aperçu de l'application Splittaa"
+    },
+    "featuresSection": {
+      "badge": "Fonctionnalités",
+      "title": "Tout ce dont vous avez besoin pour partager les dépenses",
+      "subtitle": "Notre plateforme vous offre tous les outils pour gérer facilement les dépenses communes.",
+      "groupExpenses": {
+        "title": "Dépenses de groupe",
+        "description": "Créez des groupes pour colocataires, voyages ou événements et gardez les dépenses organisées."
+      },
+      "smartSettlements": {
+        "title": "Règlements intelligents",
+        "description": "Notre algorithme minimise le nombre de paiements nécessaires pour solder les comptes."
+      },
+      "spendingAnalysis": {
+        "title": "Analyse des dépenses",
+        "description": "Suivez vos habitudes de dépenses et découvrez des insights sur vos dépenses communes."
+      },
+      "paymentReminders": {
+        "title": "Rappels de paiement",
+        "description": "Rappels automatiques pour les soldes ouverts et analyses des dépenses."
+      },
+      "splitMethods": {
+        "title": "Plusieurs modes de partage",
+        "description": "Partagez à parts égales, en pourcentage ou en montants exacts — adapté à toute situation."
+      },
+      "realtimeUpdates": {
+        "title": "Mises à jour en temps réel",
+        "description": "Voyez les nouvelles dépenses et paiements dès que vos amis les ajoutent."
+      }
+    },
+    "howItWorksSection": {
+      "badge": "Comment ça marche",
+      "title": "Partager les dépenses n'a jamais été aussi simple",
+      "subtitle": "Suivez ces étapes simples pour commencer à suivre et partager les dépenses avec vos amis.",
+      "step1": {
+        "title": "Créer ou rejoindre un groupe",
+        "description": "Créez un groupe pour colocataires, un voyage ou un événement et invitez vos amis."
+      },
+      "step2": {
+        "title": "Ajouter des dépenses",
+        "description": "Enregistrez qui a payé et comment la facture est partagée entre les membres."
+      },
+      "step3": {
+        "title": "Régler les comptes",
+        "description": "Voyez qui doit quoi à qui et enregistrez les paiements lorsque les dettes sont soldées."
+      }
+    },
+    "testimonialsSection": {
+      "badge": "Témoignages",
+      "title": "Ce que disent nos utilisateurs",
+      "annikki": {
+        "quote": "Avec Splittaa, je ne me perds plus dans qui a payé quoi !",
+        "role": "Gestionnaire de logements locatifs"
+      },
+      "luigi": {
+        "quote": "Avec Splittaa, je tiens une comptabilité précise de ce qu'on me doit. Mieux que les meilleures apps de rappels !",
+        "role": "Conseiller en finances et dettes"
+      },
+      "antti": {
+        "quote": "Si j'avais eu Splittaa plus tôt, Luigi n'aurait pas pu vendre mes chaussures et mon manteau ! J'ajoute la dette tout de suite.",
+        "role": "Développeur logiciel / Coach mindfulness"
+      }
+    },
+    "ctaSection": {
+      "title": "Prêt à simplifier le partage des dépenses ?",
+      "subtitle": "Rejoignez des milliers d'utilisateurs qui ont rendu le partage des dépenses sans stress.",
+      "button": "Commencer"
+    },
+    "footer": {
+      "copyright": "© {year} Splittaa. Tous droits réservés."
+    }
+  },
+  "join": {
+    "invalidLink": "Lien d'invitation invalide.",
+    "inviteNotFound": "Invitation introuvable.",
+    "homeLink": "Tableau de bord",
+    "inviteInvalidTitle": "L'invitation n'est pas valide",
+    "inviteInvalidBody": "L'invitation au groupe {groupName} a expiré ou a déjà été traitée.",
+    "goDashboard": "Aller au tableau de bord",
+    "goBack": "Retour",
+    "groupInviteTitle": "Invitation de groupe",
+    "invitedBy": "{inviterName} vous a invité",
+    "signInToJoin": "Connectez-vous ou créez un compte pour rejoindre le groupe.",
+    "signUpAndJoin": "S'inscrire et rejoindre",
+    "signIn": "Se connecter",
+    "joiningGroup": "Adhésion au groupe…",
+    "acceptInvite": "Accepter l'invitation",
+    "declineInvite": "Refuser l'invitation",
+    "toastInviteDeclined": "Invitation refusée"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "addExpense": "Ajouter une dépense",
+    "totalBalance": "Solde total",
+    "balanceOwedToYou": "On vous doit",
+    "balanceYouOwe": "Vous devez",
+    "balanceSettled": "Tout est réglé !",
+    "balanceNotOwingAnyone": "Vous ne devez rien à personne",
+    "balanceSummaryTitle": "Détails du solde",
+    "yourGroupsTitle": "Vos groupes",
+    "createNewGroup": "Créer un nouveau groupe",
+    "pendingInvitesTitle": "Invitations de groupe ({count})",
+    "inviterLabel": "Invité par : {name}",
+    "openInvite": "Ouvrir l'invitation",
+    "joinByCodeTitle": "Rejoindre un groupe avec un code",
+    "joinCodeLabel": "Code d'adhésion",
+    "joinCodePlaceholder": "ex. ABCD2345",
+    "joinButton": "Rejoindre",
+    "expenseSummaryTitle": "Résumé des dépenses",
+    "totalThisMonth": "Total ce mois-ci",
+    "totalThisYear": "Total cette année",
+    "monthlySpendingCaption": "Dépenses mensuelles en {year}",
+    "monthShort": {
+      "jan": "janv.",
+      "feb": "févr.",
+      "mar": "mars",
+      "apr": "avr.",
+      "may": "mai",
+      "jun": "juin",
+      "jul": "juil.",
+      "aug": "août",
+      "sep": "sept.",
+      "oct": "oct.",
+      "nov": "nov.",
+      "dec": "déc."
+    },
+    "groupListEmpty": "Pas encore de groupes",
+    "groupListEmptyHint": "Créez un groupe pour commencer à suivre les dépenses communes",
+    "balanceAllSettled": "Tout est réglé !",
+    "toastAlreadyMember": "Vous êtes déjà membre du groupe",
+    "toastJoinedGroup": "Vous avez rejoint le groupe !"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "createGroup": "Créer un groupe",
+    "peopleSection": "Personnes",
+    "peopleEmpty": "Pas encore de contacts. Ajoutez une dépense avec quelqu'un pour les voir ici.",
+    "groupsSection": "Groupes",
+    "groupsEmpty": "Pas encore de groupes. Créez un groupe pour commencer à suivre les dépenses communes."
+  },
+  "groups": {
+    "settleUp": "Régler les comptes",
+    "addExpense": "Ajouter une dépense",
+    "groupBalancesTitle": "Soldes du groupe",
+    "membersTitle": "Membres",
+    "tabsExpenses": "Dépenses ({count})",
+    "tabsSettlements": "Règlements ({count})",
+    "balancesUnavailable": "Données de solde indisponibles",
+    "notMember": "Vous n'êtes pas membre de ce groupe",
+    "yourBalance": "Votre solde",
+    "allSettledInGroup": "Tout est réglé",
+    "everyoneSettled": "Tout le monde est à jour !",
+    "theyOweYou": "Ils vous doivent {amount}",
+    "youOweThem": "Vous devez {amount}",
+    "settled": "Réglé",
+    "noMembers": "Aucun membre dans ce groupe",
+    "invitesTitle": "Invitations et adhésion",
+    "shareInviteHint": "Partagez un lien ou un code pour que d'autres puissent rejoindre le groupe. Valide jusqu'au {expiresDate}.",
+    "qrAlt": "Code QR pour rejoindre le groupe",
+    "joinLinkLabel": "Lien d'adhésion",
+    "joinCodeLabel": "Code d'adhésion",
+    "copyLinkAria": "Copier le lien",
+    "copyCodeAria": "Copier le code",
+    "pendingInvites": "Invitations en attente",
+    "revokeInviteAria": "Révoquer l'invitation",
+    "revokeInvite": "Révoquer",
+    "toastLinkCopied": "Lien copié",
+    "toastCodeCopied": "Code copié",
+    "toastCopyFailed": "Échec de la copie",
+    "toastInviteRevoked": "Invitation révoquée",
+    "toastRevokeFailed": "Échec de la révocation de l'invitation : {message}",
+    "createGroupNeedGroup": "Vous devez créer un groupe avant d'ajouter une dépense de groupe.",
+    "selectGroupPlaceholder": "Sélectionner un groupe",
+    "selectGroupToContinue": "Sélectionnez un groupe pour continuer"
+  },
+  "person": {
+    "settleUp": "Régler les comptes",
+    "addExpense": "Ajouter une dépense",
+    "balanceTitle": "Solde",
+    "allSettled": "Tout est réglé",
+    "theyOweYou": "{name} vous doit",
+    "youOweThem": "Vous devez {name}",
+    "tabsExpenses": "Dépenses ({count})",
+    "tabsSettlements": "Règlements ({count})"
+  },
+  "expenses": {
+    "newPageTitle": "Ajouter une nouvelle dépense",
+    "newPageSubtitle": "Enregistrez une dépense pour vous ou partagez-la avec d'autres",
+    "tabIndividual": "Dépense personnelle",
+    "tabGroup": "Dépense de groupe",
+    "form": {
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Déjeuner, billets de cinéma, etc.",
+      "amountLabel": "Montant",
+      "categoryLabel": "Catégorie",
+      "dateLabel": "Date",
+      "datePlaceholder": "Sélectionner une date",
+      "groupLabel": "Groupe",
+      "participantsLabel": "Participants",
+      "participantsOptionalHint": "Enregistrez la dépense pour vous seul ou ajoutez d'autres participants ci-dessous.",
+      "payerLabel": "Payeur",
+      "payerPlaceholder": "Sélectionner le payeur",
+      "splitTypeLabel": "Mode de partage",
+      "splitEqual": "À parts égales",
+      "splitPercentage": "Pourcentages",
+      "splitExact": "Montants exacts",
+      "splitEqualHint": "Partager à parts égales entre tous les participants",
+      "splitPercentageHint": "Partager en pourcentage",
+      "splitExactHint": "Saisir des montants exacts",
+      "submit": "Créer la dépense",
+      "splitsMismatch": "Les montants partagés ne correspondent pas au total. Vérifiez vos parts.",
+      "percentMustBe100": "Les pourcentages doivent totaliser 100 %.",
+      "exactMustMatchTotal": "Les montants partagés ({splitTotal}) doivent égaler le total ({total}).",
+      "validationDescriptionRequired": "La description est obligatoire",
+      "validationAmountRequired": "Le montant est obligatoire",
+      "validationAmountPositive": "Le montant doit être un nombre positif",
+      "validationPayerRequired": "Le payeur est obligatoire",
+      "toastCreated": "Dépense créée avec succès !",
+      "toastCreateFailed": "Échec de la création de la dépense : {message}"
+    },
+    "list": {
+      "empty": "Aucune dépense trouvée",
+      "youPaid": "Vous avez payé",
+      "userPaid": "{name} a payé",
+      "groupExpenseBadge": "Dépense de groupe",
+      "deleteAria": "Supprimer la dépense",
+      "deleteConfirm": "Supprimer cette dépense ? Cette action est irréversible.",
+      "toastDeleted": "Dépense supprimée avec succès",
+      "toastDeleteFailed": "Échec de la suppression de la dépense : {message}"
+    },
+    "participantSelector": {
+      "addPerson": "Ajouter une personne",
+      "searchPlaceholder": "Rechercher par nom ou e-mail...",
+      "searchMinChars": "Saisissez au moins 2 caractères pour rechercher",
+      "noUsersFound": "Aucun utilisateur trouvé",
+      "usersHeading": "Utilisateurs"
+    },
+    "categorySelector": {
+      "noCategories": "Aucune catégorie disponible",
+      "placeholder": "Sélectionner une catégorie"
+    }
+  },
+  "categories": {
+    "foodDrink": "Nourriture et boissons",
+    "coffee": "Café",
+    "groceries": "Courses",
+    "shopping": "Shopping",
+    "travel": "Voyage",
+    "transportation": "Transport",
+    "housing": "Logement",
+    "entertainment": "Divertissement",
+    "tickets": "Billets",
+    "utilities": "Services publics",
+    "water": "Eau",
+    "education": "Éducation",
+    "health": "Santé",
+    "personal": "Personnel",
+    "gifts": "Cadeaux",
+    "technology": "Technologie",
+    "bills": "Factures et frais",
+    "baby": "Bébés et enfants",
+    "music": "Musique",
+    "books": "Livres",
+    "other": "Autre",
+    "general": "Dépense générale"
+  },
+  "settlements": {
+    "pageTitle": "Enregistrer un règlement",
+    "subtitleUser": "Règlement avec {name}",
+    "subtitleGroup": "Règlement dans {groupName}",
+    "form": {
+      "currentBalance": "Solde actuel",
+      "allSettledWithUser": "Tout est réglé avec {name}",
+      "theyOweYou": "{name} vous doit",
+      "youOweThem": "Vous devez {name}",
+      "whoPaid": "Qui a payé ?",
+      "youPaidUser": "Vous avez payé {name}",
+      "userPaidYou": "{name} vous a payé",
+      "youPaidMember": "Vous avez payé {name}",
+      "memberPaidYou": "{name} vous a payé",
+      "amountLabel": "Montant",
+      "noteLabel": "Note (facultatif)",
+      "notePlaceholder": "Dîner, loyer, etc.",
+      "submit": "Enregistrer le règlement",
+      "selectMember": "Avec qui réglez-vous les comptes ?",
+      "selectMemberWarning": "Sélectionnez le membre avec qui vous réglez les comptes",
+      "validationAmountRequired": "Le montant est obligatoire",
+      "validationAmountPositive": "Le montant doit être un nombre positif",
+      "toastSuccess": "Règlement enregistré avec succès !",
+      "toastFailed": "Échec de l'enregistrement du règlement : {message}",
+      "toastSelectMember": "Sélectionnez un membre du groupe pour régler les comptes",
+      "toastMemberNotFound": "L'utilisateur sélectionné n'a pas été trouvé dans le groupe"
+    },
+    "list": {
+      "empty": "Aucun règlement trouvé",
+      "youPaidReceiver": "Vous avez payé {name}",
+      "payerPaidYou": "{payer} vous a payé",
+      "payerPaidReceiver": "{payer} a payé {receiver}",
+      "groupSettlementBadge": "Règlement de groupe",
+      "youPaidLabel": "Vous avez payé",
+      "youReceivedLabel": "Vous avez reçu",
+      "paymentLabel": "Paiement"
+    }
+  },
+  "activity": {
+    "pageTitle": "Activité",
+    "pageSubtitle": "Résumé des dépenses et événements récents — uniquement votre part dans les graphiques.",
+    "recentEventsTitle": "Événements récents",
+    "feedAria": "Activité récente",
+    "feedEmpty": "Aucune activité récente. Ajoutez une dépense ou un règlement pour la voir ici.",
+    "charts": {
+      "title": "Résumé des dépenses",
+      "periodWeek": "Semaine",
+      "periodMonth": "Mois",
+      "periodYear": "Année",
+      "periodCaption": "{period} — uniquement votre part des dépenses",
+      "totalLabel": "Total",
+      "noExpensesInPeriod": "Aucune dépense sur la période sélectionnée",
+      "spendingOverTime": "Dépenses au fil du temps",
+      "categories": "Catégories",
+      "captionMonth": "{month} {year} — chaque jour",
+      "captionYear": "Année {year}",
+      "captionWeek": "Semaine en cours (lun.–dim.)",
+      "monthLong": {
+        "january": "janvier",
+        "february": "février",
+        "march": "mars",
+        "april": "avril",
+        "may": "mai",
+        "june": "juin",
+        "july": "juillet",
+        "august": "août",
+        "september": "septembre",
+        "october": "octobre",
+        "november": "novembre",
+        "december": "décembre"
+      },
+      "dayTooltip": "{day} {month} {year}"
+    }
+  },
+  "inbox": {
+    "pageTitle": "Boîte de réception",
+    "pageSubtitle": "Boîte de réception : invitations de groupe, rappels de solde et autres notifications.",
+    "empty": "Aucun message. Les invitations de groupe et rappels de solde apparaissent ici.",
+    "markAllRead": "Tout marquer comme lu",
+    "markRead": "Marquer comme lu",
+    "toastAllMarkedRead": "Tous les messages marqués comme lus",
+    "actions": {
+      "openInvite": "Ouvrir l'invitation",
+      "viewBalance": "Voir le solde",
+      "openDashboard": "Ouvrir le tableau de bord",
+      "openSettlement": "Ouvrir le règlement",
+      "markPaid": "Marquer comme payé",
+      "markedPaid": "Marqué comme payé",
+      "toastMarkedPaid": "Paiement enregistré ({amount}). {creditorName} sera notifié.",
+      "toastRecordFailed": "Échec de l'enregistrement"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Ajustez la langue et les rappels par e-mail pour les soldes ouverts.",
+    "languageCardTitle": "Langue",
+    "languageLabel": "Langue de l'interface",
+    "languageHint": "Choisissez la langue d'affichage de Splittaa. Vous pouvez aussi changer via le drapeau dans l'en-tête.",
+    "currencyCardTitle": "Devise",
+    "currencyLabel": "Devise par défaut",
+    "currencyHint": "Tous les montants et soldes sont affichés dans cette devise. Les nouvelles dépenses sont aussi enregistrées dans cette devise.",
+    "remindersCardTitle": "Rappels de solde",
+    "remindersEnabled": "Rappels activés",
+    "remindersEnabledHint": "Nous envoyons un e-mail uniquement à l'intervalle choisi tant qu'un solde reste ouvert.",
+    "remindMeLabel": "Me rappeler",
+    "minAgeLabel": "Le solde doit être ouvert depuis au moins",
+    "minAgeHint": "Les soldes à court terme ne sont pas rappelés — seulement ceux ouverts depuis longtemps.",
+    "notifyWhenIOwe": "Quand je dois à quelqu'un",
+    "notifyWhenIOweHint": "Rappel pour vos dettes impayées.",
+    "notifyWhenOwed": "Quand quelqu'un me doit",
+    "notifyWhenOwedHint": "Rappel pour l'argent qui vous est dû.",
+    "lastSent": "Dernier rappel envoyé : {datetime}",
+    "toastSelectReminderType": "Sélectionnez au moins un type de rappel",
+    "toastSaved": "Paramètres enregistrés",
+    "toastSaveFailed": "Échec de l'enregistrement : {message}"
+  },
+  "contactsModal": {
+    "createTitle": "Créer un nouveau groupe",
+    "createdTitle": "Groupe créé",
+    "nameLabel": "Nom du groupe",
+    "namePlaceholder": "Saisir le nom du groupe",
+    "descriptionLabel": "Description (facultatif)",
+    "descriptionPlaceholder": "Saisir la description du groupe",
+    "inviteMembersLabel": "Inviter des membres (facultatif)",
+    "inviteMembersHint": "Les invités reçoivent un lien pour accepter ou refuser. Vous pouvez aussi partager un code ou un QR après la création.",
+    "addInvitee": "Ajouter un invité",
+    "createButton": "Créer le groupe",
+    "invitesSentHint": "Les invitations ont été envoyées par e-mail et apparaissent dans l'application pour les invités.",
+    "validationNameRequired": "Le nom du groupe est obligatoire",
+    "toastCreatedWithInvites": "Groupe créé ! {count} invitation(s) envoyée(s).",
+    "toastCreated": "Groupe créé avec succès !",
+    "toastCreateFailed": "Échec de la création du groupe : {message}"
+  },
+  "debtRequests": {
+    "sendButton": "Envoyer une demande de paiement",
+    "dialogTitle": "Demande de paiement",
+    "dialogDescription": "Envoyez une demande à {debtorName} ({amount}, {context}). Ils reçoivent un message dans l'application et un e-mail si disponible. Cela ne remplace pas les rappels automatiques de solde.",
+    "contextGroup": "dans le groupe {groupName}",
+    "contextPersonal": "dans un partage personnel",
+    "messageLabel": "Message (facultatif)",
+    "messagePlaceholder": "ex. Merci de payer votre part du voyage du week-end",
+    "sendRequest": "Envoyer la demande",
+    "toastSent": "Demande de paiement envoyée à {debtorName}",
+    "toastSendFailed": "Échec de l'envoi"
+  },
+  "errors": {
+    "FORBIDDEN": "Vous n'avez pas la permission pour cette action",
+    "NOT_FOUND": "Introuvable",
+    "UNAUTHORIZED": "Connexion requise",
+    "INVALID_INPUT": "Saisie invalide",
+    "generic": "Une erreur s'est produite : {message}",
+    "unknown": "Erreur inconnue"
+  },
+  "notifications": {
+    "group_invite": {
+      "title": "Invitation de groupe",
+      "body": "Vous avez été invité au groupe {groupName}"
+    },
+    "balance_reminder": {
+      "title": "Rappel de solde",
+      "body": "Vous avez un solde ouvert : {summary}"
+    },
+    "debt_request": {
+      "title": "Demande de paiement",
+      "body": "{creditorName} vous demande de payer {amount}"
+    },
+    "debt_request_paid": {
+      "title": "Dette payée",
+      "body": "{debtorName} a marqué la dette comme payée ({amount})"
+    }
+  }
+}

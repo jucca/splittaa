@@ -8,6 +8,7 @@ export default defineSchema({
     tokenIdentifier: v.string(),
     imageUrl: v.optional(v.string()),
     preferredLocale: v.optional(v.string()),
+    preferredCurrency: v.optional(v.string()),
     reminderSettings: v.optional(
       v.object({
         enabled: v.boolean(),
@@ -38,6 +39,7 @@ export default defineSchema({
   expenses: defineTable({
     description: v.string(),
     amount: v.number(),
+    currency: v.optional(v.string()),
     category: v.optional(v.string()),
     date: v.number(), // timestamp
     paidByUserId: v.id("users"), // Reference to users table
@@ -59,6 +61,7 @@ export default defineSchema({
   // Settlements
   settlements: defineTable({
     amount: v.number(),
+    currency: v.optional(v.string()),
     note: v.optional(v.string()),
     date: v.number(), // timestamp
     paidByUserId: v.id("users"), // Reference to users table
@@ -79,9 +82,17 @@ export default defineSchema({
     userId: v.id("users"),
     counterpartyUserId: v.id("users"),
     amount: v.number(), // userId owes counterpartyUserId when > 0
+    currency: v.optional(v.string()),
     updatedAt: v.number(),
   })
     .index("by_scope_pair", ["scopeType", "scopeGroupId", "userId", "counterpartyUserId"])
+    .index("by_scope_pair_currency", [
+      "scopeType",
+      "scopeGroupId",
+      "userId",
+      "counterpartyUserId",
+      "currency",
+    ])
     .index("by_user_scope", ["userId", "scopeType", "scopeGroupId"])
     .index("by_scope", ["scopeType", "scopeGroupId"]),
 
@@ -146,4 +157,10 @@ export default defineSchema({
     .index("by_user_created", ["userId", "createdAt"])
     .index("by_user_unread", ["userId", "isRead"])
     .index("by_user_dedupe", ["userId", "dedupeKey"]),
+
+  /** EUR-based rates from Frankfurter (1 EUR = rates[X]). */
+  exchangeRates: defineTable({
+    rates: v.record(v.string(), v.number()),
+    fetchedAt: v.number(),
+  }),
 });

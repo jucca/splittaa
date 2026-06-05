@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import { SendDebtRequestButton } from "@/components/features/debt-requests/send-debt-request-button";
 import type { Id } from "@/convex/_generated/dataModel";
 import type { UserBalances } from "@/lib/types/domain";
@@ -22,6 +22,7 @@ export function BalanceSummary({
   balances: UserBalances | null | undefined;
 }) {
   const t = useTranslations("dashboard");
+  const { format } = useMoney();
 
   if (!balances) return null;
 
@@ -61,7 +62,7 @@ export function BalanceSummary({
                     <span className="text-sm truncate">{item.name}</span>
                   </div>
                   <span className="font-medium text-green-600 shrink-0">
-                    {formatCurrency(item.amount)}
+                    {format(item.amount)}
                   </span>
                 </Link>
                 <SendDebtRequestButton
@@ -97,7 +98,7 @@ export function BalanceSummary({
                   <span className="text-sm">{item.name}</span>
                 </div>
                 <span className="font-medium text-red-600">
-                  {formatCurrency(item.amount)}
+                  {format(item.amount)}
                 </span>
               </Link>
             ))}

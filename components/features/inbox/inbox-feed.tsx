@@ -15,10 +15,10 @@ import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 import { useTranslations } from "next-intl";
 import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
-import { formatCurrency } from "@/lib/utils";
 import { useLocale } from "next-intl";
 import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
 import { resolveLocale } from "@/lib/i18n/locales";
+import { useMoney } from "@/components/providers/money-format-provider";
 
 type InboxMessage = FunctionReturnType<
   typeof api.notifications.listMyNotifications
@@ -42,7 +42,8 @@ function isTranslatedType(
 
 function getNotificationDisplay(
   message: InboxMessage,
-  tNotif: ReturnType<typeof useTranslations<"notifications">>
+  tNotif: ReturnType<typeof useTranslations<"notifications">>,
+  formatAmount: (amount: number) => string
 ): { title: string; body: string } {
   if (!isTranslatedType(message.type)) {
     return { title: message.title, body: message.body };
@@ -76,7 +77,7 @@ function getNotificationDisplay(
               title: tNotif("debt_request.title"),
               body: tNotif("debt_request.body", {
                 creditorName,
-                amount: formatCurrency(message.debtRequestAmount),
+                amount: formatAmount(message.debtRequestAmount),
               }),
             };
           }
@@ -127,6 +128,7 @@ export function InboxFeed() {
   const tShared = useTranslations("shared");
   const locale = resolveLocale(useLocale());
   const dateFnsLocale = useDateFnsLocale();
+  const { format } = useMoney();
   const { data: messages, isLoading } = useConvexQuery(
     api.notifications.listMyNotifications,
     { limit: 50 }
@@ -193,7 +195,11 @@ export function InboxFeed() {
 
       <ul className="space-y-3" data-testid="inbox-feed">
         {messages.map((message: InboxMessage) => {
-          const { title, body } = getNotificationDisplay(message, tNotif);
+          const { title, body } = getNotificationDisplay(
+            message,
+            tNotif,
+            (amount) => format(amount)
+          );
 
           return (
             <li key={message.id}>

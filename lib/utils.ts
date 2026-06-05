@@ -1,21 +1,26 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-
-const eurFormatter = new Intl.NumberFormat("fi-FI", {
-  style: "currency",
-  currency: "EUR",
-});
+import {
+  formatMoney,
+  formatSignedMoney,
+} from "@/lib/money/format";
+import { DEFAULT_CURRENCY } from "@/lib/money/currencies";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(amount: number | null | undefined) {
-  return eurFormatter.format(amount ?? 0);
+/** @deprecated Prefer useFormatMoney() for viewer currency; defaults to EUR. */
+export function formatCurrency(
+  amount: number | null | undefined,
+  currency: string = DEFAULT_CURRENCY
+) {
+  return formatMoney(amount, currency);
 }
 
-export function formatSignedCurrency(amount: number) {
-  if (amount === 0) return formatCurrency(0);
-  const sign = amount > 0 ? "+" : "-";
-  return `${sign}${formatCurrency(Math.abs(amount))}`;
+export function formatSignedCurrency(
+  amount: number,
+  currency: string = DEFAULT_CURRENCY
+) {
+  return formatSignedMoney(amount, currency);
 }

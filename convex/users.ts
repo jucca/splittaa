@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { requireAuth } from "./_lib/auth";
 import { isSupportedLocale } from "./_lib/locales";
+import { isSupportedCurrency } from "./_lib/currencies";
 
 export const store = mutation({
   args: {},
@@ -48,7 +49,20 @@ export const me = query({
       name: user.name,
       imageUrl: user.imageUrl ?? null,
       preferredLocale: user.preferredLocale ?? null,
+      preferredCurrency: user.preferredCurrency ?? null,
     };
+  },
+});
+
+export const updatePreferredCurrency = mutation({
+  args: { currency: v.string() },
+  handler: async (ctx, args) => {
+    const user = await requireAuth(ctx);
+    if (!isSupportedCurrency(args.currency)) {
+      throw new Error("Invalid currency");
+    }
+    await ctx.db.patch(user._id, { preferredCurrency: args.currency });
+    return { currency: args.currency };
   },
 });
 

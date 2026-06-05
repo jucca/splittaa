@@ -1,11 +1,20 @@
-import { enUS, fi } from "date-fns/locale";
+import { de, enUS, es, fi, fr, ja, sv } from "date-fns/locale";
 import type { Locale } from "date-fns";
-import { enUS as clerkEnUS, fiFI as clerkFiFI } from "@clerk/localizations";
+import {
+  deDE as clerkDeDE,
+  enUS as clerkEnUS,
+  esES as clerkEsES,
+  fiFI as clerkFiFI,
+  frFR as clerkFrFR,
+  jaJP as clerkJaJP,
+  svSE as clerkSvSE,
+} from "@clerk/localizations";
 import type { LocalizationResource } from "@clerk/types";
 import {
   DEFAULT_LOCALE,
   LOCALE_COOKIE,
   SUPPORTED_LOCALE_CODES,
+  getIntlDateTimeLocale,
   isSupportedLocale,
   resolveLocale,
   type AppLocale,
@@ -15,6 +24,7 @@ export {
   DEFAULT_LOCALE,
   LOCALE_COOKIE,
   SUPPORTED_LOCALE_CODES,
+  getIntlDateTimeLocale,
   isSupportedLocale,
   resolveLocale,
   type AppLocale,
@@ -42,6 +52,41 @@ export const SUPPORTED_LOCALES: readonly LocaleDefinition[] = [
     flag: "🇬🇧",
     dateFnsLocale: enUS,
     clerkLocalization: clerkEnUS,
+  },
+  {
+    code: "fr",
+    label: "Français",
+    flag: "🇫🇷",
+    dateFnsLocale: fr,
+    clerkLocalization: clerkFrFR,
+  },
+  {
+    code: "sv",
+    label: "Svenska",
+    flag: "🇸🇪",
+    dateFnsLocale: sv,
+    clerkLocalization: clerkSvSE,
+  },
+  {
+    code: "de",
+    label: "Deutsch",
+    flag: "🇩🇪",
+    dateFnsLocale: de,
+    clerkLocalization: clerkDeDE,
+  },
+  {
+    code: "es",
+    label: "Español",
+    flag: "🇪🇸",
+    dateFnsLocale: es,
+    clerkLocalization: clerkEsES,
+  },
+  {
+    code: "ja",
+    label: "日本語",
+    flag: "🇯🇵",
+    dateFnsLocale: ja,
+    clerkLocalization: clerkJaJP,
   },
 ] as const;
 

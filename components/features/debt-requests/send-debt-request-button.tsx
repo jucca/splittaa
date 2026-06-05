@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Send } from "lucide-react";
 import { toast } from "sonner";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import { useLocale, useTranslations } from "next-intl";
 import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
 import { resolveLocale } from "@/lib/i18n/locales";
@@ -47,6 +47,7 @@ export function SendDebtRequestButton({
   const t = useTranslations("debtRequests");
   const tShared = useTranslations("shared");
   const locale = resolveLocale(useLocale());
+  const { format } = useMoney();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const sendDebtRequest = useConvexMutation(api.debtRequests.sendDebtRequest);
@@ -94,7 +95,7 @@ export function SendDebtRequestButton({
           <DialogDescription>
             {t("dialogDescription", {
               debtorName,
-              amount: formatCurrency(amount),
+              amount: format(amount),
               context: contextLabel,
             })}
           </DialogDescription>

@@ -5,7 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import type { Participant, SplitRow, SplitType } from "@/lib/types/domain";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useTranslations } from "next-intl";
@@ -25,6 +25,7 @@ export function SplitSelector({
 }) {
   const t = useTranslations("expenses.form");
   const tShared = useTranslations("shared");
+  const { format, currencySymbol } = useMoney();
   const { user } = useUser();
   const [splits, setSplits] = useState<SplitRow[]>([]);
   const [totalPercentage, setTotalPercentage] = useState(0);
@@ -177,7 +178,7 @@ export function SplitSelector({
 
           {type === "equal" && (
             <div className="text-right text-sm">
-              {formatCurrency(split.amount)} ({split.percentage.toFixed(1)}%)
+              {format(split.amount)} ({split.percentage.toFixed(1)}%)
             </div>
           )}
 
@@ -208,7 +209,7 @@ export function SplitSelector({
                   className="w-16 h-8"
                 />
                 <span className="text-sm text-muted-foreground">%</span>
-                <span className="text-sm ml-1">{formatCurrency(split.amount)}</span>
+                <span className="text-sm ml-1">{format(split.amount)}</span>
               </div>
             </div>
           )}
@@ -217,7 +218,7 @@ export function SplitSelector({
             <div className="flex items-center gap-2 flex-1">
               <div className="flex-1"></div>
               <div className="flex gap-1 items-center">
-                <span className="text-sm text-muted-foreground">€</span>
+                <span className="text-sm text-muted-foreground">{currencySymbol}</span>
                 <Input
                   type="number"
                   min="0"
@@ -244,7 +245,7 @@ export function SplitSelector({
           <span
             className={`font-medium ${!isAmountValid ? "text-amber-600" : ""}`}
           >
-            {formatCurrency(totalAmount)}
+            {format(totalAmount)}
           </span>
           {type !== "equal" && (
             <span
@@ -265,8 +266,8 @@ export function SplitSelector({
       {type === "exact" && !isAmountValid && (
         <div className="text-sm text-amber-600 mt-2">
           {t("exactMustMatchTotal", {
-            splitTotal: formatCurrency(totalAmount),
-            total: formatCurrency(amount),
+            splitTotal: format(totalAmount),
+            total: format(amount),
           })}
         </div>
       )}

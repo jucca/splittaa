@@ -255,7 +255,7 @@
   },
   "expenses": {
     "newPageTitle": "Lisää uusi kulu",
-    "newPageSubtitle": "Kirjaa uusi kulu ja jaa se muiden kanssa",
+    "newPageSubtitle": "Kirjaa kulu itsellesi tai jaa se muiden kanssa",
     "tabIndividual": "Henkilökohtainen kulu",
     "tabGroup": "Ryhmäkulu",
     "form": {
@@ -267,7 +267,7 @@
       "datePlaceholder": "Valitse päivämäärä",
       "groupLabel": "Ryhmä",
       "participantsLabel": "Osallistujat",
-      "addParticipantMin": "Lisää vähintään yksi muu osallistuja",
+      "participantsOptionalHint": "Voit tallentaa kulun vain itsellesi tai lisätä muita osallistujia alla.",
       "payerLabel": "Maksaja",
       "payerPlaceholder": "Valitse maksaja",
       "splitTypeLabel": "Jakotapa",
@@ -428,7 +428,13 @@
   },
   "settings": {
     "title": "Asetukset",
-    "subtitle": "Säädä sähköpostimuistutuksia avoimista saldoista.",
+    "subtitle": "Säädä kieltä ja sähköpostimuistutuksia avoimista saldoista.",
+    "languageCardTitle": "Kieli",
+    "languageLabel": "Käyttöliittymän kieli",
+    "languageHint": "Valitse Splittaan näyttökieli. Voit vaihtaa kielen myös headerin lipusta.",
+    "currencyCardTitle": "Valuutta",
+    "currencyLabel": "Oletusvaluutta",
+    "currencyHint": "Kaikki summat ja saldot näytetään tässä valuutassa. Uudet kulut kirjataan myös tällä valuutalla.",
     "remindersCardTitle": "Saldomuistutukset",
     "remindersEnabled": "Muistutukset käytössä",
     "remindersEnabledHint": "Lähetämme sähköpostia vain valituin välein, jos saldo on edelleen auki.",

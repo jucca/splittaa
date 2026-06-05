@@ -15,6 +15,8 @@ import {
   userParticipatesInExpense,
   type SpendingPeriod,
 } from "./_lib/spending";
+import { balanceCurrency } from "./_lib/exchange";
+import { convertToViewer, viewerCurrency } from "./_lib/moneyDisplay";
 
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 100;
@@ -24,6 +26,7 @@ export type ActivityEntry = {
   kind: "expense" | "settlement";
   date: number;
   amount: number;
+  currency: string;
   title: string;
   subtitle: string;
   contextType: "group" | "personal";
@@ -51,6 +54,8 @@ function expenseEntryForUser(
     contextName: string;
     href: string;
     payerName: string;
+    amount: number;
+    currency: string;
   }
 ): ActivityEntry | null {
   const mySplit = expense.splits.find((s) => s.userId === userId);
@@ -65,7 +70,8 @@ function expenseEntryForUser(
       id: `expense:${expense._id}`,
       kind: "expense",
       date: expense.date,
-      amount: expense.amount,
+      amount: context.amount,
+      currency: context.currency,
       title: expense.description,
       subtitle:
         context.contextType === "group"
@@ -76,12 +82,12 @@ function expenseEntryForUser(
     };
   }
 
-  const share = mySplit?.amount ?? 0;
   return {
     id: `expense:${expense._id}`,
     kind: "expense",
     date: expense.date,
-    amount: share,
+    amount: context.amount,
+    currency: context.currency,
     title: expense.description,
     subtitle: `Osuutesi · ${context.payerName} maksoi · ${context.contextName}`,
     contextType: context.contextType,
@@ -98,6 +104,8 @@ function settlementEntryForUser(
     href: string;
     payerName: string;
     receiverName: string;
+    amount: number;
+    currency: string;
   }
 ): ActivityEntry {
   const isPayer = settlement.paidByUserId === userId;
@@ -107,7 +115,8 @@ function settlementEntryForUser(
       id: `settlement:${settlement._id}`,
       kind: "settlement",
       date: settlement.date,
-      amount: settlement.amount,
+      amount: context.amount,
+      currency: context.currency,
       title: "Tilitys",
       subtitle: `Maksoit ${context.receiverName}lle · ${context.contextName}`,
       contextType: context.contextType,
@@ -119,7 +128,8 @@ function settlementEntryForUser(
     id: `settlement:${settlement._id}`,
     kind: "settlement",
     date: settlement.date,
-    amount: settlement.amount,
+    amount: context.amount,
+    currency: context.currency,
     title: "Tilitys vastaanotettu",
     subtitle: `Sait ${context.payerName}lta · ${context.contextName}`,
     contextType: context.contextType,
@@ -133,6 +143,7 @@ export const getRecentActivity = query({
   },
   handler: async (ctx, args) => {
     const user = await requireAuth(ctx);
+    const viewerCur = viewerCurrency(user);
     const limit = Math.min(
       Math.max(1, args.limit ?? DEFAULT_LIMIT),
       MAX_LIMIT
@@ -153,11 +164,23 @@ export const getRecentActivity = query({
       const payerName = await userName(ctx, expense.paidByUserId, nameCache);
       const href = otherUserId ? `/person/${otherUserId}` : "/contacts";
 
+      const rawAmount =
+        expense.paidByUserId === user._id
+          ? expense.amount
+          : (expense.splits.find((s) => s.userId === user._id)?.amount ?? 0);
+      const converted = await convertToViewer(
+        ctx,
+        viewerCur,
+        rawAmount,
+        balanceCurrency(expense)
+      );
       const entry = expenseEntryForUser(expense, user._id, {
         contextType: "personal",
         contextName,
         href,
         payerName,
+        amount: converted,
+        currency: viewerCur,
       });
       if (entry) entries.push(entry);
     }
@@ -179,6 +202,12 @@ export const getRecentActivity = query({
         nameCache
       );
 
+      const converted = await convertToViewer(
+        ctx,
+        viewerCur,
+        settlement.amount,
+        balanceCurrency(settlement)
+      );
       entries.push(
         settlementEntryForUser(settlement, user._id, {
           contextType: "personal",
@@ -186,6 +215,8 @@ export const getRecentActivity = query({
           href: `/person/${counterpartyId}`,
           payerName,
           receiverName,
+          amount: converted,
+          currency: viewerCur,
         })
       );
     }
@@ -206,11 +237,23 @@ export const getRecentActivity = query({
 
       for (const expense of groupExpenses) {
         const payerName = await userName(ctx, expense.paidByUserId, nameCache);
+        const rawAmount =
+          expense.paidByUserId === user._id
+            ? expense.amount
+            : (expense.splits.find((s) => s.userId === user._id)?.amount ?? 0);
+        const converted = await convertToViewer(
+          ctx,
+          viewerCur,
+          rawAmount,
+          balanceCurrency(expense)
+        );
         const entry = expenseEntryForUser(expense, user._id, {
           contextType: "group",
           contextName: groupName,
           href: groupHref,
           payerName,
+          amount: converted,
+          currency: viewerCur,
         });
         if (entry) entries.push(entry);
       }
@@ -233,6 +276,12 @@ export const getRecentActivity = query({
           settlement.receivedByUserId,
           nameCache
         );
+        const converted = await convertToViewer(
+          ctx,
+          viewerCur,
+          settlement.amount,
+          balanceCurrency(settlement)
+        );
         entries.push(
           settlementEntryForUser(settlement, user._id, {
             contextType: "group",
@@ -240,6 +289,8 @@ export const getRecentActivity = query({
             href: groupHref,
             payerName,
             receiverName,
+            amount: converted,
+            currency: viewerCur,
           })
         );
       }
@@ -270,6 +321,7 @@ export const getSpendingSummary = query({
   },
   handler: async (ctx, args) => {
     const user = await requireAuth(ctx);
+    const viewerCur = viewerCurrency(user);
     const period = args.period as SpendingPeriod;
     const { rangeStart, rangeEnd } = getSpendingPeriodBounds(period);
 
@@ -290,19 +342,26 @@ export const getSpendingSummary = query({
       const share = getUserExpenseShare(expense, user._id);
       if (share <= 0) continue;
 
-      totalAmount += share;
+      const converted = await convertToViewer(
+        ctx,
+        viewerCur,
+        share,
+        balanceCurrency(expense)
+      );
+
+      totalAmount += converted;
       applyExpenseToTimeBuckets(
         byTime,
         period,
         expense.date,
-        share,
+        converted,
         rangeStart
       );
 
       const categoryId = expense.category || "other";
       categoryTotals.set(
         categoryId,
-        (categoryTotals.get(categoryId) ?? 0) + share
+        (categoryTotals.get(categoryId) ?? 0) + converted
       );
     }
 
@@ -318,6 +377,7 @@ export const getSpendingSummary = query({
       rangeStart,
       rangeEnd,
       totalAmount,
+      currency: viewerCur,
       expenseCount: inRange.filter(
         (e) => getUserExpenseShare(e, user._id) > 0
       ).length,

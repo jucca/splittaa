@@ -18,7 +18,7 @@ Product and UX constraints for Splittaa. Agents implement features; humans judge
 
 - **Framework:** [next-intl](https://next-intl.dev) with cookie `splittaa-locale` (no URL locale prefix).
 - **Registry:** `lib/i18n/locales.ts` — `SUPPORTED_LOCALES` is the single source for codes, labels, flags, date-fns, and Clerk localizations.
-- **MVP locales:** Finnish (default) and English.
+- **Supported locales:** Finnish (default), English, French, Swedish, German, Spanish, and Japanese.
 - **Adding a language:** add `messages/{code}.json`, one row in `SUPPORTED_LOCALES`, extend `AppLocale` / `convex/_lib/locales.ts`, run `npm run check:i18n`.
 - **UI copy:** `messages/*.json` + `useTranslations` / `getTranslations`; not hardcoded in components.
 - **Code and docs:** English (identifiers, comments, agent docs).

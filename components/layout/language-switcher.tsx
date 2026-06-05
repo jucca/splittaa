@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/popover";
 import { useConvexAuth } from "convex/react";
 import { Check } from "lucide-react";
+import { HoverHint } from "@/components/ui/hover-hint";
 
 export function LanguageSwitcher() {
   const t = useTranslations("language");
@@ -45,21 +46,25 @@ export function LanguageSwitcher() {
     setOpen(false);
   };
 
+  const hint = t("current", { locale: current.label });
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="h-9 w-9 text-lg leading-none"
-          aria-label={t("switch")}
-          data-testid="language-switcher"
-        >
-          <span aria-hidden>{current.flag}</span>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent align="end" className="w-44 p-1">
+      <HoverHint label={hint} side="bottom">
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 text-lg leading-none"
+            aria-label={t("switch")}
+            data-testid="language-switcher"
+          >
+            <span aria-hidden>{current.flag}</span>
+          </Button>
+        </PopoverTrigger>
+      </HoverHint>
+      <PopoverContent align="end" className="w-48 max-h-80 overflow-y-auto p-1">
         <ul className="flex flex-col" role="listbox" aria-label={t("switch")}>
           {SUPPORTED_LOCALES.map((item) => (
             <li key={item.code}>

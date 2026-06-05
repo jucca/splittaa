@@ -6,7 +6,11 @@ import { assertGroupMember, assertGroupMembers } from "./_lib/authorize";
 import {
   applySettlementToBalances,
   getNetBalanceBetweenUsers,
+  listBalancesBetweenUsers,
 } from "./_lib/balances";
+import { resolveCurrency } from "./_lib/currencies";
+import { convertWithStoredRates } from "./_lib/exchange";
+import { convertToViewer, viewerCurrency } from "./_lib/moneyDisplay";
 
 /* ============================================================================
  *  MUTATION: createSettlement
@@ -45,9 +49,13 @@ export const createSettlement = mutation({
       ]);
     }
 
+    const payer = await ctx.db.get(args.paidByUserId);
+    const settlementCurrency = resolveCurrency(payer?.preferredCurrency);
+
     /* ── insert ──────────────────────────────────────────────────────────── */
     const settlementId = await ctx.db.insert("settlements", {
       amount: args.amount,
+      currency: settlementCurrency,
       note: args.note,
       date: Date.now(), // server‑side timestamp
       paidByUserId: args.paidByUserId,
@@ -63,6 +71,7 @@ export const createSettlement = mutation({
         paidByUserId: args.paidByUserId,
         receivedByUserId: args.receivedByUserId,
         amount: args.amount,
+        currency: settlementCurrency,
         groupId: args.groupId,
       },
       1
@@ -93,9 +102,26 @@ export const getSettlementData = query({
       const other = await ctx.db.get(args.entityId as Id<"users">);
       if (!other) throw new Error("Käyttäjää ei löytynyt");
 
-      const netBalance = await getNetBalanceBetweenUsers(ctx, me._id, other._id);
-      const owed = netBalance > 0 ? netBalance : 0;
-      const owing = netBalance < 0 ? Math.abs(netBalance) : 0;
+      const balanceParts = await listBalancesBetweenUsers(ctx, me._id, other._id);
+      const viewerCurrency = resolveCurrency(me.preferredCurrency);
+
+      let netInViewer = 0;
+      for (const part of balanceParts) {
+        const converted =
+          part.currency === viewerCurrency
+            ? part.amount
+            : await convertWithStoredRates(
+                ctx,
+                part.amount,
+                part.currency,
+                viewerCurrency
+              );
+        netInViewer += converted;
+      }
+
+      const owed = netInViewer > 0 ? netInViewer : 0;
+      const owing = netInViewer < 0 ? Math.abs(netInViewer) : 0;
+      const netBalance = netInViewer;
 
       return {
         type: "user",
@@ -107,7 +133,9 @@ export const getSettlementData = query({
         },
         youAreOwed: owed,
         youOwe: owing,
-        netBalance, // + => you should receive, − => you should pay
+        netBalance,
+        displayCurrency: viewerCurrency,
+        balanceParts,
       };
     } else if (args.entityType === "group") {
       /* ──────────────────────────────────────────────────────── group page */
@@ -117,31 +145,31 @@ export const getSettlementData = query({
         me._id
       );
 
+      const viewerCur = viewerCurrency(me);
+
       const list = await Promise.all(
         group.members
           .map((m) => m.userId)
           .filter((userId) => userId !== me._id)
           .map(async (uid) => {
-            const canonical =
-              me._id < uid
-                ? { userId: me._id, counterpartyUserId: uid, isMeCanonical: true }
-                : {
-                    userId: uid,
-                    counterpartyUserId: me._id,
-                    isMeCanonical: false,
-                  };
-            const rows = await ctx.db
-              .query("balances")
-              .withIndex("by_scope_pair", (q) =>
-                q
-                  .eq("scopeType", "group")
-                  .eq("scopeGroupId", group._id)
-                  .eq("userId", canonical.userId)
-                  .eq("counterpartyUserId", canonical.counterpartyUserId)
-              )
-              .collect();
-            const pairAmount = rows[0]?.amount ?? 0;
-            const netBalance = canonical.isMeCanonical ? -pairAmount : pairAmount;
+            const balanceParts = await listBalancesBetweenUsers(
+              ctx,
+              me._id,
+              uid,
+              { scopeType: "group", scopeGroupId: group._id }
+            );
+
+            let netBalance = 0;
+            for (const part of balanceParts) {
+              const converted = await convertToViewer(
+                ctx,
+                viewerCur,
+                Math.abs(part.amount),
+                part.currency
+              );
+              netBalance += part.amount >= 0 ? converted : -converted;
+            }
+
             const m = await ctx.db.get(uid);
             const owed = netBalance > 0 ? netBalance : 0;
             const owing = netBalance < 0 ? Math.abs(netBalance) : 0;
@@ -164,6 +192,7 @@ export const getSettlementData = query({
           name: group.name,
           description: group.description,
         },
+        displayCurrency: viewerCur,
         balances: list,
       };
     }

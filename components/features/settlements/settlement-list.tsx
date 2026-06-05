@@ -2,11 +2,11 @@
 
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
-import { format } from "date-fns";
+import { format as formatDate } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeftRight } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useTranslations } from "next-intl";
 import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
@@ -14,6 +14,7 @@ import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
 export type SettlementListItem = {
   _id: Id<"settlements">;
   amount: number;
+  currency?: string;
   date: number;
   note?: string;
   paidByUserId: Id<"users">;
@@ -32,6 +33,7 @@ export function SettlementList({
   const t = useTranslations("settlements.list");
   const tShared = useTranslations("shared");
   const dateFnsLocale = useDateFnsLocale();
+  const { format: formatAmount } = useMoney();
   const { data: currentUser } = useConvexQuery(api.users.me);
 
   if (!settlements || !settlements.length) {
@@ -89,7 +91,7 @@ export function SettlementList({
                     </h3>
                     <div className="flex items-center text-sm text-muted-foreground gap-2">
                       <span>
-                        {format(new Date(settlement.date), "d.M.yyyy", {
+                        {formatDate(new Date(settlement.date), "d.M.yyyy", {
                           locale: dateFnsLocale,
                         })}
                       </span>
@@ -105,7 +107,7 @@ export function SettlementList({
 
                 <div className="text-right">
                   <div className="font-medium">
-                    {formatCurrency(settlement.amount)}
+                    {formatAmount(settlement.amount, settlement.currency)}
                   </div>
                   {isGroupSettlement ? (
                     <Badge variant="outline" className="mt-1">

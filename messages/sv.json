@@ -1,0 +1,508 @@
+{
+  "meta": {
+    "appTitle": "Splittaa",
+    "appDescription": "Det enklaste sättet att dela utgifter med vänner"
+  },
+  "language": {
+    "switch": "Byt språk",
+    "current": "Nuvarande språk: {locale}"
+  },
+  "nav": {
+    "logoAlt": "Splittaa",
+    "features": "Funktioner",
+    "howItWorks": "Så funkar det",
+    "dashboard": "Översikt",
+    "inbox": "Inkorg",
+    "inboxWithCount": "Inkorg ({count})",
+    "activity": "Aktivitet",
+    "settings": "Inställningar",
+    "signIn": "Logga in",
+    "getStarted": "Kom igång"
+  },
+  "theme": {
+    "toggleAria": "Mörkt läge",
+    "toggleSr": "Mörkt läge"
+  },
+  "shared": {
+    "you": "Du",
+    "back": "Tillbaka",
+    "loading": "Laddar…",
+    "cancel": "Avbryt",
+    "save": "Spara",
+    "saving": "Sparar…",
+    "creating": "Skapar...",
+    "joining": "Går med...",
+    "recording": "Registrerar...",
+    "sending": "Skickar...",
+    "searching": "Söker...",
+    "done": "Klar",
+    "otherUser": "Annan användare",
+    "unknownUser": "Okänd användare",
+    "showAll": "Visa alla",
+    "membersCount": "{count} medlemmar",
+    "membersInGroup": "{count} medlemmar i gruppen",
+    "peopleCountFrom": "från {count} personer",
+    "peopleCountTo": "till {count} personer",
+    "optional": "(valfritt)",
+    "total": "Totalt",
+    "sumLabel": "Belopp",
+    "consumptionLabel": "Utgifter",
+    "expenseSingular": "utgift",
+    "expensePlural": "utgifter",
+    "group": "Grupp",
+    "person": "Person",
+    "expenseKind": "Utgift",
+    "settlementKind": "Avräkning",
+    "newBadge": "Ny",
+    "admin": "Admin",
+    "youBadge": "Du",
+    "youParenthetical": "(du)",
+    "daysOption": "{count} dagar",
+    "close": "Stäng"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Dela utgifter. Förenkla livet.",
+      "title": "Det enklaste sättet att dela utgifter med vänner",
+      "subtitle": "Håll koll på gemensamma utgifter, dela räkningar enkelt och kvitta snabbt. Sluta oroa dig för vem som är skyldig vem.",
+      "ctaStart": "Kom igång",
+      "ctaHowItWorks": "Se hur det funkar",
+      "heroImageAlt": "Förhandsgranskning av Splittaa-appen"
+    },
+    "featuresSection": {
+      "badge": "Funktioner",
+      "title": "Allt du behöver för att dela utgifter",
+      "subtitle": "Vår plattform ger dig alla verktyg för att hantera gemensamma utgifter enkelt.",
+      "groupExpenses": {
+        "title": "Grupputgifter",
+        "description": "Skapa grupper för rumskamrater, resor eller evenemang och håll utgifterna organiserade."
+      },
+      "smartSettlements": {
+        "title": "Smarta avräkningar",
+        "description": "Vår algoritm minimerar antalet betalningar som behövs för att kvitta."
+      },
+      "spendingAnalysis": {
+        "title": "Utgiftsanalys",
+        "description": "Följ utgiftsvanor och upptäck insikter från dina gemensamma utgifter."
+      },
+      "paymentReminders": {
+        "title": "Betalningspåminnelser",
+        "description": "Automatiska påminnelser för öppna saldon och utgiftsinsikter."
+      },
+      "splitMethods": {
+        "title": "Flera delningsmetoder",
+        "description": "Dela lika, i procent eller exakta belopp — passar alla situationer."
+      },
+      "realtimeUpdates": {
+        "title": "Uppdateringar i realtid",
+        "description": "Se nya utgifter och betalningar så snart vänner lägger till dem."
+      }
+    },
+    "howItWorksSection": {
+      "badge": "Så funkar det",
+      "title": "Att dela utgifter har aldrig varit så enkelt",
+      "subtitle": "Följ dessa enkla steg för att börja spåra och dela utgifter med vänner.",
+      "step1": {
+        "title": "Skapa eller gå med i en grupp",
+        "description": "Starta en grupp för rumskamrater, en resa eller ett evenemang och bjud in vänner."
+      },
+      "step2": {
+        "title": "Lägg till utgifter",
+        "description": "Registrera vem som betalade och hur räkningen delas mellan medlemmarna."
+      },
+      "step3": {
+        "title": "Kvitta",
+        "description": "Se vem som är skyldig vem och registrera betalningar när skulder är betalda."
+      }
+    },
+    "testimonialsSection": {
+      "badge": "Omdömen",
+      "title": "Vad våra användare säger",
+      "annikki": {
+        "quote": "Med Splittaa blir jag inte längre förvirrad över vem som betalade vad!",
+        "role": "Förvaltare av hyreslägenheter"
+      },
+      "luigi": {
+        "quote": "Med Splittaa håller jag noggrann koll på vad jag har till godo. Bättre än de bästa påminnelseapparna!",
+        "role": "Ekonomisk och skuldrådgivare"
+      },
+      "antti": {
+        "quote": "Om jag hade haft Splittaa tidigare hade Luigi inte kunnat sälja mina skor och min jacka! Jag lägger till skulden direkt.",
+        "role": "Mjukvaruutvecklare / Mindfulness-coach"
+      }
+    },
+    "ctaSection": {
+      "title": "Redo att förenkla utgiftsdelning?",
+      "subtitle": "Gå med tusentals användare som gjort utgiftsdelning stressfri.",
+      "button": "Kom igång"
+    },
+    "footer": {
+      "copyright": "© {year} Splittaa. Alla rättigheter förbehållna."
+    }
+  },
+  "join": {
+    "invalidLink": "Ogiltig inbjudningslänk.",
+    "inviteNotFound": "Inbjudan hittades inte.",
+    "homeLink": "Översikt",
+    "inviteInvalidTitle": "Inbjudan är inte giltig",
+    "inviteInvalidBody": "Inbjudan till {groupName} har gått ut eller redan hanterats.",
+    "goDashboard": "Gå till översikt",
+    "goBack": "Tillbaka",
+    "groupInviteTitle": "Gruppinbjudan",
+    "invitedBy": "{inviterName} bjöd in dig",
+    "signInToJoin": "Logga in eller skapa ett konto för att gå med i gruppen.",
+    "signUpAndJoin": "Registrera dig och gå med",
+    "signIn": "Logga in",
+    "joiningGroup": "Går med i grupp…",
+    "acceptInvite": "Acceptera inbjudan",
+    "declineInvite": "Avböj inbjudan",
+    "toastInviteDeclined": "Inbjudan avböjd"
+  },
+  "dashboard": {
+    "title": "Översikt",
+    "addExpense": "Lägg till utgift",
+    "totalBalance": "Totalt saldo",
+    "balanceOwedToYou": "Du har till godo",
+    "balanceYouOwe": "Du är skyldig",
+    "balanceSettled": "Allt kvittat!",
+    "balanceNotOwingAnyone": "Du är inte skyldig någon",
+    "balanceSummaryTitle": "Saldodetaljer",
+    "yourGroupsTitle": "Dina grupper",
+    "createNewGroup": "Skapa ny grupp",
+    "pendingInvitesTitle": "Gruppinbjudningar ({count})",
+    "inviterLabel": "Inbjuden av: {name}",
+    "openInvite": "Öppna inbjudan",
+    "joinByCodeTitle": "Gå med i grupp med kod",
+    "joinCodeLabel": "Anslutningskod",
+    "joinCodePlaceholder": "t.ex. ABCD2345",
+    "joinButton": "Gå med",
+    "expenseSummaryTitle": "Utgiftssammanfattning",
+    "totalThisMonth": "Totalt denna månad",
+    "totalThisYear": "Totalt i år",
+    "monthlySpendingCaption": "Månatliga utgifter {year}",
+    "monthShort": {
+      "jan": "jan",
+      "feb": "feb",
+      "mar": "mar",
+      "apr": "apr",
+      "may": "maj",
+      "jun": "jun",
+      "jul": "jul",
+      "aug": "aug",
+      "sep": "sep",
+      "oct": "okt",
+      "nov": "nov",
+      "dec": "dec"
+    },
+    "groupListEmpty": "Inga grupper ännu",
+    "groupListEmptyHint": "Skapa en grupp för att börja spåra gemensamma utgifter",
+    "balanceAllSettled": "Allt är kvittat!",
+    "toastAlreadyMember": "Du är redan medlem i gruppen",
+    "toastJoinedGroup": "Du gick med i gruppen!"
+  },
+  "contacts": {
+    "title": "Kontakter",
+    "createGroup": "Skapa grupp",
+    "peopleSection": "Personer",
+    "peopleEmpty": "Inga kontakter ännu. Lägg till en utgift med någon för att se dem här.",
+    "groupsSection": "Grupper",
+    "groupsEmpty": "Inga grupper ännu. Skapa en grupp för att börja spåra gemensamma utgifter."
+  },
+  "groups": {
+    "settleUp": "Kvitta",
+    "addExpense": "Lägg till utgift",
+    "groupBalancesTitle": "Gruppsaldon",
+    "membersTitle": "Medlemmar",
+    "tabsExpenses": "Utgifter ({count})",
+    "tabsSettlements": "Avräkningar ({count})",
+    "balancesUnavailable": "Saldodata otillgänglig",
+    "notMember": "Du är inte medlem i den här gruppen",
+    "yourBalance": "Ditt saldo",
+    "allSettledInGroup": "Allt kvittat",
+    "everyoneSettled": "Alla är kvittade!",
+    "theyOweYou": "De är skyldiga dig {amount}",
+    "youOweThem": "Du är skyldig {amount}",
+    "settled": "Kvittat",
+    "noMembers": "Inga medlemmar i den här gruppen",
+    "invitesTitle": "Inbjudningar och anslutning",
+    "shareInviteHint": "Dela en länk eller kod så att andra kan gå med i gruppen. Giltig till {expiresDate}.",
+    "qrAlt": "QR-kod för att gå med i gruppen",
+    "joinLinkLabel": "Anslutningslänk",
+    "joinCodeLabel": "Anslutningskod",
+    "copyLinkAria": "Kopiera länk",
+    "copyCodeAria": "Kopiera kod",
+    "pendingInvites": "Väntande inbjudningar",
+    "revokeInviteAria": "Återkalla inbjudan",
+    "revokeInvite": "Återkalla",
+    "toastLinkCopied": "Länk kopierad",
+    "toastCodeCopied": "Kod kopierad",
+    "toastCopyFailed": "Kopiering misslyckades",
+    "toastInviteRevoked": "Inbjudan återkallad",
+    "toastRevokeFailed": "Misslyckades med att återkalla inbjudan: {message}",
+    "createGroupNeedGroup": "Du måste skapa en grupp innan du lägger till en grupputgift.",
+    "selectGroupPlaceholder": "Välj grupp",
+    "selectGroupToContinue": "Välj en grupp för att fortsätta"
+  },
+  "person": {
+    "settleUp": "Kvitta",
+    "addExpense": "Lägg till utgift",
+    "balanceTitle": "Saldo",
+    "allSettled": "Allt kvittat",
+    "theyOweYou": "{name} är skyldig dig",
+    "youOweThem": "Du är skyldig {name}",
+    "tabsExpenses": "Utgifter ({count})",
+    "tabsSettlements": "Avräkningar ({count})"
+  },
+  "expenses": {
+    "newPageTitle": "Lägg till ny utgift",
+    "newPageSubtitle": "Registrera en utgift för dig själv eller dela den med andra",
+    "tabIndividual": "Personlig utgift",
+    "tabGroup": "Grupputgift",
+    "form": {
+      "descriptionLabel": "Beskrivning",
+      "descriptionPlaceholder": "Lunch, biobiljetter osv.",
+      "amountLabel": "Belopp",
+      "categoryLabel": "Kategori",
+      "dateLabel": "Datum",
+      "datePlaceholder": "Välj datum",
+      "groupLabel": "Grupp",
+      "participantsLabel": "Deltagare",
+      "participantsOptionalHint": "Spara utgiften bara för dig själv eller lägg till fler deltagare nedan.",
+      "payerLabel": "Betalare",
+      "payerPlaceholder": "Välj betalare",
+      "splitTypeLabel": "Delningsmetod",
+      "splitEqual": "Lika",
+      "splitPercentage": "Procent",
+      "splitExact": "Exakta belopp",
+      "splitEqualHint": "Dela lika mellan alla deltagare",
+      "splitPercentageHint": "Dela i procent",
+      "splitExactHint": "Ange exakta belopp",
+      "submit": "Skapa utgift",
+      "splitsMismatch": "Delade belopp stämmer inte med totalen. Kontrollera dina delningar.",
+      "percentMustBe100": "Procenten måste bli 100 %.",
+      "exactMustMatchTotal": "Delade belopp ({splitTotal}) måste motsvara totalt ({total}).",
+      "validationDescriptionRequired": "Beskrivning krävs",
+      "validationAmountRequired": "Belopp krävs",
+      "validationAmountPositive": "Beloppet måste vara ett positivt tal",
+      "validationPayerRequired": "Betalare krävs",
+      "toastCreated": "Utgift skapad!",
+      "toastCreateFailed": "Misslyckades med att skapa utgift: {message}"
+    },
+    "list": {
+      "empty": "Inga utgifter hittades",
+      "youPaid": "Du betalade",
+      "userPaid": "{name} betalade",
+      "groupExpenseBadge": "Grupputgift",
+      "deleteAria": "Ta bort utgift",
+      "deleteConfirm": "Ta bort den här utgiften? Detta kan inte ångras.",
+      "toastDeleted": "Utgift borttagen",
+      "toastDeleteFailed": "Misslyckades med att ta bort utgift: {message}"
+    },
+    "participantSelector": {
+      "addPerson": "Lägg till person",
+      "searchPlaceholder": "Sök efter namn eller e-post...",
+      "searchMinChars": "Skriv minst 2 tecken för att söka",
+      "noUsersFound": "Inga användare hittades",
+      "usersHeading": "Användare"
+    },
+    "categorySelector": {
+      "noCategories": "Inga kategorier tillgängliga",
+      "placeholder": "Välj kategori"
+    }
+  },
+  "categories": {
+    "foodDrink": "Mat och dryck",
+    "coffee": "Kaffe",
+    "groceries": "Matvaror",
+    "shopping": "Shopping",
+    "travel": "Resor",
+    "transportation": "Transport",
+    "housing": "Boende",
+    "entertainment": "Underhållning",
+    "tickets": "Biljetter",
+    "utilities": "Hushållsutgifter",
+    "water": "Vatten",
+    "education": "Utbildning",
+    "health": "Hälsa",
+    "personal": "Personligt",
+    "gifts": "Presenter",
+    "technology": "Teknik",
+    "bills": "Räkningar och avgifter",
+    "baby": "Barn och småbarn",
+    "music": "Musik",
+    "books": "Böcker",
+    "other": "Övrigt",
+    "general": "Allmän utgift"
+  },
+  "settlements": {
+    "pageTitle": "Registrera avräkning",
+    "subtitleUser": "Avräkning med {name}",
+    "subtitleGroup": "Avräkning i {groupName}",
+    "form": {
+      "currentBalance": "Nuvarande saldo",
+      "allSettledWithUser": "Allt kvittat med {name}",
+      "theyOweYou": "{name} är skyldig dig",
+      "youOweThem": "Du är skyldig {name}",
+      "whoPaid": "Vem betalade?",
+      "youPaidUser": "Du betalade {name}",
+      "userPaidYou": "{name} betalade dig",
+      "youPaidMember": "Du betalade {name}",
+      "memberPaidYou": "{name} betalade dig",
+      "amountLabel": "Belopp",
+      "noteLabel": "Anteckning (valfritt)",
+      "notePlaceholder": "Middag, hyra osv.",
+      "submit": "Registrera avräkning",
+      "selectMember": "Vem kvittar du med?",
+      "selectMemberWarning": "Välj medlemmen du kvittar med",
+      "validationAmountRequired": "Belopp krävs",
+      "validationAmountPositive": "Beloppet måste vara ett positivt tal",
+      "toastSuccess": "Avräkning registrerad!",
+      "toastFailed": "Misslyckades med att registrera avräkning: {message}",
+      "toastSelectMember": "Välj en gruppmedlem att kvitta med",
+      "toastMemberNotFound": "Vald användare hittades inte i gruppen"
+    },
+    "list": {
+      "empty": "Inga avräkningar hittades",
+      "youPaidReceiver": "Du betalade {name}",
+      "payerPaidYou": "{payer} betalade dig",
+      "payerPaidReceiver": "{payer} betalade {receiver}",
+      "groupSettlementBadge": "Gruppavräkning",
+      "youPaidLabel": "Du betalade",
+      "youReceivedLabel": "Du tog emot",
+      "paymentLabel": "Betalning"
+    }
+  },
+  "activity": {
+    "pageTitle": "Aktivitet",
+    "pageSubtitle": "Utgiftssammanfattning och senaste händelser — endast din andel i diagrammen.",
+    "recentEventsTitle": "Senaste händelser",
+    "feedAria": "Senaste aktivitet",
+    "feedEmpty": "Ingen senaste aktivitet. Lägg till en utgift eller avräkning för att se den här.",
+    "charts": {
+      "title": "Utgiftssammanfattning",
+      "periodWeek": "Vecka",
+      "periodMonth": "Månad",
+      "periodYear": "År",
+      "periodCaption": "{period} — endast din andel av utgifterna",
+      "totalLabel": "Totalt",
+      "noExpensesInPeriod": "Inga utgifter under vald period",
+      "spendingOverTime": "Utgifter över tid",
+      "categories": "Kategorier",
+      "captionMonth": "{month} {year} — varje dag",
+      "captionYear": "År {year}",
+      "captionWeek": "Innevarande vecka (mån–sön)",
+      "monthLong": {
+        "january": "januari",
+        "february": "februari",
+        "march": "mars",
+        "april": "april",
+        "may": "maj",
+        "june": "juni",
+        "july": "juli",
+        "august": "augusti",
+        "september": "september",
+        "october": "oktober",
+        "november": "november",
+        "december": "december"
+      },
+      "dayTooltip": "{day} {month} {year}"
+    }
+  },
+  "inbox": {
+    "pageTitle": "Inkorg",
+    "pageSubtitle": "Inkorg: gruppinbjudningar, saldopåminnelser och andra aviseringar.",
+    "empty": "Inga meddelanden. Gruppinbjudningar och saldopåminnelser visas här.",
+    "markAllRead": "Markera alla som lästa",
+    "markRead": "Markera som läst",
+    "toastAllMarkedRead": "Alla meddelanden markerade som lästa",
+    "actions": {
+      "openInvite": "Öppna inbjudan",
+      "viewBalance": "Visa saldo",
+      "openDashboard": "Öppna översikt",
+      "openSettlement": "Öppna avräkning",
+      "markPaid": "Markera som betald",
+      "markedPaid": "Markerad som betald",
+      "toastMarkedPaid": "Betalning registrerad ({amount}). {creditorName} meddelas.",
+      "toastRecordFailed": "Registrering misslyckades"
+    }
+  },
+  "settings": {
+    "title": "Inställningar",
+    "subtitle": "Justera språk och e-postpåminnelser för öppna saldon.",
+    "languageCardTitle": "Språk",
+    "languageLabel": "Gränssnittsspråk",
+    "languageHint": "Välj visningsspråk för Splittaa. Du kan också byta via flaggan i sidhuvudet.",
+    "currencyCardTitle": "Valuta",
+    "currencyLabel": "Standardvaluta",
+    "currencyHint": "Alla belopp och saldon visas i denna valuta. Nya utgifter registreras också i denna valuta.",
+    "remindersCardTitle": "Saldopåminnelser",
+    "remindersEnabled": "Påminnelser aktiverade",
+    "remindersEnabledHint": "Vi skickar endast e-post med valt intervall så länge ett saldo är öppet.",
+    "remindMeLabel": "Påminn mig",
+    "minAgeLabel": "Saldo måste vara öppet minst",
+    "minAgeHint": "Kortsiktiga saldon påminns inte — endast länge öppna.",
+    "notifyWhenIOwe": "När jag är skyldig någon",
+    "notifyWhenIOweHint": "Påminnelse om dina obetalda skulder.",
+    "notifyWhenOwed": "När någon är skyldig mig",
+    "notifyWhenOwedHint": "Påminnelse om pengar du har till godo.",
+    "lastSent": "Senaste påminnelse skickad: {datetime}",
+    "toastSelectReminderType": "Välj minst en påminnelsetyp",
+    "toastSaved": "Inställningar sparade",
+    "toastSaveFailed": "Sparning misslyckades: {message}"
+  },
+  "contactsModal": {
+    "createTitle": "Skapa ny grupp",
+    "createdTitle": "Grupp skapad",
+    "nameLabel": "Gruppnamn",
+    "namePlaceholder": "Ange gruppnamn",
+    "descriptionLabel": "Beskrivning (valfritt)",
+    "descriptionPlaceholder": "Ange gruppbeskrivning",
+    "inviteMembersLabel": "Bjud in medlemmar (valfritt)",
+    "inviteMembersHint": "Inbjudna får en länk för att acceptera eller avböja. Du kan också dela en anslutningskod eller QR efter skapande.",
+    "addInvitee": "Lägg till inbjuden",
+    "createButton": "Skapa grupp",
+    "invitesSentHint": "Inbjudningar skickades via e-post och visas i appen för inbjudna.",
+    "validationNameRequired": "Gruppnamn krävs",
+    "toastCreatedWithInvites": "Grupp skapad! {count} inbjudning(ar) skickade.",
+    "toastCreated": "Grupp skapad!",
+    "toastCreateFailed": "Misslyckades med att skapa grupp: {message}"
+  },
+  "debtRequests": {
+    "sendButton": "Skicka betalningsbegäran",
+    "dialogTitle": "Betalningsbegäran",
+    "dialogDescription": "Skicka en begäran till {debtorName} ({amount}, {context}). De får ett meddelande i appen och e-post om tillgängligt. Detta ersätter inte automatiska saldopåminnelser.",
+    "contextGroup": "i gruppen {groupName}",
+    "contextPersonal": "i en personlig delning",
+    "messageLabel": "Meddelande (valfritt)",
+    "messagePlaceholder": "t.ex. Betala din andel av helgresan",
+    "sendRequest": "Skicka begäran",
+    "toastSent": "Betalningsbegäran skickad till {debtorName}",
+    "toastSendFailed": "Sändning misslyckades"
+  },
+  "errors": {
+    "FORBIDDEN": "Du har inte behörighet för den här åtgärden",
+    "NOT_FOUND": "Hittades inte",
+    "UNAUTHORIZED": "Inloggning krävs",
+    "INVALID_INPUT": "Ogiltig inmatning",
+    "generic": "Något gick fel: {message}",
+    "unknown": "Okänt fel"
+  },
+  "notifications": {
+    "group_invite": {
+      "title": "Gruppinbjudan",
+      "body": "Du blev inbjuden till {groupName}"
+    },
+    "balance_reminder": {
+      "title": "Saldopåminnelse",
+      "body": "Du har ett öppet saldo: {summary}"
+    },
+    "debt_request": {
+      "title": "Betalningsbegäran",
+      "body": "{creditorName} ber dig betala {amount}"
+    },
+    "debt_request_paid": {
+      "title": "Skuld betald",
+      "body": "{debtorName} markerade skulden som betald ({amount})"
+    }
+  }
+}

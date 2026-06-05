@@ -4,10 +4,9 @@ import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
 import { assertGroupMember } from "./_lib/authorize";
 import { validateSplits } from "./_lib/money";
-import {
-  applyExpenseToBalances,
-  getNetBalanceBetweenUsers,
-} from "./_lib/balances";
+import { resolveCurrency } from "./_lib/currencies";
+import { applyExpenseToBalances, listBalancesBetweenUsers } from "./_lib/balances";
+import { convertToViewer, viewerCurrency } from "./_lib/moneyDisplay";
 
 // Create a new expense
 export const createExpense = mutation({
@@ -42,10 +41,13 @@ export const createExpense = mutation({
       );
     }
 
+    const currency = resolveCurrency(user.preferredCurrency);
+
     // Create the expense
     const expenseId = await ctx.db.insert("expenses", {
       description: args.description,
       amount: args.amount,
+      currency,
       category: args.category || "Other",
       date: args.date,
       paidByUserId: args.paidByUserId,
@@ -60,6 +62,7 @@ export const createExpense = mutation({
       {
         paidByUserId: args.paidByUserId,
         groupId: args.groupId,
+        currency,
         splits: args.splits,
       },
       1
@@ -133,8 +136,19 @@ export const getExpensesBetweenUsers = query({
 
     settlements.sort((a, b) => b.date - a.date);
 
-    /* ───── 4. Compute running balance ──────────────────────────────── */
-    const balance = await getNetBalanceBetweenUsers(ctx, me._id, userId);
+    /* ───── 4. Compute running balance (viewer's preferred currency) ─ */
+    const viewerCur = viewerCurrency(me);
+    const parts = await listBalancesBetweenUsers(ctx, me._id, userId);
+    let balance = 0;
+    for (const part of parts) {
+      const converted = await convertToViewer(
+        ctx,
+        viewerCur,
+        Math.abs(part.amount),
+        part.currency
+      );
+      balance += part.amount >= 0 ? converted : -converted;
+    }
 
     /* ───── 5. Return payload ───────────────────────────────────────── */
     const other = await ctx.db.get(userId);
@@ -238,6 +252,7 @@ export const deleteExpense = mutation({
       {
         paidByUserId: expense.paidByUserId,
         groupId: expense.groupId,
+        currency: resolveCurrency(expense.currency),
         splits: expense.splits,
       },
       -1

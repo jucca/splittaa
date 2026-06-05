@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { format } from "date-fns";
+import { format as formatDate } from "date-fns";
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import {
   ArrowLeftRight,
   Receipt,
@@ -68,9 +68,10 @@ function ActivityRow({
   dateFnsLocale: ReturnType<typeof useDateFnsLocale>;
 }) {
   const tShared = useTranslations("shared");
+  const { format: formatAmount } = useMoney();
   const Icon = item.kind === "settlement" ? ArrowLeftRight : Receipt;
   const ContextIcon = item.contextType === "group" ? Users : User;
-  const dateLabel = format(new Date(item.date), "d.M.yyyy 'klo' HH:mm", {
+  const dateLabel = formatDate(new Date(item.date), "d.M.yyyy 'klo' HH:mm", {
     locale: dateFnsLocale,
   });
 
@@ -107,7 +108,7 @@ function ActivityRow({
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <span className="font-semibold tabular-nums">
-                {formatCurrency(item.amount)}
+                {formatAmount(item.amount)}
               </span>
               <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
             </div>

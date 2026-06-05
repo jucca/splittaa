@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Users } from "lucide-react";
-import { formatSignedCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import type { DashboardGroup } from "@/lib/types/domain";
 import { useTranslations } from "next-intl";
 
@@ -13,6 +13,7 @@ export function GroupList({
 }) {
   const t = useTranslations("dashboard");
   const tShared = useTranslations("shared");
+  const { formatSigned } = useMoney();
 
   if (!groups || groups.length === 0) {
     return (
@@ -55,7 +56,7 @@ export function GroupList({
                   balance > 0 ? "text-green-600" : "text-red-600"
                 }`}
               >
-                {formatSignedCurrency(balance)}
+                {formatSigned(balance)}
               </span>
             )}
           </Link>

@@ -23,6 +23,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import { CalendarIcon } from "lucide-react";
 import { getAllCategories } from "@/lib/expense-categories";
 import type { Participant, SplitRow, SplitType } from "@/lib/types/domain";
@@ -51,6 +52,7 @@ export function ExpenseForm({
 }) {
   const t = useTranslations("expenses.form");
   const tGroups = useTranslations("groups");
+  const { currencySymbol } = useMoney();
   const tShared = useTranslations("shared");
   const locale = resolveLocale(useLocale());
   const dateFnsLocale = useDateFnsLocale();
@@ -109,6 +111,8 @@ export function ExpenseForm({
 
   const amountValue = watch("amount");
   const paidByUserId = watch("paidByUserId");
+  const isSoloExpense =
+    type === "individual" && participants.length === 1;
 
   useEffect(() => {
     if (participants.length === 0 && currentUser) {
@@ -126,21 +130,32 @@ export function ExpenseForm({
     try {
       const amount = parseFloat(data.amount);
 
-      const formattedSplits = splits.map((split) => ({
-        userId: split.userId,
-        amount: split.amount,
-        paid: split.userId === data.paidByUserId,
-      }));
+      const formattedSplits =
+        isSoloExpense && currentUser
+          ? [
+              {
+                userId: currentUser.id,
+                amount,
+                paid: true,
+              },
+            ]
+          : splits.map((split) => ({
+              userId: split.userId,
+              amount: split.amount,
+              paid: split.userId === data.paidByUserId,
+            }));
 
-      const totalSplitAmount = formattedSplits.reduce(
-        (sum, split) => sum + split.amount,
-        0
-      );
-      const tolerance = 0.01;
+      if (!isSoloExpense) {
+        const totalSplitAmount = formattedSplits.reduce(
+          (sum, split) => sum + split.amount,
+          0
+        );
+        const tolerance = 0.01;
 
-      if (Math.abs(totalSplitAmount - amount) > tolerance) {
-        toast.error(t("splitsMismatch"));
-        return;
+        if (Math.abs(totalSplitAmount - amount) > tolerance) {
+          toast.error(t("splitsMismatch"));
+          return;
+        }
       }
 
       const groupId =
@@ -168,7 +183,7 @@ export function ExpenseForm({
       const otherUserId = otherParticipant?.id;
 
       if (onSuccess) {
-        if (type === "individual" && otherUserId) {
+        if (type === "individual") {
           onSuccess(otherUserId);
         } else if (type === "group" && groupId) {
           onSuccess(groupId);
@@ -205,14 +220,20 @@ export function ExpenseForm({
 
           <div className="space-y-2">
             <Label htmlFor="amount">{t("amountLabel")}</Label>
-            <Input
-              id="amount"
-              placeholder="0.00"
-              type="number"
-              step="0.01"
-              min="0.01"
-              {...register("amount")}
-            />
+            <div className="relative">
+              <span className="absolute left-3 top-2.5 text-muted-foreground">
+                {currencySymbol}
+              </span>
+              <Input
+                id="amount"
+                placeholder="0.00"
+                type="number"
+                step="0.01"
+                min="0.01"
+                className="pl-8"
+                {...register("amount")}
+              />
+            </div>
             {errors.amount && (
               <p className="text-sm text-red-500">{errors.amount.message}</p>
             )}
@@ -298,9 +319,9 @@ export function ExpenseForm({
               participants={participants}
               onParticipantsChange={setParticipants}
             />
-            {participants.length <= 1 && (
-              <p className="text-xs text-amber-600">
-                {t("addParticipantMin")}
+            {isSoloExpense && (
+              <p className="text-xs text-muted-foreground">
+                {t("participantsOptionalHint")}
               </p>
             )}
           </div>
@@ -328,64 +349,66 @@ export function ExpenseForm({
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label>{t("splitTypeLabel")}</Label>
-          <Tabs
-            defaultValue="equal"
-            onValueChange={(value) =>
-              setValue("splitType", value as SplitType)
-            }
-          >
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="equal">{t("splitEqual")}</TabsTrigger>
-              <TabsTrigger value="percentage">{t("splitPercentage")}</TabsTrigger>
-              <TabsTrigger value="exact">{t("splitExact")}</TabsTrigger>
-            </TabsList>
-            <TabsContent value="equal" className="pt-4">
-              <p className="text-sm text-muted-foreground">
-                {t("splitEqualHint")}
-              </p>
-              <SplitSelector
-                type="equal"
-                amount={parseFloat(amountValue) || 0}
-                participants={participants}
-                paidByUserId={paidByUserId}
-                onSplitsChange={setSplits}
-              />
-            </TabsContent>
-            <TabsContent value="percentage" className="pt-4">
-              <p className="text-sm text-muted-foreground">
-                {t("splitPercentageHint")}
-              </p>
-              <SplitSelector
-                type="percentage"
-                amount={parseFloat(amountValue) || 0}
-                participants={participants}
-                paidByUserId={paidByUserId}
-                onSplitsChange={setSplits}
-              />
-            </TabsContent>
-            <TabsContent value="exact" className="pt-4">
-              <p className="text-sm text-muted-foreground">
-                {t("splitExactHint")}
-              </p>
-              <SplitSelector
-                type="exact"
-                amount={parseFloat(amountValue) || 0}
-                participants={participants}
-                paidByUserId={paidByUserId}
-                onSplitsChange={setSplits}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
+        {!isSoloExpense && (
+          <div className="space-y-2">
+            <Label>{t("splitTypeLabel")}</Label>
+            <Tabs
+              defaultValue="equal"
+              onValueChange={(value) =>
+                setValue("splitType", value as SplitType)
+              }
+            >
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="equal">{t("splitEqual")}</TabsTrigger>
+                <TabsTrigger value="percentage">{t("splitPercentage")}</TabsTrigger>
+                <TabsTrigger value="exact">{t("splitExact")}</TabsTrigger>
+              </TabsList>
+              <TabsContent value="equal" className="pt-4">
+                <p className="text-sm text-muted-foreground">
+                  {t("splitEqualHint")}
+                </p>
+                <SplitSelector
+                  type="equal"
+                  amount={parseFloat(amountValue) || 0}
+                  participants={participants}
+                  paidByUserId={paidByUserId}
+                  onSplitsChange={setSplits}
+                />
+              </TabsContent>
+              <TabsContent value="percentage" className="pt-4">
+                <p className="text-sm text-muted-foreground">
+                  {t("splitPercentageHint")}
+                </p>
+                <SplitSelector
+                  type="percentage"
+                  amount={parseFloat(amountValue) || 0}
+                  participants={participants}
+                  paidByUserId={paidByUserId}
+                  onSplitsChange={setSplits}
+                />
+              </TabsContent>
+              <TabsContent value="exact" className="pt-4">
+                <p className="text-sm text-muted-foreground">
+                  {t("splitExactHint")}
+                </p>
+                <SplitSelector
+                  type="exact"
+                  amount={parseFloat(amountValue) || 0}
+                  participants={participants}
+                  paidByUserId={paidByUserId}
+                  onSplitsChange={setSplits}
+                />
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-end">
         <Button
           type="submit"
           data-testid="expense-submit"
-          disabled={isSubmitting || participants.length <= 1}
+          disabled={isSubmitting || participants.length === 0}
         >
           {isSubmitting ? tShared("creating") : t("submit")}
         </Button>

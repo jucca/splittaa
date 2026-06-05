@@ -3,6 +3,8 @@ import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
 import { assertGroupMember } from "./_lib/authorize";
+import { balanceCurrency } from "./_lib/exchange";
+import { convertToViewer, viewerCurrency } from "./_lib/moneyDisplay";
 
 export const getGroupOrMembers = query({
   args: {
@@ -119,6 +121,8 @@ export const getGroupExpenses = query({
       });
     });
 
+    const viewerCur = viewerCurrency(currentUser);
+
     const snapshotRows = await ctx.db
       .query("balances")
       .withIndex("by_scope", (q) =>
@@ -131,10 +135,16 @@ export const getGroupExpenses = query({
         continue;
       }
       if (row.amount <= 0) continue;
-      // Canonical row stores "row.userId owes row.counterpartyUserId".
-      ledger[row.userId][row.counterpartyUserId] = row.amount;
-      totals[row.userId] -= row.amount;
-      totals[row.counterpartyUserId] += row.amount;
+      const converted = await convertToViewer(
+        ctx,
+        viewerCur,
+        row.amount,
+        balanceCurrency(row)
+      );
+      ledger[row.userId][row.counterpartyUserId] =
+        (ledger[row.userId][row.counterpartyUserId] ?? 0) + converted;
+      totals[row.userId] -= converted;
+      totals[row.counterpartyUserId] += converted;
     }
 
     /* ----------  shape the response ---------- */

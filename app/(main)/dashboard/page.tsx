@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Users, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { formatCurrency, formatSignedCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import { ExpenseSummary } from "@/components/features/dashboard/expense-summary";
 import { BalanceSummary } from "@/components/features/dashboard/balance-summary";
 import { GroupList } from "@/components/features/dashboard/group-list";
@@ -24,6 +24,7 @@ import { useTranslations } from "next-intl";
 export default function Dashboard() {
   const t = useTranslations("dashboard");
   const tShared = useTranslations("shared");
+  const { format, formatSigned } = useMoney();
 
   const { data: balances, isLoading: balancesLoading } = useConvexQuery(
     api.dashboard.getUserBalances
@@ -80,14 +81,14 @@ export default function Dashboard() {
                 >
                   {balances?.totalBalance > 0 ? (
                     <span className="text-green-600">
-                      {formatSignedCurrency(balances?.totalBalance)}
+                      {formatSigned(balances?.totalBalance ?? 0)}
                     </span>
                   ) : balances?.totalBalance < 0 ? (
                     <span className="text-red-600">
-                      {formatSignedCurrency(balances?.totalBalance)}
+                      {formatSigned(balances?.totalBalance ?? 0)}
                     </span>
                   ) : (
-                    <span>{formatCurrency(0)}</span>
+                    <span>{format(0)}</span>
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -108,7 +109,7 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
-                  {formatCurrency(balances?.youAreOwed)}
+                  {format(balances?.youAreOwed)}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   {tShared("peopleCountFrom", {
@@ -128,7 +129,7 @@ export default function Dashboard() {
                 {balances?.oweDetails?.youOwe?.length > 0 ? (
                   <>
                     <div className="text-2xl font-bold text-red-600">
-                      {formatCurrency(balances?.youOwe)}
+                      {format(balances?.youOwe)}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                       {tShared("peopleCountTo", {
@@ -138,7 +139,7 @@ export default function Dashboard() {
                   </>
                 ) : (
                   <>
-                    <div className="text-2xl font-bold">{formatCurrency(0)}</div>
+                    <div className="text-2xl font-bold">{format(0)}</div>
                     <p className="text-xs text-muted-foreground mt-1">
                       {t("balanceNotOwingAnyone")}
                     </p>
@@ -151,8 +152,8 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
               <ExpenseSummary
-                monthlySpending={monthlySpending}
-                totalSpent={totalSpent}
+                monthlySpending={monthlySpending?.months}
+                totalSpent={totalSpent?.total}
               />
             </div>
 

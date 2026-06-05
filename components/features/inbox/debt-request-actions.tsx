@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { formatCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import { useLocale, useTranslations } from "next-intl";
 import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
 import { resolveLocale } from "@/lib/i18n/locales";
@@ -32,6 +32,7 @@ export function DebtRequestActions({
   const tInbox = useTranslations("inbox");
   const tShared = useTranslations("shared");
   const locale = resolveLocale(useLocale());
+  const { format } = useMoney();
   const respond = useConvexMutation(api.debtRequests.respondToDebtRequest);
   const markAsRead = useConvexMutation(api.notifications.markAsRead);
 
@@ -40,7 +41,7 @@ export function DebtRequestActions({
       const result = await respond.mutate({ notificationId });
       toast.success(
         t("toastMarkedPaid", {
-          amount: formatCurrency(result.amount),
+          amount: format(result.amount),
           creditorName: result.creditorName,
         })
       );

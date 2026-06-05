@@ -4,7 +4,7 @@ import { useConvexQuery } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
-import { formatCurrency, formatSignedCurrency } from "@/lib/utils";
+import { useMoney } from "@/components/providers/money-format-provider";
 import { SendDebtRequestButton } from "@/components/features/debt-requests/send-debt-request-button";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useTranslations } from "next-intl";
@@ -29,6 +29,7 @@ export function GroupBalances({
 }) {
   const t = useTranslations("groups");
   const tDashboard = useTranslations("dashboard");
+  const { format, formatSigned } = useMoney();
   const { data: currentUser } = useConvexQuery(api.users.me);
 
   if (!balances?.length || !currentUser) {
@@ -85,10 +86,10 @@ export function GroupBalances({
           }`}
         >
           {me.totalBalance > 0
-            ? formatSignedCurrency(me.totalBalance)
+            ? formatSigned(me.totalBalance)
             : me.totalBalance < 0
-              ? formatSignedCurrency(me.totalBalance)
-              : formatCurrency(0)}
+              ? formatSigned(me.totalBalance)
+              : format(0)}
         </p>
         <p className="text-sm text-muted-foreground mt-1">
           {me.totalBalance > 0
@@ -128,7 +129,7 @@ export function GroupBalances({
                         <span className="text-sm">{member.name}</span>
                       </div>
                       <span className="font-medium text-green-600">
-                        {formatCurrency(member.amount)}
+                        {format(member.amount)}
                       </span>
                     </div>
                     {groupId && (
@@ -169,7 +170,7 @@ export function GroupBalances({
                       <span className="text-sm">{member.name}</span>
                     </div>
                     <span className="font-medium text-red-600">
-                      {formatCurrency(member.amount)}
+                      {format(member.amount)}
                     </span>
                   </div>
                 ))}

@@ -1,6 +1,8 @@
 import type { MutationCtx } from "../_generated/server";
 import type { Id } from "../_generated/dataModel";
-import { formatCurrency } from "../../lib/utils";
+import { formatMoney } from "../../lib/money/format";
+import { resolveCurrency } from "./currencies";
+import { convertWithStoredRates } from "./exchange";
 
 type DebtRow = { name: string; amount: number };
 
@@ -89,15 +91,20 @@ export async function deliverGroupInviteNotification(
   });
 }
 
+function formatForCurrency(amount: number, currency: string): string {
+  return formatMoney(amount, resolveCurrency(currency));
+}
+
 export function buildBalanceReminderBody(
   iOwe: DebtRow[],
-  owedToMe: DebtRow[]
+  owedToMe: DebtRow[],
+  currency: string
 ): string {
   const parts: string[] = [];
   if (iOwe.length > 0) {
     const lines = iOwe
       .slice(0, 5)
-      .map((d) => `${d.name}: ${formatCurrency(d.amount)}`)
+      .map((d) => `${d.name}: ${formatForCurrency(d.amount, currency)}`)
       .join(", ");
     parts.push(
       `Olet velkaa ${iOwe.length} henkilölle${iOwe.length > 5 ? " (esim.)" : ""}: ${lines}.`
@@ -106,7 +113,7 @@ export function buildBalanceReminderBody(
   if (owedToMe.length > 0) {
     const lines = owedToMe
       .slice(0, 5)
-      .map((d) => `${d.name}: ${formatCurrency(d.amount)}`)
+      .map((d) => `${d.name}: ${formatForCurrency(d.amount, currency)}`)
       .join(", ");
     parts.push(
       `Sinulle ollaan velkaa ${owedToMe.length} henkilöltä${owedToMe.length > 5 ? " (esim.)" : ""}: ${lines}.`
@@ -125,7 +132,9 @@ export async function deliverBalanceReminderNotification(
   }
 ): Promise<void> {
   const day = new Date(args.sentAt).toISOString().slice(0, 10);
-  const body = buildBalanceReminderBody(args.iOwe, args.owedToMe);
+  const recipient = await ctx.db.get(args.userId);
+  const currency = resolveCurrency(recipient?.preferredCurrency);
+  const body = buildBalanceReminderBody(args.iOwe, args.owedToMe, currency);
   if (!body) return;
 
   await upsertNotification(ctx, {
@@ -146,6 +155,7 @@ export async function deliverDebtRequestNotification(
     creditorId: Id<"users">;
     creditorName: string;
     amount: number;
+    amountCurrency: string;
     href: string;
     dedupeKey: string;
     message?: string;
@@ -160,11 +170,20 @@ export async function deliverDebtRequestNotification(
     ? ` Viesti: «${args.message.trim().slice(0, 500)}»`
     : "";
 
+  const debtor = await ctx.db.get(args.debtorUserId);
+  const debtorCurrency = resolveCurrency(debtor?.preferredCurrency);
+  const displayAmount = await convertWithStoredRates(
+    ctx,
+    args.amount,
+    resolveCurrency(args.amountCurrency),
+    debtorCurrency
+  );
+
   await upsertNotification(ctx, {
     userId: args.debtorUserId,
     type: "debt_request",
     title: "Velkapyyntö",
-    body: `${args.creditorName} pyytää sinua maksamaan ${formatCurrency(args.amount)}${context}.${extra}`,
+    body: `${args.creditorName} pyytää sinua maksamaan ${formatForCurrency(displayAmount, debtorCurrency)}${context}.${extra}`,
     href: args.href,
     dedupeKey: args.dedupeKey,
     debtRequestCreditorId: args.creditorId,
@@ -179,16 +198,25 @@ export async function deliverDebtRequestPaidNotification(
     creditorUserId: Id<"users">;
     debtorName: string;
     amount: number;
+    amountCurrency: string;
     href: string;
     groupName?: string;
   }
 ): Promise<void> {
   const context = args.groupName ? ` ryhmässä ${args.groupName}` : "";
+  const creditor = await ctx.db.get(args.creditorUserId);
+  const creditorCurrency = resolveCurrency(creditor?.preferredCurrency);
+  const displayAmount = await convertWithStoredRates(
+    ctx,
+    args.amount,
+    resolveCurrency(args.amountCurrency),
+    creditorCurrency
+  );
   await upsertNotification(ctx, {
     userId: args.creditorUserId,
     type: "debt_request_paid",
     title: "Velkapyyntö maksettu",
-    body: `${args.debtorName} merkitsi velkapyyntösi maksetuksi (${formatCurrency(args.amount)}${context}).`,
+    body: `${args.debtorName} merkitsi velkapyyntösi maksetuksi (${formatForCurrency(displayAmount, creditorCurrency)}${context}).`,
     href: args.href,
     dedupeKey: `debt_request_paid:${args.creditorUserId}:${Date.now()}`,
   });

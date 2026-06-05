@@ -1,67 +1,58 @@
 import { query } from "./_generated/server";
 import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
+import { balanceCurrency } from "./_lib/exchange";
 import {
-  getPersonalExpensesForUser,
-  getPersonalSettlementsForUser,
-} from "./_lib/personal";
+  convertToViewer,
+  signedBalanceForViewer,
+  viewerCurrency,
+} from "./_lib/moneyDisplay";
+import {
+  getAllExpensesForUser,
+  getUserExpenseShare,
+  userParticipatesInExpense,
+} from "./_lib/spending";
 
 // Get user balances
 export const getUserBalances = query({
   handler: async (ctx) => {
-    // Use the existing getCurrentUser function instead of repeating auth logic
     const user = await requireAuth(ctx);
+    const viewerCur = viewerCurrency(user);
 
-    /* ───────────── 1‑to‑1 expenses (indexed via personal helpers) ───────────── */
-    const expenses = await getPersonalExpensesForUser(ctx, user._id);
+    const rows = await ctx.db
+      .query("balances")
+      .withIndex("by_scope", (q) =>
+        q.eq("scopeType", "personal").eq("scopeGroupId", undefined)
+      )
+      .collect();
 
-    /* tallies */
+    const netByCounterparty = new Map<Id<"users">, number>();
+
+    for (const row of rows) {
+      if (row.userId !== user._id && row.counterpartyUserId !== user._id) {
+        continue;
+      }
+      const counterparty =
+        row.userId === user._id ? row.counterpartyUserId : row.userId;
+      const signed = await signedBalanceForViewer(
+        ctx,
+        user._id,
+        viewerCur,
+        row
+      );
+      netByCounterparty.set(
+        counterparty,
+        (netByCounterparty.get(counterparty) ?? 0) + signed
+      );
+    }
+
     let youOwe = 0;
     let youAreOwed = 0;
-    const balanceByUser: Record<
-      Id<"users">,
-      { owed: number; owing: number }
-    > = {} as Record<Id<"users">, { owed: number; owing: number }>;
-
-    for (const e of expenses) {
-      const isPayer = e.paidByUserId === user._id;
-      const mySplit = e.splits.find((s) => s.userId === user._id);
-
-      if (isPayer) {
-        for (const s of e.splits) {
-          if (s.userId === user._id || s.paid) continue;
-          youAreOwed += s.amount;
-          (balanceByUser[s.userId] ??= { owed: 0, owing: 0 }).owed += s.amount;
-        }
-      } else if (mySplit && !mySplit.paid) {
-        youOwe += mySplit.amount;
-        (balanceByUser[e.paidByUserId] ??= { owed: 0, owing: 0 }).owing +=
-          mySplit.amount;
-      }
-    }
-
-    /* ───────────── 1‑to‑1 settlements (indexed) ───────────── */
-    const settlements = await getPersonalSettlementsForUser(ctx, user._id);
-
-    for (const s of settlements) {
-      if (s.paidByUserId === user._id) {
-        youOwe -= s.amount;
-        (balanceByUser[s.receivedByUserId] ??= { owed: 0, owing: 0 }).owing -=
-          s.amount;
-      } else {
-        youAreOwed -= s.amount;
-        (balanceByUser[s.paidByUserId] ??= { owed: 0, owing: 0 }).owed -=
-          s.amount;
-      }
-    }
-
-    /* build lists for UI */
     const youOweList = [];
     const youAreOwedByList = [];
-    for (const uid of Object.keys(balanceByUser) as Id<"users">[]) {
-      const { owed, owing } = balanceByUser[uid];
-      const net = owed - owing;
-      if (net === 0) continue;
+
+    for (const [uid, net] of netByCounterparty) {
+      if (Math.abs(net) < 0.005) continue;
       const counterpart = await ctx.db.get(uid);
       const base = {
         userId: uid,
@@ -69,7 +60,13 @@ export const getUserBalances = query({
         imageUrl: counterpart?.imageUrl,
         amount: Math.abs(net),
       };
-      net > 0 ? youAreOwedByList.push(base) : youOweList.push(base);
+      if (net > 0) {
+        youAreOwed += net;
+        youAreOwedByList.push(base);
+      } else {
+        youOwe += Math.abs(net);
+        youOweList.push(base);
+      }
     }
 
     youOweList.sort((a, b) => b.amount - a.amount);
@@ -79,6 +76,7 @@ export const getUserBalances = query({
       youOwe,
       youAreOwed,
       totalBalance: youAreOwed - youOwe,
+      currency: viewerCur,
       oweDetails: { youOwe: youOweList, youAreOwedBy: youAreOwedByList },
     };
   },
@@ -88,37 +86,28 @@ export const getUserBalances = query({
 export const getTotalSpent = query({
   handler: async (ctx) => {
     const user = await requireAuth(ctx);
+    const viewerCur = viewerCurrency(user);
 
-    // Get start of current year timestamp
     const currentYear = new Date().getFullYear();
     const startOfYear = new Date(currentYear, 0, 1).getTime();
 
-    // Get all expenses for the current year
-    const expenses = await ctx.db
-      .query("expenses")
-      .withIndex("by_date", (q) => q.gte("date", startOfYear))
-      .collect();
-
-    // Filter for expenses where user is involved
-    const userExpenses = expenses.filter(
-      (expense) =>
-        expense.paidByUserId === user._id ||
-        expense.splits.some((split) => split.userId === user._id)
-    );
-
-    // Calculate total spent (personal share only)
+    const expenses = await getAllExpensesForUser(ctx, user._id);
     let totalSpent = 0;
 
-    userExpenses.forEach((expense) => {
-      const userSplit = expense.splits.find(
-        (split) => split.userId === user._id
+    for (const expense of expenses) {
+      if (expense.date < startOfYear) continue;
+      if (!userParticipatesInExpense(expense, user._id)) continue;
+      const share = getUserExpenseShare(expense, user._id);
+      if (share <= 0) continue;
+      totalSpent += await convertToViewer(
+        ctx,
+        viewerCur,
+        share,
+        balanceCurrency(expense)
       );
-      if (userSplit) {
-        totalSpent += userSplit.amount;
-      }
-    });
+    }
 
-    return totalSpent;
+    return { total: totalSpent, currency: viewerCur };
   },
 });
 
@@ -126,62 +115,44 @@ export const getTotalSpent = query({
 export const getMonthlySpending = query({
   handler: async (ctx) => {
     const user = await requireAuth(ctx);
+    const viewerCur = viewerCurrency(user);
 
-    // Get current year
     const currentYear = new Date().getFullYear();
     const startOfYear = new Date(currentYear, 0, 1).getTime();
 
-    // Get all expenses for current year
-    const allExpenses = await ctx.db
-      .query("expenses")
-      .withIndex("by_date", (q) => q.gte("date", startOfYear))
-      .collect();
-
-    // Filter for expenses where user is involved
-    const userExpenses = allExpenses.filter(
-      (expense) =>
-        expense.paidByUserId === user._id ||
-        expense.splits.some((split) => split.userId === user._id)
-    );
-
-    // Group expenses by month
     const monthlyTotals: Record<number, number> = {};
-
-    // Initialize all months with zero
     for (let i = 0; i < 12; i++) {
-      const monthDate = new Date(currentYear, i, 1);
-      monthlyTotals[monthDate.getTime()] = 0;
+      monthlyTotals[new Date(currentYear, i, 1).getTime()] = 0;
     }
 
-    // Sum up expenses by month
-    userExpenses.forEach((expense) => {
-      const date = new Date(expense.date);
+    const expenses = await getAllExpensesForUser(ctx, user._id);
+    for (const expense of expenses) {
+      if (expense.date < startOfYear) continue;
+      if (!userParticipatesInExpense(expense, user._id)) continue;
+      const share = getUserExpenseShare(expense, user._id);
+      if (share <= 0) continue;
+
+      const converted = await convertToViewer(
+        ctx,
+        viewerCur,
+        share,
+        balanceCurrency(expense)
+      );
       const monthStart = new Date(
-        date.getFullYear(),
-        date.getMonth(),
+        new Date(expense.date).getFullYear(),
+        new Date(expense.date).getMonth(),
         1
       ).getTime();
+      monthlyTotals[monthStart] = (monthlyTotals[monthStart] || 0) + converted;
+    }
 
-      // Get user's share of this expense
-      const userSplit = expense.splits.find(
-        (split) => split.userId === user._id
-      );
-      if (userSplit) {
-        monthlyTotals[monthStart] =
-          (monthlyTotals[monthStart] || 0) + userSplit.amount;
-      }
-    });
-
-    // Convert to array format
     const result = Object.entries(monthlyTotals).map(([month, total]) => ({
       month: parseInt(month),
       total,
     }));
-
-    // Sort by month (ascending)
     result.sort((a, b) => a.month - b.month);
 
-    return result;
+    return { months: result, currency: viewerCur };
   },
 });
 
@@ -198,51 +169,29 @@ export const getUserGroups = query({
       group.members.some((member) => member.userId === user._id)
     );
 
-    // Calculate balances for each group
+    const viewerCur = viewerCurrency(user);
+
     const enhancedGroups = await Promise.all(
       groups.map(async (group) => {
-        // Get all expenses for this group
-        const expenses = await ctx.db
-          .query("expenses")
-          .withIndex("by_group", (q) => q.eq("groupId", group._id))
+        const snapshotRows = await ctx.db
+          .query("balances")
+          .withIndex("by_scope", (q) =>
+            q.eq("scopeType", "group").eq("scopeGroupId", group._id)
+          )
           .collect();
 
         let balance = 0;
-
-        expenses.forEach((expense) => {
-          if (expense.paidByUserId === user._id) {
-            // User paid for others
-            expense.splits.forEach((split) => {
-              if (split.userId !== user._id && !split.paid) {
-                balance += split.amount;
-              }
-            });
-          } else {
-            // User owes someone else
-            const userSplit = expense.splits.find(
-              (split) => split.userId === user._id
-            );
-            if (userSplit && !userSplit.paid) {
-              balance -= userSplit.amount;
-            }
+        for (const row of snapshotRows) {
+          if (row.userId !== user._id && row.counterpartyUserId !== user._id) {
+            continue;
           }
-        });
-
-        // Apply settlements
-        const settlements = await ctx.db
-          .query("settlements")
-          .withIndex("by_group", (q) => q.eq("groupId", group._id))
-          .collect();
-
-        settlements.forEach((settlement) => {
-          if (settlement.paidByUserId === user._id) {
-            // User paid someone
-            balance += settlement.amount;
-          } else {
-            // Someone paid the user
-            balance -= settlement.amount;
-          }
-        });
+          balance += await signedBalanceForViewer(
+            ctx,
+            user._id,
+            viewerCur,
+            row
+          );
+        }
 
         return {
           ...group,

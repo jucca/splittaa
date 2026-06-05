@@ -14,6 +14,36 @@ import { Authenticated, Unauthenticated } from "convex/react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { HoverHint } from "@/components/ui/hover-hint";
+import type { LucideIcon } from "lucide-react";
+
+function NavIconLink({
+  href,
+  icon: Icon,
+  label,
+}: {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+}) {
+  return (
+    <Link href={href}>
+      <Button
+        variant="outline"
+        className="hidden md:inline-flex items-center gap-2 hover:text-green-600 hover:border-green-600 transition"
+      >
+        <Icon className="h-4 w-4" />
+        {label}
+      </Button>
+      <HoverHint label={label} side="bottom">
+        <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
+          <Icon className="h-4 w-4" />
+          <span className="sr-only">{label}</span>
+        </Button>
+      </HoverHint>
+    </Link>
+  );
+}
 
 export default function Header() {
   const { isLoading } = useStoreUser();
@@ -53,49 +83,25 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <Authenticated>
             <div className="flex items-center gap-4">
-              <Link href="/dashboard">
-                <Button
-                  variant="outline"
-                  className="hidden md:inline-flex items-center gap-2 hover:text-green-600 hover:border-green-600 transition"
-                >
-                  <LayoutDashboard className="h-4 w-4" />
-                  {t("dashboard")}
-                </Button>
-                <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
-                  <LayoutDashboard className="h-4 w-4" />
-                  <span className="sr-only">{t("dashboard")}</span>
-                </Button>
-              </Link>
+              <NavIconLink
+                href="/dashboard"
+                icon={LayoutDashboard}
+                label={t("dashboard")}
+              />
 
               <InboxNavLink />
 
-              <Link href="/toiminta">
-                <Button
-                  variant="outline"
-                  className="hidden md:inline-flex items-center gap-2 hover:text-green-600 hover:border-green-600 transition"
-                >
-                  <History className="h-4 w-4" />
-                  {t("activity")}
-                </Button>
-                <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
-                  <History className="h-4 w-4" />
-                  <span className="sr-only">{t("activity")}</span>
-                </Button>
-              </Link>
+              <NavIconLink
+                href="/toiminta"
+                icon={History}
+                label={t("activity")}
+              />
 
-              <Link href="/asetukset">
-                <Button
-                  variant="outline"
-                  className="hidden md:inline-flex items-center gap-2 hover:text-green-600 hover:border-green-600 transition"
-                >
-                  <Settings className="h-4 w-4" />
-                  {t("settings")}
-                </Button>
-                <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
-                  <Settings className="h-4 w-4" />
-                  <span className="sr-only">{t("settings")}</span>
-                </Button>
-              </Link>
+              <NavIconLink
+                href="/asetukset"
+                icon={Settings}
+                label={t("settings")}
+              />
 
               <div className="flex items-center gap-3">
                 <UserButton

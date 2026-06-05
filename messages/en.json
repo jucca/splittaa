@@ -255,7 +255,7 @@
   },
   "expenses": {
     "newPageTitle": "Add new expense",
-    "newPageSubtitle": "Record a new expense and share it with others",
+    "newPageSubtitle": "Record an expense for yourself or share it with others",
     "tabIndividual": "Personal expense",
     "tabGroup": "Group expense",
     "form": {
@@ -267,7 +267,7 @@
       "datePlaceholder": "Select date",
       "groupLabel": "Group",
       "participantsLabel": "Participants",
-      "addParticipantMin": "Add at least one other participant",
+      "participantsOptionalHint": "Save the expense for yourself only, or add other participants below.",
       "payerLabel": "Payer",
       "payerPlaceholder": "Select payer",
       "splitTypeLabel": "Split method",
@@ -428,7 +428,13 @@
   },
   "settings": {
     "title": "Settings",
-    "subtitle": "Adjust email reminders for open balances.",
+    "subtitle": "Adjust language and email reminders for open balances.",
+    "languageCardTitle": "Language",
+    "languageLabel": "Interface language",
+    "languageHint": "Choose Splittaa display language. You can also switch from the flag in the header.",
+    "currencyCardTitle": "Currency",
+    "currencyLabel": "Default currency",
+    "currencyHint": "All amounts and balances are shown in this currency. New expenses are also recorded in this currency.",
     "remindersCardTitle": "Balance reminders",
     "remindersEnabled": "Reminders enabled",
     "remindersEnabledHint": "We email only at the chosen interval while a balance remains open.",

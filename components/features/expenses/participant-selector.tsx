@@ -92,8 +92,7 @@ export function ParticipantSelector({
           </Badge>
         ))}
 
-        {participants.length < 2 && (
-          <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
@@ -156,7 +155,6 @@ export function ParticipantSelector({
               </Command>
             </PopoverContent>
           </Popover>
-        )}
       </div>
     </div>
   );

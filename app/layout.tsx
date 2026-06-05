@@ -8,6 +8,8 @@ import { ConvexClientProvider } from "@/components/layout/convex-client-provider
 import Header from "@/components/layout/header";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { AppTooltipProvider } from "@/components/layout/tooltip-provider";
+import { MoneyFormatProvider } from "@/components/providers/money-format-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,13 +34,17 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ClerkLocaleProvider>
             <ThemeProvider>
-              <ConvexClientProvider>
-                <Header />
-                <main className="min-h-screen">
-                  <Toaster richColors />
-                  {children}
-                </main>
-              </ConvexClientProvider>
+              <AppTooltipProvider>
+                <ConvexClientProvider>
+                  <MoneyFormatProvider>
+                  <Header />
+                  <main className="min-h-screen">
+                    <Toaster richColors />
+                    {children}
+                  </main>
+                  </MoneyFormatProvider>
+                </ConvexClientProvider>
+              </AppTooltipProvider>
             </ThemeProvider>
           </ClerkLocaleProvider>
         </NextIntlClientProvider>

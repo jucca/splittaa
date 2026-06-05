@@ -23,6 +23,7 @@ docs/exec-plans/
 
 # playwright saved sessions (local E2E only)
 tests/e2e/.auth/
+test-results/
 
 # misc
 .DS_Store

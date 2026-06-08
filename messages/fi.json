@@ -426,9 +426,24 @@
       "toastRecordFailed": "Kirjaus epäonnistui"
     }
   },
+  "profile": {
+    "onboardingTitle": "Luo profiili",
+    "onboardingSubtitle": "Valitse näyttönimi ja käyttäjänimi. Muiden on helpompi löytää sinut kuluissa.",
+    "displayNameLabel": "Näyttönimi",
+    "usernameLabel": "Käyttäjänimi",
+    "usernameHint": "3–20 merkkiä: pienet kirjaimet, numerot ja alaviiva",
+    "usernameChecking": "Tarkistetaan saatavuutta…",
+    "usernameAvailable": "Käyttäjänimi on vapaana",
+    "usernameTaken": "Käyttäjänimi on jo käytössä",
+    "usernameCooldown": "Käyttäjänimen voi vaihtaa uudelleen {date} jälkeen",
+    "completeProfile": "Valmis",
+    "settingsCardTitle": "Profiili",
+    "toastProfileSaved": "Profiili tallennettu",
+    "toastNoChanges": "Ei muutoksia tallennettavaksi"
+  },
   "settings": {
     "title": "Asetukset",
-    "subtitle": "Säädä kieltä ja sähköpostimuistutuksia avoimista saldoista.",
+    "subtitle": "Hallitse profiilia, kieltä ja sähköpostimuistutuksia.",
     "languageCardTitle": "Kieli",
     "languageLabel": "Käyttöliittymän kieli",
     "languageHint": "Valitse Splittaan näyttökieli. Voit vaihtaa kielen myös headerin lipusta.",

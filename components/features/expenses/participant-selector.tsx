@@ -21,6 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import type { Participant } from "@/lib/types/domain";
+import { formatUsernameLabel } from "@/lib/usernames";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useTranslations } from "next-intl";
 
@@ -131,7 +132,11 @@ export function ParticipantSelector({
                     {searchResults?.map((user: Participant) => (
                       <CommandItem
                         key={user.id}
-                        value={user.name + user.email}
+                        value={
+                          user.name +
+                          (user.username ?? "") +
+                          (user.email ?? "")
+                        }
                         onSelect={() => addParticipant(user)}
                       >
                         <div className="flex items-center gap-2">
@@ -143,9 +148,11 @@ export function ParticipantSelector({
                           </Avatar>
                           <div className="flex flex-col">
                             <span className="text-sm">{user.name}</span>
-                            <span className="text-xs text-muted-foreground">
-                              {user.email}
-                            </span>
+                            {user.username && (
+                              <span className="text-xs text-muted-foreground">
+                                {formatUsernameLabel(user.username)}
+                              </span>
+                            )}
                           </div>
                         </div>
                       </CommandItem>

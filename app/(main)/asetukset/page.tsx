@@ -25,6 +25,7 @@ import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
 import { getIntlDateTimeLocale, resolveLocale } from "@/lib/i18n/locales";
 import { LanguageSettings } from "@/components/layout/language-settings";
 import { CurrencySettings } from "@/components/layout/currency-settings";
+import { ProfileSettings } from "@/components/features/profile/profile-settings";
 import { HoverHint } from "@/components/ui/hover-hint";
 
 const INTERVAL_VALUES: ReminderIntervalDays[] = [3, 7, 14, 30];
@@ -121,6 +122,8 @@ export default function SettingsPage() {
           <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
         </div>
       </div>
+
+      <ProfileSettings />
 
       <LanguageSettings />
 

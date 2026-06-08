@@ -426,9 +426,24 @@
       "toastRecordFailed": "Erfassung fehlgeschlagen"
     }
   },
+  "profile": {
+    "onboardingTitle": "Profil erstellen",
+    "onboardingSubtitle": "Wähle Anzeigename und Benutzername, damit andere dich bei gemeinsamen Ausgaben finden.",
+    "displayNameLabel": "Anzeigename",
+    "usernameLabel": "Benutzername",
+    "usernameHint": "3–20 Zeichen: Kleinbuchstaben, Zahlen und Unterstrich",
+    "usernameChecking": "Verfügbarkeit wird geprüft…",
+    "usernameAvailable": "Benutzername ist verfügbar",
+    "usernameTaken": "Benutzername ist bereits vergeben",
+    "usernameCooldown": "Benutzername kann erst nach {date} erneut geändert werden",
+    "completeProfile": "Fertig",
+    "settingsCardTitle": "Profil",
+    "toastProfileSaved": "Profil gespeichert",
+    "toastNoChanges": "Keine Änderungen zum Speichern"
+  },
   "settings": {
     "title": "Einstellungen",
-    "subtitle": "Sprache und E-Mail-Erinnerungen für offene Salden anpassen.",
+    "subtitle": "Profil, Sprache und E-Mail-Erinnerungen verwalten.",
     "languageCardTitle": "Sprache",
     "languageLabel": "Oberflächensprache",
     "languageHint": "Wählen Sie die Anzeigesprache für Splittaa. Sie können auch über die Flagge in der Kopfzeile wechseln.",

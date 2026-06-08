@@ -426,9 +426,24 @@
       "toastRecordFailed": "Error al registrar"
     }
   },
+  "profile": {
+    "onboardingTitle": "Crea tu perfil",
+    "onboardingSubtitle": "Elige un nombre visible y un usuario para que otros te encuentren en gastos compartidos.",
+    "displayNameLabel": "Nombre visible",
+    "usernameLabel": "Usuario",
+    "usernameHint": "3–20 caracteres: minúsculas, números y guion bajo",
+    "usernameChecking": "Comprobando disponibilidad…",
+    "usernameAvailable": "Usuario disponible",
+    "usernameTaken": "Usuario ya en uso",
+    "usernameCooldown": "Podrás cambiar el usuario después del {date}",
+    "completeProfile": "Listo",
+    "settingsCardTitle": "Perfil",
+    "toastProfileSaved": "Perfil guardado",
+    "toastNoChanges": "No hay cambios que guardar"
+  },
   "settings": {
     "title": "Ajustes",
-    "subtitle": "Ajusta el idioma y los recordatorios por correo para saldos pendientes.",
+    "subtitle": "Gestiona perfil, idioma y recordatorios por correo.",
     "languageCardTitle": "Idioma",
     "languageLabel": "Idioma de la interfaz",
     "languageHint": "Elige el idioma de Splittaa. También puedes cambiarlo desde la bandera en la cabecera.",

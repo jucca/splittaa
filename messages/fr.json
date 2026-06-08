@@ -426,9 +426,24 @@
       "toastRecordFailed": "Échec de l'enregistrement"
     }
   },
+  "profile": {
+    "onboardingTitle": "Créer votre profil",
+    "onboardingSubtitle": "Choisissez un nom d'affichage et un identifiant pour que les autres vous trouvent dans les dépenses partagées.",
+    "displayNameLabel": "Nom d'affichage",
+    "usernameLabel": "Identifiant",
+    "usernameHint": "3–20 caractères : minuscules, chiffres et tiret bas",
+    "usernameChecking": "Vérification de la disponibilité…",
+    "usernameAvailable": "Identifiant disponible",
+    "usernameTaken": "Identifiant déjà pris",
+    "usernameCooldown": "Vous pourrez changer d'identifiant après le {date}",
+    "completeProfile": "Terminer",
+    "settingsCardTitle": "Profil",
+    "toastProfileSaved": "Profil enregistré",
+    "toastNoChanges": "Aucune modification à enregistrer"
+  },
   "settings": {
     "title": "Paramètres",
-    "subtitle": "Ajustez la langue et les rappels par e-mail pour les soldes ouverts.",
+    "subtitle": "Gérez le profil, la langue et les rappels par e-mail.",
     "languageCardTitle": "Langue",
     "languageLabel": "Langue de l'interface",
     "languageHint": "Choisissez la langue d'affichage de Splittaa. Vous pouvez aussi changer via le drapeau dans l'en-tête.",

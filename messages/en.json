@@ -426,9 +426,24 @@
       "toastRecordFailed": "Recording failed"
     }
   },
+  "profile": {
+    "onboardingTitle": "Create your profile",
+    "onboardingSubtitle": "Choose a display name and username so others can find you in shared expenses.",
+    "displayNameLabel": "Display name",
+    "usernameLabel": "Username",
+    "usernameHint": "3–20 characters: lowercase letters, numbers, and underscore",
+    "usernameChecking": "Checking availability…",
+    "usernameAvailable": "Username is available",
+    "usernameTaken": "Username is already taken",
+    "usernameCooldown": "You can change your username again after {date}",
+    "completeProfile": "Done",
+    "settingsCardTitle": "Profile",
+    "toastProfileSaved": "Profile saved",
+    "toastNoChanges": "No changes to save"
+  },
   "settings": {
     "title": "Settings",
-    "subtitle": "Adjust language and email reminders for open balances.",
+    "subtitle": "Manage your profile, language, and email reminders.",
     "languageCardTitle": "Language",
     "languageLabel": "Interface language",
     "languageHint": "Choose Splittaa display language. You can also switch from the flag in the header.",

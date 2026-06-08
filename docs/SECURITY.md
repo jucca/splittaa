@@ -111,9 +111,14 @@ Configured in `next.config.ts` (Phase 3):
 | `groupInvites.declineInvite` | mutation | `requireAuth` | Direct invitee only | |
 | `groupInvites.joinByCode` | mutation | `requireAuth` | Open invite code | |
 | `groupInvites.revokeInvite` | mutation | `requireAuth` | Group admin | |
-| `users.me` | query | `requireAuth` | Self only | Safe DTO |
-| `users.store` | mutation | Clerk identity | Self provision | First-login upsert |
-| `users.searchUsers` | query | `requireAuth` | Authenticated search | Min 2 chars; returns email |
+| `users.me` | query | `requireAuth` | Self only | Safe DTO incl. `profileCompleted`, `username` |
+| `users.store` | mutation | Clerk identity | Self provision | First-login upsert; does not overwrite display name after profile complete |
+| `users.completeProfile` | mutation | `requireAuth` | Self only; once | Sets display name + unique username |
+| `users.suggestUsername` | query | `requireAuth` | Self only | Onboarding suggestion |
+| `users.isUsernameAvailable` | query | `requireAuth` | Authenticated | Boolean only; no user leak |
+| `users.updateDisplayName` | mutation | `requireAuth` | Self only | Requires completed profile |
+| `users.updateUsername` | mutation | `requireAuth` | Self only | 30-day rate limit |
+| `users.searchUsers` | query | `requireAuth` | Authenticated search | Min 2 chars; name + username + email search; response has no email |
 
 **Internal only (not public):** `seed:seedDatabase`, `seedTest:seedTestFixtures`, `internal.inngest.*`, `internal._lib.auth.getCurrentUser`, `internal.email.sendGroupInviteEmail`, `internal.email.sendDebtRequestEmail`, `internal.notifications.deliverBalanceReminder`, `internal.notifications.deliverGroupInvite`.
 

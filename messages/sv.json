@@ -426,9 +426,24 @@
       "toastRecordFailed": "Registrering misslyckades"
     }
   },
+  "profile": {
+    "onboardingTitle": "Skapa profil",
+    "onboardingSubtitle": "Välj visningsnamn och användarnamn så att andra hittar dig i gemensamma utgifter.",
+    "displayNameLabel": "Visningsnamn",
+    "usernameLabel": "Användarnamn",
+    "usernameHint": "3–20 tecken: små bokstäver, siffror och understreck",
+    "usernameChecking": "Kontrollerar tillgänglighet…",
+    "usernameAvailable": "Användarnamnet är ledigt",
+    "usernameTaken": "Användarnamnet är redan taget",
+    "usernameCooldown": "Du kan byta användarnamn igen efter {date}",
+    "completeProfile": "Klar",
+    "settingsCardTitle": "Profil",
+    "toastProfileSaved": "Profilen sparades",
+    "toastNoChanges": "Inga ändringar att spara"
+  },
   "settings": {
     "title": "Inställningar",
-    "subtitle": "Justera språk och e-postpåminnelser för öppna saldon.",
+    "subtitle": "Hantera profil, språk och e-postpåminnelser.",
     "languageCardTitle": "Språk",
     "languageLabel": "Gränssnittsspråk",
     "languageHint": "Välj visningsspråk för Splittaa. Du kan också byta via flaggan i sidhuvudet.",

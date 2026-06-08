@@ -426,9 +426,24 @@
       "toastRecordFailed": "記録に失敗しました"
     }
   },
+  "profile": {
+    "onboardingTitle": "プロフィールを作成",
+    "onboardingSubtitle": "表示名とユーザー名を設定すると、共有の支出で他の人があなたを見つけやすくなります。",
+    "displayNameLabel": "表示名",
+    "usernameLabel": "ユーザー名",
+    "usernameHint": "3〜20文字：小文字・数字・アンダースコア",
+    "usernameChecking": "利用可否を確認中…",
+    "usernameAvailable": "ユーザー名は利用できます",
+    "usernameTaken": "ユーザー名は既に使われています",
+    "usernameCooldown": "{date}以降にユーザー名を変更できます",
+    "completeProfile": "完了",
+    "settingsCardTitle": "プロフィール",
+    "toastProfileSaved": "プロフィールを保存しました",
+    "toastNoChanges": "保存する変更はありません"
+  },
   "settings": {
     "title": "設定",
-    "subtitle": "言語と未精算残高のメールリマインダーを調整します。",
+    "subtitle": "プロフィール、言語、メールリマインダーを管理します。",
     "languageCardTitle": "言語",
     "languageLabel": "表示言語",
     "languageHint": "Splittaaの表示言語を選択します。ヘッダーの国旗アイコンからも変更できます。",

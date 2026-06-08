@@ -13,6 +13,7 @@ import { Plus, Users, User } from "lucide-react";
 import { CreateGroupModal } from "@/components/features/contacts/create-group-modal";
 import type { FunctionReturnType } from "convex/server";
 import { useTranslations } from "next-intl";
+import { formatUsernameLabel } from "@/lib/usernames";
 
 type ContactsData = NonNullable<
   FunctionReturnType<typeof api.contacts.getAllContacts>
@@ -90,9 +91,15 @@ export default function ContactsPage() {
                           </Avatar>
                           <div>
                             <p className="font-medium">{user.name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {user.email}
-                            </p>
+                            {user.username ? (
+                              <p className="text-sm text-muted-foreground">
+                                {formatUsernameLabel(user.username)}
+                              </p>
+                            ) : (
+                              <p className="text-sm text-muted-foreground">
+                                {user.email}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>

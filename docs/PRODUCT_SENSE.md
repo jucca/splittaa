@@ -4,6 +4,21 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 
 ---
 
+## 0. Create profile (first sign-in)
+
+**Actor:** New or legacy user without completed profile  
+**Goal:** Set display name and unique username before using the app.
+
+1. Sign in with Clerk → `users.store` provisions the row.
+2. If `profileCompletedAt` is missing → redirect to **Luo profiili** (`/profiili/luo`).
+3. Enter **näyttönimi** and **käyttäjänimi** (username suggested from Clerk name; availability checked live).
+4. Submit → `users.completeProfile` → redirect to intended page or dashboard.
+
+**Success:** User appears in participant search as `Nimi (@tunnus)`; email is not shown in search results.  
+**Later:** Profile editable under **Asetukset**; username change limited to once per 30 days.
+
+---
+
 ## 1. Split an expense
 
 **Actor:** Signed-in user  

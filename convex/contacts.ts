@@ -38,6 +38,7 @@ export const getAllContacts = query({
           ? {
               id: u._id,
               name: u.name,
+              username: u.username ?? null,
               email: u.email,
               imageUrl: u.imageUrl,
               type: "user",

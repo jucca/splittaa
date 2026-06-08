@@ -28,6 +28,17 @@ export async function createTestUser(
   return { asUser, userId, tokenIdentifier };
 }
 
+export async function completeTestProfile(
+  asUser: TestContext,
+  label: string
+): Promise<void> {
+  const username = label.toLowerCase().replace(/[^a-z0-9]/g, "_").slice(0, 20);
+  await asUser.mutation(api.users.completeProfile, {
+    displayName: `User ${label}`,
+    username: username.length >= 3 ? username : `${username}x`.slice(0, 20),
+  });
+}
+
 export function expectConvexError(
   error: unknown,
   code: string

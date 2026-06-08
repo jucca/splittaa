@@ -8,6 +8,7 @@ export type CurrentUser = NonNullable<FunctionReturnType<typeof api.users.me>>;
 export type Participant = {
   id: Id<"users">;
   name: string;
+  username?: string | null;
   email?: string;
   imageUrl?: string | null;
 };

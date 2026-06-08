@@ -6,7 +6,7 @@ import { format as formatDate } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { getCategoryIcon } from "@/lib/expense-categories";
+import { getCategoryColor, getCategoryIcon } from "@/lib/expense-categories";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -133,7 +133,14 @@ export function ExpenseList({
                         })}
                       </span>
                       <span>•</span>
-                      <span>{getCategoryLabel(tCategories, categoryId)}</span>
+                      <span className="inline-flex items-center gap-1">
+                        <span
+                          className="inline-block h-2 w-2 shrink-0 rounded-full"
+                          style={{ backgroundColor: getCategoryColor(categoryId) }}
+                          aria-hidden
+                        />
+                        {getCategoryLabel(tCategories, categoryId)}
+                      </span>
                       {showOtherPerson && !isGroupExpense && (
                         <>
                           <span>•</span>

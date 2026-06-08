@@ -7,7 +7,7 @@
     "build": "next build",
     "vercel-build": "npx convex deploy --cmd 'npm run build' --cmd-url-env-var-name NEXT_PUBLIC_CONVEX_URL",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint app components lib hooks middleware.ts",
     "typecheck": "tsc --noEmit",
     "test:unit": "vitest run",
     "test:convex": "vitest run --config vitest.convex.config.ts",

@@ -57,6 +57,12 @@ describe("dashboard.getMonthlySpending", () => {
     expect(travel?.amount).toBe(20);
     expect(groceries?.amount).toBe(0);
 
+    const categorySum = monthRow.byCategory.reduce(
+      (sum, c) => sum + c.amount,
+      0
+    );
+    expect(monthRow.total).toBe(categorySum);
+
     const categoryOrder = monthRow.byCategory.map((c) => c.categoryId);
     expect(categoryOrder).toEqual([...EXPENSE_CATEGORY_IDS]);
   });
@@ -79,6 +85,26 @@ describe("dashboard.getMonthlySpending", () => {
     const other = monthRow.byCategory.find((c) => c.categoryId === "other");
 
     expect(other?.amount).toBe(12);
+  });
+
+  it("maps unknown category strings to other", async () => {
+    const { asUser: asA, userId: userA } = await createTestUser(t, "dash-bogus");
+
+    await asA.mutation(api.expenses.createExpense, {
+      description: "Bogus",
+      amount: 8,
+      category: "bogus",
+      date: Date.now(),
+      paidByUserId: userA,
+      splitType: "equal",
+      splits: [{ userId: userA, amount: 8, paid: true }],
+    });
+
+    const result = await asA.query(api.dashboard.getMonthlySpending, {});
+    const monthRow = result.months[new Date().getMonth()];
+    const other = monthRow.byCategory.find((c) => c.categoryId === "other");
+
+    expect(other?.amount).toBe(8);
   });
 
   it("requires authentication", async () => {

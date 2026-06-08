@@ -83,7 +83,7 @@ export const EXPENSE_CATEGORIES = {
     id: "utilities",
     name: "Palvelut",
     icon: Wifi,
-    color: "#FDD835",
+    color: "#F9A825",
   },
   water: {
     id: "water",

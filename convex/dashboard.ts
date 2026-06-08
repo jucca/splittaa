@@ -8,6 +8,12 @@ import {
   viewerCurrency,
 } from "./_lib/moneyDisplay";
 import {
+  categoryTotalsToArray,
+  emptyCategoryTotals,
+  normalizeExpenseCategoryId,
+} from "./_lib/categories";
+import type { ExpenseCategoryId } from "./_lib/categories";
+import {
   getAllExpensesForUser,
   getUserExpenseShare,
   userParticipatesInExpense,
@@ -121,8 +127,14 @@ export const getMonthlySpending = query({
     const startOfYear = new Date(currentYear, 0, 1).getTime();
 
     const monthlyTotals: Record<number, number> = {};
+    const monthlyCategoryTotals = new Map<
+      number,
+      Map<ExpenseCategoryId, number>
+    >();
     for (let i = 0; i < 12; i++) {
-      monthlyTotals[new Date(currentYear, i, 1).getTime()] = 0;
+      const monthStart = new Date(currentYear, i, 1).getTime();
+      monthlyTotals[monthStart] = 0;
+      monthlyCategoryTotals.set(monthStart, emptyCategoryTotals());
     }
 
     const expenses = await getAllExpensesForUser(ctx, user._id);
@@ -144,11 +156,23 @@ export const getMonthlySpending = query({
         1
       ).getTime();
       monthlyTotals[monthStart] = (monthlyTotals[monthStart] || 0) + converted;
+
+      const categoryId = normalizeExpenseCategoryId(expense.category);
+      const categoryTotals =
+        monthlyCategoryTotals.get(monthStart) ?? emptyCategoryTotals();
+      categoryTotals.set(
+        categoryId,
+        (categoryTotals.get(categoryId) ?? 0) + converted
+      );
+      monthlyCategoryTotals.set(monthStart, categoryTotals);
     }
 
     const result = Object.entries(monthlyTotals).map(([month, total]) => ({
       month: parseInt(month),
       total,
+      byCategory: categoryTotalsToArray(
+        monthlyCategoryTotals.get(parseInt(month)) ?? emptyCategoryTotals()
+      ),
     }));
     result.sort((a, b) => a.month - b.month);
 

@@ -12,6 +12,7 @@ import type * as _lib_auth from "../_lib/auth.js";
 import type * as _lib_authorize from "../_lib/authorize.js";
 import type * as _lib_automation from "../_lib/automation.js";
 import type * as _lib_balances from "../_lib/balances.js";
+import type * as _lib_categories from "../_lib/categories.js";
 import type * as _lib_currencies from "../_lib/currencies.js";
 import type * as _lib_debtRequests from "../_lib/debtRequests.js";
 import type * as _lib_exchange from "../_lib/exchange.js";
@@ -54,6 +55,7 @@ declare const fullApi: ApiFromModules<{
   "_lib/authorize": typeof _lib_authorize;
   "_lib/automation": typeof _lib_automation;
   "_lib/balances": typeof _lib_balances;
+  "_lib/categories": typeof _lib_categories;
   "_lib/currencies": typeof _lib_currencies;
   "_lib/debtRequests": typeof _lib_debtRequests;
   "_lib/exchange": typeof _lib_exchange;

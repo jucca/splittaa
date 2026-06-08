@@ -43,6 +43,7 @@ export type UserBalances = FunctionReturnType<
 export type MonthlySpendingItem = {
   month: number;
   total: number;
+  byCategory: Array<{ categoryId: string; amount: number }>;
 };
 
 export type DashboardGroup = NonNullable<

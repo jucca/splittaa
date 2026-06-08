@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   BarChart,
@@ -10,9 +11,16 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import type { TooltipProps } from "recharts";
 import { useMoney } from "@/components/providers/money-format-provider";
 import type { MonthlySpendingItem } from "@/lib/types/domain";
 import { useTranslations } from "next-intl";
+import {
+  CATEGORY_IDS,
+  getCategoryColor,
+  type ExpenseCategoryId,
+} from "@/lib/expense-categories";
+import { getCategoryLabel } from "@/lib/i18n/category-label";
 
 const MONTH_KEYS = [
   "jan",
@@ -29,6 +37,8 @@ const MONTH_KEYS = [
   "dec",
 ] as const;
 
+const TOP_STACK_CATEGORY_ID = CATEGORY_IDS[CATEGORY_IDS.length - 1];
+
 export function ExpenseSummary({
   monthlySpending,
   totalSpent,
@@ -38,17 +48,65 @@ export function ExpenseSummary({
 }) {
   const t = useTranslations("dashboard");
   const tShared = useTranslations("shared");
+  const tCategories = useTranslations("categories");
   const { format } = useMoney();
 
-  const chartData =
-    monthlySpending?.map((item: MonthlySpendingItem) => {
-      const date = new Date(item.month);
-      const monthKey = MONTH_KEYS[date.getMonth()];
-      return {
-        name: t(`monthShort.${monthKey}`),
-        amount: item.total,
-      };
-    }) || [];
+  const chartData = useMemo(() => {
+    return (
+      monthlySpending?.map((item: MonthlySpendingItem) => {
+        const date = new Date(item.month);
+        const monthKey = MONTH_KEYS[date.getMonth()];
+        const byCategoryMap = new Map(
+          item.byCategory.map((c) => [c.categoryId, c.amount]),
+        );
+        const categories = Object.fromEntries(
+          CATEGORY_IDS.map((id) => [id, byCategoryMap.get(id) ?? 0]),
+        ) as Record<ExpenseCategoryId, number>;
+        return {
+          name: t(`monthShort.${monthKey}`),
+          ...categories,
+        };
+      }) ?? []
+    );
+  }, [monthlySpending, t]);
+
+  const renderTooltip = (props: TooltipProps<number, string>) => {
+    const { active, payload, label } = props;
+    if (!active || !payload?.length) return null;
+
+    const entries = payload
+      .filter((p) => typeof p.value === "number" && p.value > 0)
+      .sort((a, b) => (b.value as number) - (a.value as number));
+
+    const total = payload.reduce(
+      (sum, p) => sum + (typeof p.value === "number" ? p.value : 0),
+      0,
+    );
+
+    return (
+      <div className="rounded-lg border bg-background p-3 text-sm shadow-lg">
+        <p className="mb-2 font-medium">{label}</p>
+        <ul className="space-y-1">
+          {entries.map((entry) => (
+            <li key={entry.dataKey} className="flex items-center gap-2">
+              <span
+                className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
+                style={{ backgroundColor: entry.color }}
+              />
+              <span className="flex-1">
+                {getCategoryLabel(tCategories, String(entry.dataKey))}
+              </span>
+              <span className="font-medium">{format(entry.value as number)}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-2 flex justify-between border-t pt-2 font-medium">
+          <span>{tShared("sumLabel")}</span>
+          <span>{format(total)}</span>
+        </p>
+      </div>
+    );
+  };
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
@@ -78,22 +136,41 @@ export function ExpenseSummary({
           </div>
         </div>
 
-        <div className="h-64 mt-6">
+        <div className="h-64 mt-6" data-testid="expense-summary-chart">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip
-                formatter={(value) => [
-                  format(typeof value === "number" ? value : Number(value)),
-                  tShared("sumLabel"),
-                ]}
-                labelFormatter={() => tShared("consumptionLabel")}
-              />
-              <Bar dataKey="amount" fill="#36d7b7" radius={[4, 4, 0, 0]} />
+              <Tooltip content={renderTooltip} />
+              {CATEGORY_IDS.map((id) => (
+                <Bar
+                  key={id}
+                  dataKey={id}
+                  stackId="month"
+                  fill={getCategoryColor(id)}
+                  radius={
+                    id === TOP_STACK_CATEGORY_ID ? [4, 4, 0, 0] : undefined
+                  }
+                />
+              ))}
             </BarChart>
           </ResponsiveContainer>
+        </div>
+
+        <div
+          className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground"
+          data-testid="expense-summary-legend"
+        >
+          {CATEGORY_IDS.map((id) => (
+            <div key={id} className="flex items-center gap-1">
+              <span
+                className="inline-block h-2 w-2 shrink-0 rounded-full"
+                style={{ backgroundColor: getCategoryColor(id) }}
+              />
+              {getCategoryLabel(tCategories, id)}
+            </div>
+          ))}
         </div>
 
         <p className="text-xs text-muted-foreground text-center mt-2">

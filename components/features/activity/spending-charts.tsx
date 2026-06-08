@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMoney } from "@/components/providers/money-format-provider";
 import { useTranslations } from "next-intl";
+import { getCategoryColor } from "@/lib/expense-categories";
 import { getCategoryLabel } from "@/lib/i18n/category-label";
 
 type SpendingPeriod = "week" | "month" | "year";
@@ -37,16 +38,6 @@ const MONTH_LONG_KEYS = [
   "november",
   "december",
 ] as const;
-
-const CHART_COLORS = [
-  "#36d7b7",
-  "#2eb89a",
-  "#26a88c",
-  "#1e987e",
-  "#168870",
-  "#0e7862",
-  "#066854",
-];
 
 export function SpendingCharts() {
   const t = useTranslations("activity.charts");
@@ -92,6 +83,7 @@ export function SpendingCharts() {
   const categoryData = useMemo(() => {
     if (!summary) return [];
     return summary.byCategory.map((c) => ({
+      categoryId: c.categoryId,
       name: getCategoryLabel(tCategories, c.categoryId),
       amount: c.amount,
     }));
@@ -246,10 +238,10 @@ export function SpendingCharts() {
                       outerRadius={72}
                       paddingAngle={2}
                     >
-                      {categoryData.map((_, index) => (
+                      {categoryData.map((entry) => (
                         <Cell
-                          key={`cell-${index}`}
-                          fill={CHART_COLORS[index % CHART_COLORS.length]}
+                          key={entry.categoryId}
+                          fill={getCategoryColor(entry.categoryId)}
                         />
                       ))}
                     </Pie>
@@ -264,13 +256,12 @@ export function SpendingCharts() {
                   </PieChart>
                 </ResponsiveContainer>
                 <ul className="flex flex-wrap gap-x-4 gap-y-1 justify-center mt-2 text-xs text-muted-foreground">
-                  {categoryData.map((c, index) => (
-                    <li key={c.name} className="flex items-center gap-1">
+                  {categoryData.map((c) => (
+                    <li key={c.categoryId} className="flex items-center gap-1">
                       <span
                         className="inline-block w-2 h-2 rounded-full"
                         style={{
-                          backgroundColor:
-                            CHART_COLORS[index % CHART_COLORS.length],
+                          backgroundColor: getCategoryColor(c.categoryId),
                         }}
                       />
                       {c.name}

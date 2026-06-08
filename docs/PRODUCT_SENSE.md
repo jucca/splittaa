@@ -131,7 +131,7 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 **Actor:** Returning user  
 **Goal:** Situation awareness at a glance.
 
-1. **Dashboard** (`/dashboard`) — pending group invites at top; join-by-code between **Saldotiedot** and **Ryhmäsi**; total balance cards; per-group summaries; monthly spending chart.
+1. **Dashboard** (`/dashboard`) — pending group invites at top; join-by-code between **Saldotiedot** and **Ryhmäsi**; total balance cards; per-group summaries; **Kulutusyhteenveto** monthly stacked bar chart by category (22 fixed colors, all categories in legend).
 2. Navigate to person or group for detail.
 
 **Performance note:** Aggregates must use indexed queries — not full-table scans (harness Phase 3).

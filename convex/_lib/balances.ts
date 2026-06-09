@@ -175,21 +175,17 @@ export async function applyExpenseToBalances(
   }
 }
 
-export async function applySettlementToBalances(
+async function applySettlementToScope(
   ctx: BalanceWriter,
+  scope: Scope,
   settlement: {
     paidByUserId: Id<"users">;
     receivedByUserId: Id<"users">;
     amount: number;
     currency: SupportedCurrencyCode;
-    groupId?: Id<"groups">;
   },
   factor: 1 | -1
 ) {
-  const scope: Scope = settlement.groupId
-    ? { scopeType: "group", scopeGroupId: settlement.groupId }
-    : { scopeType: "personal" };
-
   const canonical = normalizeDirection(
     settlement.paidByUserId,
     settlement.receivedByUserId
@@ -247,6 +243,109 @@ export async function applySettlementToBalances(
   }
 }
 
+export async function applySettlementToBalances(
+  ctx: BalanceWriter,
+  settlement: {
+    paidByUserId: Id<"users">;
+    receivedByUserId: Id<"users">;
+    amount: number;
+    currency: SupportedCurrencyCode;
+    groupId?: Id<"groups">;
+  },
+  factor: 1 | -1
+) {
+  const scope: Scope = settlement.groupId
+    ? { scopeType: "group", scopeGroupId: settlement.groupId }
+    : { scopeType: "personal" };
+
+  await applySettlementToScope(ctx, scope, settlement, factor);
+}
+
+async function getGroupIdsForUser(
+  ctx: BalanceReader,
+  userId: Id<"users">
+): Promise<Id<"groups">[]> {
+  const groups = await ctx.db.query("groups").collect();
+  return groups
+    .filter((g) => g.members.some((m) => m.userId === userId))
+    .map((g) => g._id);
+}
+
+async function findSharedGroupIds(
+  ctx: BalanceReader,
+  userId: Id<"users">,
+  otherId: Id<"users">
+): Promise<Id<"groups">[]> {
+  const groups = await ctx.db.query("groups").collect();
+  return groups
+    .filter(
+      (g) =>
+        g.members.some((m) => m.userId === userId) &&
+        g.members.some((m) => m.userId === otherId)
+    )
+    .map((g) => g._id);
+}
+
+/** Personal scope + every shared group scope (Splitwise-style global net). */
+export async function listGlobalBalancesBetweenUsers(
+  ctx: BalanceReader,
+  meId: Id<"users">,
+  otherId: Id<"users">
+) {
+  const sharedGroupIds = await findSharedGroupIds(ctx, meId, otherId);
+  const scopes: Scope[] = [
+    { scopeType: "personal" },
+    ...sharedGroupIds.map((groupId) => ({
+      scopeType: "group" as const,
+      scopeGroupId: groupId,
+    })),
+  ];
+
+  const byCurrency = new Map<SupportedCurrencyCode, number>();
+  for (const scope of scopes) {
+    const parts = await listBalancesBetweenUsers(ctx, meId, otherId, scope);
+    for (const part of parts) {
+      byCurrency.set(
+        part.currency,
+        (byCurrency.get(part.currency) ?? 0) + part.amount
+      );
+    }
+  }
+
+  return [...byCurrency.entries()]
+    .filter(([, amount]) => Math.abs(amount) >= 0.005)
+    .map(([currency, amount]) => ({ currency, amount }));
+}
+
+/** Balance rows for dashboard: personal + all groups the user belongs to. */
+export async function collectGlobalBalanceRowsForUser(
+  ctx: BalanceReader,
+  userId: Id<"users">
+): Promise<Doc<"balances">[]> {
+  const personalRows = await ctx.db
+    .query("balances")
+    .withIndex("by_scope", (q) =>
+      q.eq("scopeType", "personal").eq("scopeGroupId", undefined)
+    )
+    .collect();
+
+  const groupIds = await getGroupIdsForUser(ctx, userId);
+  const groupRows: Doc<"balances">[] = [];
+  for (const groupId of groupIds) {
+    const rows = await ctx.db
+      .query("balances")
+      .withIndex("by_scope", (q) =>
+        q.eq("scopeType", "group").eq("scopeGroupId", groupId)
+      )
+      .collect();
+    groupRows.push(...rows);
+  }
+
+  return [...personalRows, ...groupRows].filter(
+    (r) => r.userId === userId || r.counterpartyUserId === userId
+  );
+}
+
 export async function listBalancesBetweenUsers(
   ctx: BalanceReader,
   meId: Id<"users">,
@@ -280,8 +379,7 @@ export async function getNetBalanceBetweenUsers(
   meId: Id<"users">,
   otherId: Id<"users">
 ) {
-  const parts = await listBalancesBetweenUsers(ctx, meId, otherId);
+  const parts = await listGlobalBalancesBetweenUsers(ctx, meId, otherId);
   if (parts.length === 0) return 0;
-  if (parts.length === 1) return parts[0]!.amount;
-  return parts[0]!.amount;
+  return parts.reduce((sum, part) => sum + part.amount, 0);
 }

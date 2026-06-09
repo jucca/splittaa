@@ -143,4 +143,88 @@ describe("expenses", () => {
     expect(aAfterDelete.find((x) => x.userId === userB)).toBeUndefined();
     expect(bAfterDelete.find((x) => x.userId === userA)).toBeUndefined();
   });
+
+  it("nets personal balance when payer covers counterparty share (1:1)", async () => {
+    const { asUser: asA, userId: userA } = await createTestUser(t, "lars");
+    const { asUser: asB, userId: userB } = await createTestUser(t, "mia");
+
+    await asB.mutation(api.expenses.createExpense, {
+      description: "Initial debt",
+      amount: 40,
+      date: Date.now(),
+      paidByUserId: userB,
+      splitType: "exact",
+      splits: [
+        { userId: userA, amount: 20, paid: false },
+        { userId: userB, amount: 20, paid: true },
+      ],
+    });
+
+    await asA.mutation(api.expenses.createExpense, {
+      description: "Covers B share",
+      amount: 10,
+      date: Date.now(),
+      paidByUserId: userA,
+      splitType: "exact",
+      splits: [
+        { userId: userA, amount: 0, paid: true },
+        { userId: userB, amount: 10, paid: false },
+      ],
+    });
+
+    const aBalances = await asA.query(api.balances.getPersonalBalances, {});
+    expect(aBalances.find((x) => x.userId === userB)?.netBalance).toBe(-10);
+  });
+
+  it("nets global balance when group expense offsets existing personal debt", async () => {
+    const { asUser: asA, userId: userA } = await createTestUser(t, "nina");
+    const { asUser: asB, userId: userB } = await createTestUser(t, "olavi");
+    const { asUser: asC, userId: userC } = await createTestUser(t, "paula");
+
+    const { groupId } = await asA.mutation(api.contacts.createGroup, {
+      name: "Trip",
+      members: [userB, userC],
+    });
+    await joinGroupAsUser(t, asB, groupId, userB);
+    await joinGroupAsUser(t, asC, groupId, userC);
+
+    await asB.mutation(api.expenses.createExpense, {
+      description: "Initial debt",
+      amount: 40,
+      date: Date.now(),
+      paidByUserId: userB,
+      splitType: "exact",
+      splits: [
+        { userId: userA, amount: 20, paid: false },
+        { userId: userB, amount: 20, paid: true },
+      ],
+    });
+
+    await asA.mutation(api.expenses.createExpense, {
+      description: "Group dinner",
+      amount: 30,
+      date: Date.now(),
+      paidByUserId: userA,
+      splitType: "equal",
+      splits: [
+        { userId: userA, amount: 10, paid: true },
+        { userId: userB, amount: 10, paid: false },
+        { userId: userC, amount: 10, paid: false },
+      ],
+      groupId,
+    });
+
+    const aBalances = await asA.query(api.balances.getPersonalBalances, {});
+    expect(aBalances.find((x) => x.userId === userB)?.netBalance).toBe(-10);
+
+    const dashboard = await asA.query(api.dashboard.getUserBalances, {});
+    const oweB = dashboard.oweDetails.youOwe.find((x) => x.userId === userB);
+    expect(oweB?.amount).toBe(10);
+
+    const groupBalances = await asA.query(api.balances.getGroupBalances, {
+      groupId,
+    });
+    const bInGroup = groupBalances.balances.find((m) => m.userId === userB);
+    expect(bInGroup?.netBalance).toBe(-10);
+  });
 });

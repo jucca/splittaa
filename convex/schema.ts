@@ -32,6 +32,11 @@ export default defineSchema({
         lastSentAt: v.optional(v.number()),
       })
     ),
+    balanceSettings: v.optional(
+      v.object({
+        autoNetBalances: v.boolean(),
+      })
+    ),
   })
     .index("by_token", ["tokenIdentifier"])
     .index("by_email", ["email"])

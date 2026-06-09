@@ -13,6 +13,8 @@ import {
   normalizeExpenseCategoryId,
 } from "./_lib/categories";
 import type { ExpenseCategoryId } from "./_lib/categories";
+import { normalizeBalanceSettings } from "./_lib/balanceSettings";
+import { computeGlobalBalanceByCounterparty } from "./_lib/globalBalance";
 import {
   getAllExpensesForUser,
   getUserExpenseShare,
@@ -25,31 +27,19 @@ export const getUserBalances = query({
     const user = await requireAuth(ctx);
     const viewerCur = viewerCurrency(user);
 
-    const rows = await ctx.db
-      .query("balances")
-      .withIndex("by_scope", (q) =>
-        q.eq("scopeType", "personal").eq("scopeGroupId", undefined)
-      )
-      .collect();
+    const { autoNetBalances } = normalizeBalanceSettings(
+      user.balanceSettings ?? undefined
+    );
+    const owedLedger = await computeGlobalBalanceByCounterparty(
+      ctx,
+      user._id,
+      viewerCur,
+      autoNetBalances
+    );
 
     const netByCounterparty = new Map<Id<"users">, number>();
-
-    for (const row of rows) {
-      if (row.userId !== user._id && row.counterpartyUserId !== user._id) {
-        continue;
-      }
-      const counterparty =
-        row.userId === user._id ? row.counterpartyUserId : row.userId;
-      const signed = await signedBalanceForViewer(
-        ctx,
-        user._id,
-        viewerCur,
-        row
-      );
-      netByCounterparty.set(
-        counterparty,
-        (netByCounterparty.get(counterparty) ?? 0) + signed
-      );
+    for (const [counterpartyId, owed] of owedLedger) {
+      netByCounterparty.set(counterpartyId, -owed);
     }
 
     let youOwe = 0;

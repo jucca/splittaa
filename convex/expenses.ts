@@ -5,8 +5,10 @@ import { requireAuth } from "./_lib/auth";
 import { assertGroupMember } from "./_lib/authorize";
 import { validateSplits } from "./_lib/money";
 import { resolveCurrency } from "./_lib/currencies";
-import { applyExpenseToBalances, listBalancesBetweenUsers } from "./_lib/balances";
-import { convertToViewer, viewerCurrency } from "./_lib/moneyDisplay";
+import { applyExpenseToBalances } from "./_lib/balances";
+import { normalizeBalanceSettings } from "./_lib/balanceSettings";
+import { computeGlobalNetBetweenUsers } from "./_lib/globalBalance";
+import { viewerCurrency } from "./_lib/moneyDisplay";
 
 // Create a new expense
 export const createExpense = mutation({
@@ -138,17 +140,16 @@ export const getExpensesBetweenUsers = query({
 
     /* ───── 4. Compute running balance (viewer's preferred currency) ─ */
     const viewerCur = viewerCurrency(me);
-    const parts = await listBalancesBetweenUsers(ctx, me._id, userId);
-    let balance = 0;
-    for (const part of parts) {
-      const converted = await convertToViewer(
-        ctx,
-        viewerCur,
-        Math.abs(part.amount),
-        part.currency
-      );
-      balance += part.amount >= 0 ? converted : -converted;
-    }
+    const { autoNetBalances } = normalizeBalanceSettings(
+      me.balanceSettings ?? undefined
+    );
+    const balance = await computeGlobalNetBetweenUsers(
+      ctx,
+      me._id,
+      userId,
+      viewerCur,
+      autoNetBalances
+    );
 
     /* ───── 5. Return payload ───────────────────────────────────────── */
     const other = await ctx.db.get(userId);

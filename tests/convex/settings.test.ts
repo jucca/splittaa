@@ -27,4 +27,19 @@ describe("settings", () => {
     expect(settings.intervalDays).toBe(14);
     expect(settings.notifyWhenOwedToMe).toBe(false);
   });
+
+  it("returns default balance settings for new user", async () => {
+    const { asUser } = await createTestUser(t, "balance-default");
+    const settings = await asUser.query(api.settings.getBalanceSettings);
+    expect(settings.autoNetBalances).toBe(true);
+  });
+
+  it("persists balance settings updates", async () => {
+    const { asUser } = await createTestUser(t, "balance-save");
+    await asUser.mutation(api.settings.updateBalanceSettings, {
+      autoNetBalances: false,
+    });
+    const settings = await asUser.query(api.settings.getBalanceSettings);
+    expect(settings.autoNetBalances).toBe(false);
+  });
 });

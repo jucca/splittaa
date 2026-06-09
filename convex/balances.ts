@@ -3,51 +3,29 @@ import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
 import { assertGroupMember } from "./_lib/authorize";
-
-function toNetFromCanonical(
-  meId: Id<"users">,
-  userId: Id<"users">,
-  counterpartyUserId: Id<"users">,
-  amount: number
-) {
-  if (meId === userId) return -amount;
-  if (meId === counterpartyUserId) return amount;
-  return 0;
-}
+import { normalizeBalanceSettings } from "./_lib/balanceSettings";
+import { computeGlobalBalanceByCounterparty } from "./_lib/globalBalance";
+import { viewerCurrency } from "./_lib/moneyDisplay";
 
 export const getPersonalBalances = query({
   args: {},
   handler: async (ctx) => {
     const me = await requireAuth(ctx);
-    const rows = await ctx.db
-      .query("balances")
-      .withIndex("by_user_scope", (q) =>
-        q.eq("userId", me._id).eq("scopeType", "personal").eq("scopeGroupId", undefined)
-      )
-      .collect();
+    const viewerCur = viewerCurrency(me);
+    const { autoNetBalances } = normalizeBalanceSettings(
+      me.balanceSettings ?? undefined
+    );
+    const owedLedger = await computeGlobalBalanceByCounterparty(
+      ctx,
+      me._id,
+      viewerCur,
+      autoNetBalances
+    );
 
-    const counterpartRows = await ctx.db
-      .query("balances")
-      .withIndex("by_scope", (q) =>
-        q.eq("scopeType", "personal").eq("scopeGroupId", undefined)
-      )
-      .collect();
-
-    const merged = new Map<string, { userId: Id<"users">; netBalance: number }>();
-    for (const row of [...rows, ...counterpartRows]) {
-      if (row.userId !== me._id && row.counterpartyUserId !== me._id) continue;
-      const otherUserId =
-        row.userId === me._id ? row.counterpartyUserId : row.userId;
-      const net = toNetFromCanonical(
-        me._id,
-        row.userId,
-        row.counterpartyUserId,
-        row.amount
-      );
-      merged.set(otherUserId, { userId: otherUserId, netBalance: net });
-    }
-
-    return Array.from(merged.values());
+    return [...owedLedger.entries()].map(([userId, owed]) => ({
+      userId,
+      netBalance: -owed,
+    }));
   },
 });
 

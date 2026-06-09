@@ -69,7 +69,7 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 6. Alternatively: enter display code on the dashboard sidebar between **Saldotiedot** and **Ryhmäsi** (**Liity ryhmään koodilla**).
 7. Invites expire after **7 days**; admins see pending invites on the group page and can revoke.
 
-**Success:** Group balance reflects sum of member shares minus settlements; only accepted members appear in splits.
+**Success:** Group balance reflects sum of member shares minus settlements; only accepted members appear in splits. Dashboard **Saldotiedot** and person view show **global net balance** between two users. With **autoNetBalances** on (default), personal and group shared expenses can reduce an existing debt the same way Splitwise does. With it off (Asetukset → Saldotiedot), only direct debts and personal settlements appear in global views — paying a shared expense does not automatically reduce debt.
 
 ---
 

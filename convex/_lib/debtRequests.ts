@@ -1,7 +1,10 @@
 import { ConvexError } from "convex/values";
 import type { Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
-import { getNetBalanceBetweenUsers, listBalancesBetweenUsers } from "./balances";
+import { normalizeBalanceSettings } from "./balanceSettings";
+import { listBalancesBetweenUsers } from "./balances";
+import { computeGlobalNetBetweenUsers } from "./globalBalance";
+import { viewerCurrency } from "./moneyDisplay";
 import { assertGroupMember } from "./authorize";
 import type { SupportedCurrencyCode } from "./currencies";
 import { DEFAULT_CURRENCY } from "./currencies";
@@ -23,27 +26,41 @@ export async function getAmountDebtorOwesCreditor(
     await assertGroupMember(ctx, groupId, debtorId);
   }
 
-  const parts = await listBalancesBetweenUsers(
-    ctx,
-    creditorId,
-    debtorId,
-    scope
-  );
-  const owedParts = parts.filter((p) => p.amount > 0);
-  if (owedParts.length === 0) {
-    const net = await getNetBalanceBetweenUsers(ctx, creditorId, debtorId);
+  if (groupId) {
+    const parts = await listBalancesBetweenUsers(
+      ctx,
+      creditorId,
+      debtorId,
+      scope
+    );
+    const owedParts = parts.filter((p) => p.amount > 0);
+    if (owedParts.length === 0) {
+      return { amount: 0, currency: DEFAULT_CURRENCY };
+    }
+    const primary = owedParts.sort(
+      (a, b) => Math.abs(b.amount) - Math.abs(a.amount)
+    )[0]!;
     return {
-      amount: net > 0 ? Math.round(net * 100) / 100 : 0,
-      currency: DEFAULT_CURRENCY,
+      amount: Math.round(primary.amount * 100) / 100,
+      currency: primary.currency,
     };
   }
 
-  const primary = owedParts.sort(
-    (a, b) => Math.abs(b.amount) - Math.abs(a.amount)
-  )[0]!;
+  const creditor = await ctx.db.get(creditorId);
+  const viewerCur = viewerCurrency(creditor ?? {});
+  const { autoNetBalances } = normalizeBalanceSettings(
+    creditor?.balanceSettings ?? undefined
+  );
+  const net = await computeGlobalNetBetweenUsers(
+    ctx,
+    creditorId,
+    debtorId,
+    viewerCur,
+    autoNetBalances
+  );
   return {
-    amount: Math.round(primary.amount * 100) / 100,
-    currency: primary.currency,
+    amount: net > 0 ? Math.round(net * 100) / 100 : 0,
+    currency: viewerCur,
   };
 }
 

@@ -11,11 +11,13 @@
 import type * as _lib_auth from "../_lib/auth.js";
 import type * as _lib_authorize from "../_lib/authorize.js";
 import type * as _lib_automation from "../_lib/automation.js";
+import type * as _lib_balanceSettings from "../_lib/balanceSettings.js";
 import type * as _lib_balances from "../_lib/balances.js";
 import type * as _lib_categories from "../_lib/categories.js";
 import type * as _lib_currencies from "../_lib/currencies.js";
 import type * as _lib_debtRequests from "../_lib/debtRequests.js";
 import type * as _lib_exchange from "../_lib/exchange.js";
+import type * as _lib_globalBalance from "../_lib/globalBalance.js";
 import type * as _lib_invites from "../_lib/invites.js";
 import type * as _lib_locales from "../_lib/locales.js";
 import type * as _lib_money from "../_lib/money.js";
@@ -54,11 +56,13 @@ declare const fullApi: ApiFromModules<{
   "_lib/auth": typeof _lib_auth;
   "_lib/authorize": typeof _lib_authorize;
   "_lib/automation": typeof _lib_automation;
+  "_lib/balanceSettings": typeof _lib_balanceSettings;
   "_lib/balances": typeof _lib_balances;
   "_lib/categories": typeof _lib_categories;
   "_lib/currencies": typeof _lib_currencies;
   "_lib/debtRequests": typeof _lib_debtRequests;
   "_lib/exchange": typeof _lib_exchange;
+  "_lib/globalBalance": typeof _lib_globalBalance;
   "_lib/invites": typeof _lib_invites;
   "_lib/locales": typeof _lib_locales;
   "_lib/money": typeof _lib_money;

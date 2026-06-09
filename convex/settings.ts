@@ -1,6 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { requireAuth } from "./_lib/auth";
+import { normalizeBalanceSettings } from "./_lib/balanceSettings";
 import { normalizeReminderSettings } from "./_lib/reminderSettings";
 
 export const getReminderSettings = query({
@@ -43,6 +44,26 @@ export const updateReminderSettings = mutation({
     };
 
     await ctx.db.patch(user._id, { reminderSettings: next });
+    return next;
+  },
+});
+
+export const getBalanceSettings = query({
+  args: {},
+  handler: async (ctx) => {
+    const user = await requireAuth(ctx);
+    return normalizeBalanceSettings(user.balanceSettings ?? undefined);
+  },
+});
+
+export const updateBalanceSettings = mutation({
+  args: {
+    autoNetBalances: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const user = await requireAuth(ctx);
+    const next = { autoNetBalances: args.autoNetBalances };
+    await ctx.db.patch(user._id, { balanceSettings: next });
     return next;
   },
 });

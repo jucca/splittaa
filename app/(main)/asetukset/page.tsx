@@ -25,6 +25,7 @@ import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
 import { getIntlDateTimeLocale, resolveLocale } from "@/lib/i18n/locales";
 import { LanguageSettings } from "@/components/layout/language-settings";
 import { CurrencySettings } from "@/components/layout/currency-settings";
+import { BalanceSettings } from "@/components/features/settings/balance-settings";
 import { ProfileSettings } from "@/components/features/profile/profile-settings";
 import { HoverHint } from "@/components/ui/hover-hint";
 
@@ -128,6 +129,8 @@ export default function SettingsPage() {
       <LanguageSettings />
 
       <CurrencySettings />
+
+      <BalanceSettings />
 
       <Card>
         <CardHeader>

@@ -5,9 +5,10 @@ import { requireAuth } from "./_lib/auth";
 import { assertGroupMember, assertGroupMembers } from "./_lib/authorize";
 import {
   applySettlementToBalances,
-  getNetBalanceBetweenUsers,
   listBalancesBetweenUsers,
 } from "./_lib/balances";
+import { normalizeBalanceSettings } from "./_lib/balanceSettings";
+import { computeGlobalNetBetweenUsers } from "./_lib/globalBalance";
 import { resolveCurrency } from "./_lib/currencies";
 import { convertWithStoredRates } from "./_lib/exchange";
 import { convertToViewer, viewerCurrency } from "./_lib/moneyDisplay";
@@ -102,26 +103,20 @@ export const getSettlementData = query({
       const other = await ctx.db.get(args.entityId as Id<"users">);
       if (!other) throw new Error("Käyttäjää ei löytynyt");
 
-      const balanceParts = await listBalancesBetweenUsers(ctx, me._id, other._id);
       const viewerCurrency = resolveCurrency(me.preferredCurrency);
+      const { autoNetBalances } = normalizeBalanceSettings(
+        me.balanceSettings ?? undefined
+      );
+      const netBalance = await computeGlobalNetBetweenUsers(
+        ctx,
+        me._id,
+        other._id,
+        viewerCurrency,
+        autoNetBalances
+      );
 
-      let netInViewer = 0;
-      for (const part of balanceParts) {
-        const converted =
-          part.currency === viewerCurrency
-            ? part.amount
-            : await convertWithStoredRates(
-                ctx,
-                part.amount,
-                part.currency,
-                viewerCurrency
-              );
-        netInViewer += converted;
-      }
-
-      const owed = netInViewer > 0 ? netInViewer : 0;
-      const owing = netInViewer < 0 ? Math.abs(netInViewer) : 0;
-      const netBalance = netInViewer;
+      const owed = netBalance > 0 ? netBalance : 0;
+      const owing = netBalance < 0 ? Math.abs(netBalance) : 0;
 
       return {
         type: "user",
@@ -135,7 +130,7 @@ export const getSettlementData = query({
         youOwe: owing,
         netBalance,
         displayCurrency: viewerCurrency,
-        balanceParts,
+        balanceParts: [],
       };
     } else if (args.entityType === "group") {
       /* ──────────────────────────────────────────────────────── group page */

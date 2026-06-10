@@ -67,7 +67,23 @@
       "subtitle": "Seuraa yhteisiä kuluja, jaa laskut vaivatta ja tasaa tilit nopeasti. Unohda huoli siitä, kuka on kenelle velkaa.",
       "ctaStart": "Aloita",
       "ctaHowItWorks": "Katso miten se toimii",
-      "heroImageAlt": "Splittaa-sovelluksen esittelykuva"
+      "heroImageAlt": "Splittaa-sovelluksen esittelykuva",
+      "carousel": {
+        "prevSlide": "Edellinen kuva",
+        "nextSlide": "Seuraava kuva",
+        "goToSlide": "Siirry kuvaan",
+        "slides": {
+          "capybaras": {
+            "alt": "Kapibarat ravintolassa — älä ole se, joka tarttuu laskuun"
+          },
+          "kittens": {
+            "alt": "Kissat avaruudessa jakavat pizzan — Splittaa: jaa se. rentoudu."
+          },
+          "sloth": {
+            "alt": "Laiskuri käyttää Splittaa-puhelinta viidakossa — lopeta piiloutuminen, jaa kulut"
+          }
+        }
+      }
     },
     "featuresSection": {
       "badge": "Ominaisuudet",

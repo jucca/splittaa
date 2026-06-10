@@ -67,7 +67,23 @@
       "subtitle": "Håll koll på gemensamma utgifter, dela räkningar enkelt och kvitta snabbt. Sluta oroa dig för vem som är skyldig vem.",
       "ctaStart": "Kom igång",
       "ctaHowItWorks": "Se hur det funkar",
-      "heroImageAlt": "Förhandsgranskning av Splittaa-appen"
+      "heroImageAlt": "Förhandsgranskning av Splittaa-appen",
+      "carousel": {
+        "prevSlide": "Föregående bild",
+        "nextSlide": "Nästa bild",
+        "goToSlide": "Gå till bild",
+        "slides": {
+          "capybaras": {
+            "alt": "Kapibaror på restaurang — bli inte den som tar notan igen"
+          },
+          "kittens": {
+            "alt": "Kattungar i rymden delar pizza — Splittaa: dela och chilla"
+          },
+          "sloth": {
+            "alt": "Sengångare använder Splittaa i mobilen i djungeln — sluta gömma dig, dela bara"
+          }
+        }
+      }
     },
     "featuresSection": {
       "badge": "Funktioner",

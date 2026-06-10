@@ -67,7 +67,23 @@
       "subtitle": "Gemeinsame Ausgaben verfolgen, Rechnungen mühelos aufteilen und schnell ausgleichen. Kein Stress mehr darüber, wer wem was schuldet.",
       "ctaStart": "Loslegen",
       "ctaHowItWorks": "So funktioniert's",
-      "heroImageAlt": "Splittaa-App-Vorschau"
+      "heroImageAlt": "Splittaa-App-Vorschau",
+      "carousel": {
+        "prevSlide": "Vorherige Folie",
+        "nextSlide": "Nächste Folie",
+        "goToSlide": "Gehe zu Folie",
+        "slides": {
+          "capybaras": {
+            "alt": "Wasserschweine im Restaurant — sei nicht derjenige, der wieder die Rechnung zahlt"
+          },
+          "kittens": {
+            "alt": "Kätzchen im Weltraum teilen Pizza — Splittaa: teilen und entspannen"
+          },
+          "sloth": {
+            "alt": "Faultier nutzt Splittaa am Handy im Dschungel — hör auf dich zu verstecken, teile einfach"
+          }
+        }
+      }
     },
     "featuresSection": {
       "badge": "Funktionen",

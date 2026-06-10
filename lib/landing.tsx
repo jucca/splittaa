@@ -20,6 +20,17 @@ export type LandingStepKey = "step1" | "step2" | "step3";
 
 export type LandingTestimonialKey = "annikki" | "luigi" | "antti";
 
+export type LandingHeroSlideKey = "capybaras" | "kittens" | "sloth";
+
+export const LANDING_HERO_SLIDES: {
+  key: LandingHeroSlideKey;
+  src: string;
+}[] = [
+  { key: "capybaras", src: "/hero/capybaras.png" },
+  { key: "kittens", src: "/hero/kittens.png" },
+  { key: "sloth", src: "/hero/sloth.png" },
+];
+
 export const LANDING_FEATURES: {
   key: LandingFeatureKey;
   Icon: LucideIcon | (() => ReactElement);

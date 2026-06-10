@@ -67,7 +67,23 @@
       "subtitle": "Track shared expenses, split bills effortlessly, and settle up quickly. Stop worrying about who owes whom.",
       "ctaStart": "Get started",
       "ctaHowItWorks": "See how it works",
-      "heroImageAlt": "Splittaa app preview"
+      "heroImageAlt": "Splittaa app preview",
+      "carousel": {
+        "prevSlide": "Previous slide",
+        "nextSlide": "Next slide",
+        "goToSlide": "Go to slide",
+        "slides": {
+          "capybaras": {
+            "alt": "Capybaras at a restaurant — never be the one who grabs the bill again"
+          },
+          "kittens": {
+            "alt": "Kittens in space sharing pizza — Splittaa: split it, chill"
+          },
+          "sloth": {
+            "alt": "Sloth using Splittaa on a phone in the jungle — stop hiding, just split it"
+          }
+        }
+      }
     },
     "featuresSection": {
       "badge": "Features",

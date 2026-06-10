@@ -503,6 +503,7 @@
     "sendAllConfirm": "Send to all",
     "toastBulkSent": "{sent}/{total} debt requests sent",
     "toastBulkSkippedCooldown": "Skipped {count} — already sent in the last 24 hours",
+    "toastBulkSkippedNoDebt": "Skipped {count} — no open debt remaining",
     "toastBulkNoneSent": "No debt requests were sent"
   },
   "errors": {

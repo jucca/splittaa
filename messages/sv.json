@@ -503,6 +503,7 @@
     "sendAllConfirm": "Skicka till alla",
     "toastBulkSent": "{sent}/{total} betalningsbegäran skickade",
     "toastBulkSkippedCooldown": "{count} hoppades över — redan skickat senaste 24 timmarna",
+    "toastBulkSkippedNoDebt": "{count} hoppades över — ingen öppen skuld kvar",
     "toastBulkNoneSent": "Inga betalningsbegäran skickades"
   },
   "errors": {

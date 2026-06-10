@@ -503,6 +503,7 @@
     "sendAllConfirm": "全員に送信",
     "toastBulkSent": "{sent}/{total}件の借金リクエストを送信しました",
     "toastBulkSkippedCooldown": "{count}件スキップ — 過去24時間以内に送信済み",
+    "toastBulkSkippedNoDebt": "{count}件スキップ — 未払いの借金なし",
     "toastBulkNoneSent": "借金リクエストは送信されませんでした"
   },
   "errors": {

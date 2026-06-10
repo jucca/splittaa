@@ -124,8 +124,55 @@ describe("debtRequests", () => {
 
     const inboxB = await asB.query(api.notifications.listMyNotifications, {});
     const inboxC = await asC.query(api.notifications.listMyNotifications, {});
-    expect(inboxB.some((m) => m.type === "debt_request")).toBe(true);
-    expect(inboxC.some((m) => m.type === "debt_request")).toBe(true);
+    const debtB = inboxB.find((m) => m.type === "debt_request");
+    const debtC = inboxC.find((m) => m.type === "debt_request");
+    expect(debtB).toBeTruthy();
+    expect(debtC).toBeTruthy();
+    expect(debtB?.debtRequestAmount).toBe(20);
+    expect(debtC?.debtRequestAmount).toBe(30);
+  });
+
+  it("sendDebtRequestsBulk amounts match single-send", async () => {
+    const { asUser: asA, userId: userA } = await createTestUser(t, "match-a");
+    const { asUser: asB, userId: userB } = await createTestUser(t, "match-b");
+
+    await asA.mutation(api.expenses.createExpense, {
+      description: "Vertailu",
+      amount: 45.5,
+      date: Date.now(),
+      paidByUserId: userA,
+      splitType: "equal",
+      splits: [
+        { userId: userA, amount: 22.75, paid: true },
+        { userId: userB, amount: 22.75, paid: false },
+      ],
+    });
+
+    const single = await asA.mutation(api.debtRequests.sendDebtRequest, {
+      debtorUserId: userB,
+    });
+
+    const { asUser: asC, userId: userC } = await createTestUser(t, "match-c");
+    await asA.mutation(api.expenses.createExpense, {
+      description: "Toinen",
+      amount: 10,
+      date: Date.now(),
+      paidByUserId: userA,
+      splitType: "equal",
+      splits: [
+        { userId: userA, amount: 5, paid: true },
+        { userId: userC, amount: 5, paid: false },
+      ],
+    });
+
+    const bulk = await asA.mutation(api.debtRequests.sendDebtRequestsBulk, {});
+    expect(bulk.sent).toBe(1);
+    expect(bulk.skippedCooldown).toBe(1);
+
+    const inboxC = await asC.query(api.notifications.listMyNotifications, {});
+    const bulkDebt = inboxC.find((m) => m.type === "debt_request");
+    expect(bulkDebt?.debtRequestAmount).toBe(5);
+    expect(single.amount).toBe(22.75);
   });
 
   it("enforces cooldown for repeated requests same day", async () => {

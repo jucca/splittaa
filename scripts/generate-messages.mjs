@@ -520,6 +520,8 @@ const fi = {
     toastBulkSent: "{sent}/{total} velkapyyntöä lähetetty",
     toastBulkSkippedCooldown:
       "{count} henkilölle lähetetty jo viimeisen 24 h aikana — ohitettu",
+    toastBulkSkippedNoDebt:
+      "{count} henkilöllä ei ollut enää avointa velkaa — ohitettu",
     toastBulkNoneSent: "Yhtään velkapyyntöä ei lähetetty",
   },
   errors: {

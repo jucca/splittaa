@@ -82,10 +82,12 @@ export const sendDebtRequestsBulk = mutation({
     for (const [counterpartyId, owed] of ledger) {
       if (owed >= -0.005) continue;
 
+      const amount = Math.round(Math.abs(owed) * 100) / 100;
       const result = await sendDebtRequestForCreditor(ctx, creditor, {
         debtorUserId: counterpartyId,
         message: args.message,
         skipCooldown: true,
+        resolvedAmount: { amount, currency: viewerCur },
       });
 
       if (result.status === "sent") {

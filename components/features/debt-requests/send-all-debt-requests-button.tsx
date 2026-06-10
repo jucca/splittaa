@@ -50,11 +50,14 @@ export function SendAllDebtRequestsButton({
         message: message.trim() || undefined,
       });
 
+      const totalAttempted =
+        result.sent + result.skippedCooldown + result.skippedNoDebt;
+
       if (result.sent > 0) {
         toast.success(
           t("toastBulkSent", {
             sent: result.sent,
-            total: debtors.length,
+            total: totalAttempted,
           })
         );
       }
@@ -65,7 +68,17 @@ export function SendAllDebtRequestsButton({
         );
       }
 
-      if (result.sent === 0 && result.skippedCooldown === 0) {
+      if (result.skippedNoDebt > 0) {
+        toast.info(
+          t("toastBulkSkippedNoDebt", { count: result.skippedNoDebt })
+        );
+      }
+
+      if (
+        result.sent === 0 &&
+        result.skippedCooldown === 0 &&
+        result.skippedNoDebt === 0
+      ) {
         toast.info(t("toastBulkNoneSent"));
       }
 

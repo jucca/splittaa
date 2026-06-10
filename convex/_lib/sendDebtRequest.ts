@@ -8,6 +8,7 @@ import {
   getAmountDebtorOwesCreditor,
   isDebtRequestOnCooldown,
 } from "./debtRequests";
+import type { SupportedCurrencyCode } from "./currencies";
 import { deliverDebtRequestNotification } from "./notifications";
 import { getSiteUrlFromEnv } from "./invites";
 
@@ -25,6 +26,7 @@ export async function sendDebtRequestForCreditor(
     groupId?: Id<"groups">;
     message?: string;
     skipCooldown?: boolean;
+    resolvedAmount?: { amount: number; currency: SupportedCurrencyCode };
   }
 ): Promise<SendDebtRequestResult> {
   if (creditor._id === args.debtorUserId) {
@@ -39,13 +41,14 @@ export async function sendDebtRequestForCreditor(
     return { status: "skipped", reason: "not_found" };
   }
 
-  const { amount, currency: amountCurrency } =
-    await getAmountDebtorOwesCreditor(
-      ctx,
-      creditor._id,
-      args.debtorUserId,
-      args.groupId
-    );
+  const { amount, currency: amountCurrency } = args.resolvedAmount
+    ? args.resolvedAmount
+    : await getAmountDebtorOwesCreditor(
+        ctx,
+        creditor._id,
+        args.debtorUserId,
+        args.groupId
+      );
 
   if (amount <= 0) {
     return { status: "skipped", reason: "no_debt" };

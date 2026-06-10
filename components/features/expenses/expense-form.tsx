@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -92,9 +92,21 @@ export function ExpenseForm({
   const [splits, setSplits] = useState<SplitRow[]>([]);
 
   const { data: currentUser } = useConvexQuery(api.users.me);
+  const currencyInitializedRef = useRef(false);
 
   const createExpense = useConvexMutation(api.expenses.createExpense);
   const categories = getAllCategories();
+
+  const getDefaultFormValues = (): ExpenseFormValues => ({
+    description: "",
+    amount: "",
+    category: "",
+    date: new Date(),
+    paidByUserId: currentUser?.id || "",
+    splitType: "equal",
+    groupId: undefined,
+    currency: resolveCurrency(currentUser?.preferredCurrency),
+  });
 
   const {
     register,
@@ -125,9 +137,9 @@ export function ExpenseForm({
     type === "individual" && participants.length === 1;
 
   useEffect(() => {
-    if (currentUser?.preferredCurrency) {
-      setValue("currency", resolveCurrency(currentUser.preferredCurrency));
-    }
+    if (!currentUser || currencyInitializedRef.current) return;
+    currencyInitializedRef.current = true;
+    setValue("currency", resolveCurrency(currentUser.preferredCurrency));
   }, [currentUser, setValue]);
 
   useEffect(() => {
@@ -192,7 +204,7 @@ export function ExpenseForm({
       });
 
       toast.success(t("toastCreated"));
-      reset();
+      reset(getDefaultFormValues());
 
       const otherParticipant = participants.find(
         (p) => p.id !== currentUser?.id

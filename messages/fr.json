@@ -503,6 +503,7 @@
     "sendAllConfirm": "Envoyer à tous",
     "toastBulkSent": "{sent}/{total} demandes de paiement envoyées",
     "toastBulkSkippedCooldown": "{count} ignorées — déjà envoyé dans les dernières 24 heures",
+    "toastBulkSkippedNoDebt": "{count} ignorées — plus de dette ouverte",
     "toastBulkNoneSent": "Aucune demande de paiement envoyée"
   },
   "errors": {

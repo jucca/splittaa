@@ -503,6 +503,7 @@
     "sendAllConfirm": "An alle senden",
     "toastBulkSent": "{sent}/{total} Zahlungsanfragen gesendet",
     "toastBulkSkippedCooldown": "{count} übersprungen — bereits in den letzten 24 Stunden gesendet",
+    "toastBulkSkippedNoDebt": "{count} übersprungen — keine offene Schuld mehr",
     "toastBulkNoneSent": "Keine Zahlungsanfragen gesendet"
   },
   "errors": {

@@ -262,6 +262,7 @@
       "descriptionLabel": "説明",
       "descriptionPlaceholder": "ランチ、映画チケットなど",
       "amountLabel": "金額",
+      "currencyHint": "支出額は選択した通貨で記録されます。",
       "categoryLabel": "カテゴリ",
       "dateLabel": "日付",
       "datePlaceholder": "日付を選択",
@@ -495,7 +496,14 @@
     "messagePlaceholder": "例: 週末旅行の分をお支払いください",
     "sendRequest": "リクエストを送信",
     "toastSent": "{debtorName}に借金リクエストを送信しました",
-    "toastSendFailed": "送信に失敗しました"
+    "toastSendFailed": "送信に失敗しました",
+    "sendAllButton": "全員に送信 ({count})",
+    "bulkDialogTitle": "全員に借金リクエストを送信",
+    "bulkDialogDescription": "残高サマリーの{count}人に個人の借金リクエストを送信します。同じメッセージが各リクエストに添付されます。",
+    "sendAllConfirm": "全員に送信",
+    "toastBulkSent": "{sent}/{total}件の借金リクエストを送信しました",
+    "toastBulkSkippedCooldown": "{count}件スキップ — 過去24時間以内に送信済み",
+    "toastBulkNoneSent": "借金リクエストは送信されませんでした"
   },
   "errors": {
     "FORBIDDEN": "この操作の権限がありません",

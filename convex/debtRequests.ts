@@ -1,25 +1,18 @@
 import { ConvexError, v } from "convex/values";
 import { mutation } from "./_generated/server";
 import { requireAuth } from "./_lib/auth";
-import {
-  assertDebtRequestCooldown,
-  debtRequestDedupeKey,
-  getAmountDebtorOwesCreditor,
-} from "./_lib/debtRequests";
-import {
-  deliverDebtRequestNotification,
-  deliverDebtRequestPaidNotification,
-} from "./_lib/notifications";
+import { getAmountDebtorOwesCreditor } from "./_lib/debtRequests";
+import { sendDebtRequestForCreditor } from "./_lib/sendDebtRequest";
+import { deliverDebtRequestPaidNotification } from "./_lib/notifications";
+import { normalizeBalanceSettings } from "./_lib/balanceSettings";
+import { computeGlobalBalanceByCounterparty } from "./_lib/globalBalance";
+import { viewerCurrency } from "./_lib/moneyDisplay";
 import {
   applySettlementToBalances,
   listBalancesBetweenUsers,
 } from "./_lib/balances";
 import { resolveCurrency, type SupportedCurrencyCode } from "./_lib/currencies";
 import { convertWithStoredRates } from "./_lib/exchange";
-import { getSiteUrlFromEnv } from "./_lib/invites";
-import { internal } from "./_generated/api";
-const MAX_MESSAGE_LENGTH = 500;
-
 export const sendDebtRequest = mutation({
   args: {
     debtorUserId: v.id("users"),
@@ -29,84 +22,82 @@ export const sendDebtRequest = mutation({
   handler: async (ctx, args) => {
     const creditor = await requireAuth(ctx);
 
-    if (creditor._id === args.debtorUserId) {
-      throw new ConvexError({
-        code: "INVALID_STATE",
-        message: "Et voi lähettää velkapyyntöä itsellesi",
-      });
-    }
-
-    const debtor = await ctx.db.get(args.debtorUserId);
-    if (!debtor) {
-      throw new ConvexError({
-        code: "NOT_FOUND",
-        message: "Velallista ei löytynyt",
-      });
-    }
-
-    const { amount, currency: amountCurrency } =
-      await getAmountDebtorOwesCreditor(
-        ctx,
-        creditor._id,
-        args.debtorUserId,
-        args.groupId
-      );
-
-    if (amount <= 0) {
-      throw new ConvexError({
-        code: "INVALID_STATE",
-        message: "Tällä hetkellä ei ole avointa velkaa, jota voisi pyytää",
-      });
-    }
-
-    const now = Date.now();
-    const dedupeKey = debtRequestDedupeKey(
-      creditor._id,
-      args.debtorUserId,
-      args.groupId,
-      now
-    );
-    await assertDebtRequestCooldown(ctx, args.debtorUserId, dedupeKey);
-
-    const message = args.message?.trim().slice(0, MAX_MESSAGE_LENGTH);
-    let groupName: string | undefined;
-    let href: string;
-
-    if (args.groupId) {
-      const group = await ctx.db.get(args.groupId);
-      groupName = group?.name;
-      href = `/groups/${args.groupId}`;
-    } else {
-      href = `/person/${creditor._id}`;
-    }
-
-    await deliverDebtRequestNotification(ctx, {
+    const result = await sendDebtRequestForCreditor(ctx, creditor, {
       debtorUserId: args.debtorUserId,
-      creditorId: creditor._id,
-      creditorName: creditor.name,
-      amount,
-      amountCurrency,
-      href,
-      dedupeKey,
-      message,
-      groupName,
       groupId: args.groupId,
+      message: args.message,
     });
 
-    const siteUrl = getSiteUrlFromEnv();
-    if (debtor.email) {
-      await ctx.scheduler.runAfter(0, internal.email.sendDebtRequestEmail, {
-        to: debtor.email,
-        debtorName: debtor.name,
-        creditorName: creditor.name,
-        amount,
-        groupName: groupName ?? null,
-        message: message ?? null,
-        actionUrl: `${siteUrl}${href}`,
+    if (result.status === "skipped") {
+      if (result.reason === "not_found") {
+        throw new ConvexError({
+          code: "NOT_FOUND",
+          message: "Velallista ei löytynyt",
+        });
+      }
+      if (result.reason === "no_debt") {
+        throw new ConvexError({
+          code: "INVALID_STATE",
+          message: "Tällä hetkellä ei ole avointa velkaa, jota voisi pyytää",
+        });
+      }
+      throw new ConvexError({
+        code: "COOLDOWN",
+        message:
+          "Velkapyyntö on jo lähetetty tälle henkilölle viimeisen 24 tunnin aikana.",
       });
     }
 
-    return { success: true as const, amount };
+    return { success: true as const, amount: result.amount };
+  },
+});
+
+/** Send personal-scope debt requests to everyone who owes the creditor (Saldotiedot). */
+export const sendDebtRequestsBulk = mutation({
+  args: {
+    message: v.optional(v.string()),
+  },
+  returns: v.object({
+    sent: v.number(),
+    skippedCooldown: v.number(),
+    skippedNoDebt: v.number(),
+  }),
+  handler: async (ctx, args) => {
+    const creditor = await requireAuth(ctx);
+    const viewerCur = viewerCurrency(creditor);
+    const { autoNetBalances } = normalizeBalanceSettings(
+      creditor.balanceSettings ?? undefined
+    );
+    const ledger = await computeGlobalBalanceByCounterparty(
+      ctx,
+      creditor._id,
+      viewerCur,
+      autoNetBalances
+    );
+
+    let sent = 0;
+    let skippedCooldown = 0;
+    let skippedNoDebt = 0;
+
+    for (const [counterpartyId, owed] of ledger) {
+      if (owed >= -0.005) continue;
+
+      const result = await sendDebtRequestForCreditor(ctx, creditor, {
+        debtorUserId: counterpartyId,
+        message: args.message,
+        skipCooldown: true,
+      });
+
+      if (result.status === "sent") {
+        sent += 1;
+      } else if (result.reason === "cooldown") {
+        skippedCooldown += 1;
+      } else if (result.reason === "no_debt") {
+        skippedNoDebt += 1;
+      }
+    }
+
+    return { sent, skippedCooldown, skippedNoDebt };
   },
 });
 

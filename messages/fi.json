@@ -14,7 +14,7 @@
     "dashboard": "Etusivu",
     "inbox": "Viestit",
     "inboxWithCount": "Viestit ({count})",
-    "activity": "Toiminta",
+    "activity": "Tapahtumat",
     "settings": "Asetukset",
     "signIn": "Kirjaudu",
     "getStarted": "Aloita"
@@ -262,6 +262,7 @@
       "descriptionLabel": "Kuvaus",
       "descriptionPlaceholder": "Lounas, elokuvaliput jne.",
       "amountLabel": "Summa",
+      "currencyHint": "Kulun summa kirjataan valitussa valuutassa.",
       "categoryLabel": "Kategoria",
       "dateLabel": "Päivämäärä",
       "datePlaceholder": "Valitse päivämäärä",
@@ -373,11 +374,11 @@
     }
   },
   "activity": {
-    "pageTitle": "Toiminta",
+    "pageTitle": "Tapahtumat",
     "pageSubtitle": "Kulutusyhteenveto ja viimeisimmät tapahtumat — vain sinun osuutesi kaavioissa.",
     "recentEventsTitle": "Viimeisimmät tapahtumat",
-    "feedAria": "Viimeaikainen toiminta",
-    "feedEmpty": "Ei viimeaikaista toimintaa. Lisää kulu tai tilitys nähdäksesi ne täällä.",
+    "feedAria": "Viimeaikaiset tapahtumat",
+    "feedEmpty": "Ei viimeaikaisia tapahtumia. Lisää kulu tai tilitys nähdäksesi ne täällä.",
     "charts": {
       "title": "Kulutusyhteenveto",
       "periodWeek": "Viikko",
@@ -495,7 +496,14 @@
     "messagePlaceholder": "Esim. Muistathan maksaa viikonloppureissun osuutesi",
     "sendRequest": "Lähetä pyyntö",
     "toastSent": "Velkapyyntö lähetetty käyttäjälle {debtorName}",
-    "toastSendFailed": "Lähetys epäonnistui"
+    "toastSendFailed": "Lähetys epäonnistui",
+    "sendAllButton": "Lähetä kaikille ({count})",
+    "bulkDialogTitle": "Lähetä velkapyynnöt kaikille",
+    "bulkDialogDescription": "Lähetät henkilökohtaisen velkapyynnön {count} henkilölle Saldotiedoissa. Sama viesti liitetään jokaiseen pyyntöön.",
+    "sendAllConfirm": "Lähetä kaikille",
+    "toastBulkSent": "{sent}/{total} velkapyyntöä lähetetty",
+    "toastBulkSkippedCooldown": "{count} henkilölle lähetetty jo viimeisen 24 h aikana — ohitettu",
+    "toastBulkNoneSent": "Yhtään velkapyyntöä ei lähetetty"
   },
   "errors": {
     "FORBIDDEN": "Ei oikeutta tähän toimintoon",

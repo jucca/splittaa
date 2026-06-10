@@ -15,17 +15,20 @@ export function SplitSelector({
   amount,
   participants,
   paidByUserId,
+  currencySymbol: currencySymbolProp,
   onSplitsChange,
 }: {
   type: SplitType;
   amount: number;
   participants: Participant[];
   paidByUserId: Id<"users"> | string;
+  currencySymbol?: string;
   onSplitsChange?: (splits: SplitRow[]) => void;
 }) {
   const t = useTranslations("expenses.form");
   const tShared = useTranslations("shared");
-  const { format, currencySymbol } = useMoney();
+  const { format, currencySymbol: defaultCurrencySymbol } = useMoney();
+  const currencySymbol = currencySymbolProp ?? defaultCurrencySymbol;
   const { user } = useUser();
   const [splits, setSplits] = useState<SplitRow[]>([]);
   const [totalPercentage, setTotalPercentage] = useState(0);

@@ -4,7 +4,7 @@ import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
 import { assertGroupMember } from "./_lib/authorize";
 import { validateSplits } from "./_lib/money";
-import { resolveCurrency } from "./_lib/currencies";
+import { isSupportedCurrency, resolveCurrency } from "./_lib/currencies";
 import { applyExpenseToBalances } from "./_lib/balances";
 import { normalizeBalanceSettings } from "./_lib/balanceSettings";
 import { computeGlobalNetBetweenUsers } from "./_lib/globalBalance";
@@ -27,6 +27,7 @@ export const createExpense = mutation({
       })
     ),
     groupId: v.optional(v.id("groups")),
+    currency: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     // Use centralized getCurrentUser function
@@ -43,7 +44,10 @@ export const createExpense = mutation({
       );
     }
 
-    const currency = resolveCurrency(user.preferredCurrency);
+    if (args.currency !== undefined && !isSupportedCurrency(args.currency)) {
+      throw new Error("Virheellinen valuutta");
+    }
+    const currency = resolveCurrency(args.currency ?? user.preferredCurrency);
 
     // Create the expense
     const expenseId = await ctx.db.insert("expenses", {

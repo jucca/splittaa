@@ -262,6 +262,7 @@
       "descriptionLabel": "Description",
       "descriptionPlaceholder": "Déjeuner, billets de cinéma, etc.",
       "amountLabel": "Montant",
+      "currencyHint": "Le montant de la dépense est enregistré dans la devise sélectionnée.",
       "categoryLabel": "Catégorie",
       "dateLabel": "Date",
       "datePlaceholder": "Sélectionner une date",
@@ -495,7 +496,14 @@
     "messagePlaceholder": "ex. Merci de payer votre part du voyage du week-end",
     "sendRequest": "Envoyer la demande",
     "toastSent": "Demande de paiement envoyée à {debtorName}",
-    "toastSendFailed": "Échec de l'envoi"
+    "toastSendFailed": "Échec de l'envoi",
+    "sendAllButton": "Envoyer à tous ({count})",
+    "bulkDialogTitle": "Envoyer des demandes de paiement à tous",
+    "bulkDialogDescription": "Envoyez une demande de paiement personnelle à {count} personnes dans votre résumé de solde. Le même message est joint à chaque demande.",
+    "sendAllConfirm": "Envoyer à tous",
+    "toastBulkSent": "{sent}/{total} demandes de paiement envoyées",
+    "toastBulkSkippedCooldown": "{count} ignorées — déjà envoyé dans les dernières 24 heures",
+    "toastBulkNoneSent": "Aucune demande de paiement envoyée"
   },
   "errors": {
     "FORBIDDEN": "Vous n'avez pas la permission pour cette action",

@@ -13,6 +13,7 @@ export const expenseFormSchema = z.object({
   paidByUserId: z.string().min(1, "Maksaja on pakollinen"),
   splitType: z.enum(["equal", "percentage", "exact"]),
   groupId: z.string().optional(),
+  currency: z.string().optional(),
 });
 
 export type ExpenseFormValues = z.infer<typeof expenseFormSchema>;

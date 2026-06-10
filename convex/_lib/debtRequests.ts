@@ -75,11 +75,11 @@ export function debtRequestDedupeKey(
   return `debt_request:${creditorId}:${debtorId}:${scope}:${day}`;
 }
 
-export async function assertDebtRequestCooldown(
+export async function isDebtRequestOnCooldown(
   ctx: MutationCtx,
   debtorId: Id<"users">,
   dedupeKey: string
-): Promise<void> {
+): Promise<boolean> {
   const existing = await ctx.db
     .query("notifications")
     .withIndex("by_user_dedupe", (q) =>
@@ -87,7 +87,15 @@ export async function assertDebtRequestCooldown(
     )
     .first();
 
-  if (existing && Date.now() - existing.createdAt < COOLDOWN_MS) {
+  return !!(existing && Date.now() - existing.createdAt < COOLDOWN_MS);
+}
+
+export async function assertDebtRequestCooldown(
+  ctx: MutationCtx,
+  debtorId: Id<"users">,
+  dedupeKey: string
+): Promise<void> {
+  if (await isDebtRequestOnCooldown(ctx, debtorId, dedupeKey)) {
     throw new ConvexError({
       code: "COOLDOWN",
       message:

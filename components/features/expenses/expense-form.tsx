@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { ParticipantSelector } from "./participant-selector";
 import { GroupSelector } from "./group-selector";
 import { CategorySelector } from "./category-selector";
+import { CurrencySelector } from "./currency-selector";
 import { SplitSelector } from "./split-selector";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -23,8 +24,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { useMoney } from "@/components/providers/money-format-provider";
 import { CalendarIcon } from "lucide-react";
+import {
+  getCurrencyDefinition,
+  resolveCurrency,
+  SUPPORTED_CURRENCY_CODES,
+  type CurrencyCode,
+} from "@/lib/money/currencies";
 import { getAllCategories } from "@/lib/expense-categories";
 import type { Participant, SplitRow, SplitType } from "@/lib/types/domain";
 import type { Id } from "@/convex/_generated/dataModel";
@@ -41,6 +47,7 @@ type ExpenseFormValues = {
   paidByUserId: string;
   splitType: SplitType;
   groupId?: string;
+  currency: CurrencyCode;
 };
 
 export function ExpenseForm({
@@ -52,7 +59,6 @@ export function ExpenseForm({
 }) {
   const t = useTranslations("expenses.form");
   const tGroups = useTranslations("groups");
-  const { currencySymbol } = useMoney();
   const tShared = useTranslations("shared");
   const locale = resolveLocale(useLocale());
   const dateFnsLocale = useDateFnsLocale();
@@ -72,6 +78,7 @@ export function ExpenseForm({
         paidByUserId: z.string().min(1, t("validationPayerRequired")),
         splitType: z.enum(["equal", "percentage", "exact"]),
         groupId: z.string().optional(),
+        currency: z.enum(SUPPORTED_CURRENCY_CODES),
       }),
     [t]
   );
@@ -106,13 +113,22 @@ export function ExpenseForm({
       paidByUserId: currentUser?.id || "",
       splitType: "equal",
       groupId: undefined,
+      currency: "EUR",
     },
   });
 
   const amountValue = watch("amount");
   const paidByUserId = watch("paidByUserId");
+  const selectedCurrency = resolveCurrency(watch("currency"));
+  const expenseCurrency = getCurrencyDefinition(selectedCurrency);
   const isSoloExpense =
     type === "individual" && participants.length === 1;
+
+  useEffect(() => {
+    if (currentUser?.preferredCurrency) {
+      setValue("currency", resolveCurrency(currentUser.preferredCurrency));
+    }
+  }, [currentUser, setValue]);
 
   useEffect(() => {
     if (participants.length === 0 && currentUser) {
@@ -172,6 +188,7 @@ export function ExpenseForm({
         splitType: data.splitType,
         splits: formattedSplits,
         groupId,
+        currency: selectedCurrency,
       });
 
       toast.success(t("toastCreated"));
@@ -220,20 +237,31 @@ export function ExpenseForm({
 
           <div className="space-y-2">
             <Label htmlFor="amount">{t("amountLabel")}</Label>
-            <div className="relative">
-              <span className="absolute left-3 top-2.5 text-muted-foreground">
-                {currencySymbol}
-              </span>
-              <Input
-                id="amount"
-                placeholder="0.00"
-                type="number"
-                step="0.01"
-                min="0.01"
-                className="pl-8"
-                {...register("amount")}
-              />
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <span className="absolute left-3 top-2.5 text-muted-foreground">
+                  {expenseCurrency.symbol}
+                </span>
+                <Input
+                  id="amount"
+                  placeholder={
+                    expenseCurrency.fractionDigits === 0 ? "0" : "0.00"
+                  }
+                  type="number"
+                  step={expenseCurrency.fractionDigits === 0 ? "1" : "0.01"}
+                  min={expenseCurrency.fractionDigits === 0 ? "1" : "0.01"}
+                  className="pl-8"
+                  {...register("amount")}
+                />
+              </div>
+              <div className="w-[9.5rem] shrink-0">
+                <CurrencySelector
+                  value={selectedCurrency}
+                  onChange={(currency) => setValue("currency", currency)}
+                />
+              </div>
             </div>
+            <p className="text-xs text-muted-foreground">{t("currencyHint")}</p>
             {errors.amount && (
               <p className="text-sm text-red-500">{errors.amount.message}</p>
             )}
@@ -372,6 +400,7 @@ export function ExpenseForm({
                   amount={parseFloat(amountValue) || 0}
                   participants={participants}
                   paidByUserId={paidByUserId}
+                  currencySymbol={expenseCurrency.symbol}
                   onSplitsChange={setSplits}
                 />
               </TabsContent>
@@ -384,6 +413,7 @@ export function ExpenseForm({
                   amount={parseFloat(amountValue) || 0}
                   participants={participants}
                   paidByUserId={paidByUserId}
+                  currencySymbol={expenseCurrency.symbol}
                   onSplitsChange={setSplits}
                 />
               </TabsContent>
@@ -396,6 +426,7 @@ export function ExpenseForm({
                   amount={parseFloat(amountValue) || 0}
                   participants={participants}
                   paidByUserId={paidByUserId}
+                  currencySymbol={expenseCurrency.symbol}
                   onSplitsChange={setSplits}
                 />
               </TabsContent>

@@ -262,6 +262,7 @@
       "descriptionLabel": "Beskrivning",
       "descriptionPlaceholder": "Lunch, biobiljetter osv.",
       "amountLabel": "Belopp",
+      "currencyHint": "Utgiftsbeloppet registreras i vald valuta.",
       "categoryLabel": "Kategori",
       "dateLabel": "Datum",
       "datePlaceholder": "Välj datum",
@@ -495,7 +496,14 @@
     "messagePlaceholder": "t.ex. Betala din andel av helgresan",
     "sendRequest": "Skicka begäran",
     "toastSent": "Betalningsbegäran skickad till {debtorName}",
-    "toastSendFailed": "Sändning misslyckades"
+    "toastSendFailed": "Sändning misslyckades",
+    "sendAllButton": "Skicka till alla ({count})",
+    "bulkDialogTitle": "Skicka betalningsbegäran till alla",
+    "bulkDialogDescription": "Skicka en personlig betalningsbegäran till {count} personer i saldoöversikten. Samma meddelande bifogas varje begäran.",
+    "sendAllConfirm": "Skicka till alla",
+    "toastBulkSent": "{sent}/{total} betalningsbegäran skickade",
+    "toastBulkSkippedCooldown": "{count} hoppades över — redan skickat senaste 24 timmarna",
+    "toastBulkNoneSent": "Inga betalningsbegäran skickades"
   },
   "errors": {
     "FORBIDDEN": "Du har inte behörighet för den här åtgärden",

@@ -40,6 +40,26 @@ describe("expenses", () => {
     }
   });
 
+  it("stores expense in requested currency", async () => {
+    const { asUser, userId } = await createTestUser(t, "fx-user");
+
+    await asUser.mutation(api.expenses.createExpense, {
+      description: "USD lunch",
+      amount: 25,
+      currency: "USD",
+      date: Date.now(),
+      paidByUserId: userId,
+      splitType: "equal",
+      splits: [{ userId, amount: 25, paid: true }],
+    });
+
+    const stored = await t.run(async (ctx) => {
+      const rows = await ctx.db.query("expenses").collect();
+      return rows.find((row) => row.description === "USD lunch");
+    });
+    expect(stored?.currency).toBe("USD");
+  });
+
   it("rejects expense when splits do not sum to total", async () => {
     const { asUser, userId } = await createTestUser(t, "dave");
 

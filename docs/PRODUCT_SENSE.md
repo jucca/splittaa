@@ -25,12 +25,12 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 **Goal:** Record who paid and how cost is split.
 
 1. Open **Uusi kulutus** (`/expenses/new`).
-2. Enter description, amount, category, date.
+2. Enter description, amount (with currency — defaults to your preferred currency from settings), category, date.
 3. Choose participants (search users or pick from group).
 4. Configure split (equal, exact amounts, percentages — per `split-selector`).
 5. Submit → Convex creates expense + participant rows → balances update.
 
-**Success:** All participants see updated balances on dashboard and group/person views.  
+**Success:** Expense is saved; user returns to **dashboard**. Balances update on dashboard and on group/person views when navigated there.  
 **Failure modes:** Split does not sum to total; user not in group; unauthenticated.
 
 ---
@@ -43,7 +43,7 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 1. From dashboard, group, or person view — open settlement flow (`/settlements/[type]/[id]`).
 2. Confirm counterparty and amount (defaults from current balance).
 3. Submit settlement mutation.
-4. If you are owed money, you may send a **velkapyyntö** (debt request) from the person view, dashboard balance list, or group balances — distinct from the automated email reminder in settings.
+4. If you are owed money, you may send a **velkapyyntö** (debt request) from the person view, dashboard balance list (per person or **Lähetä kaikille** for all in Saldotiedot), or group balances — distinct from the automated email reminder in settings.
 
 **Success:** Net balance between parties decreases; settlement appears in history.  
 **Human-sensitive:** Wrong party or amount erodes trust — CODEOWNERS on `convex/settlements/`.
@@ -86,12 +86,12 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 
 ---
 
-## 5. Activity feed (`/toiminta`)
+## 5. Events feed (`/toiminta`)
 
 **Actor:** Signed-in user  
 **Goal:** Review spending summary and recent money movements.
 
-1. Open **Toiminta** from the header (separate from dashboard).
+1. Open **Tapahtumat** from the header (separate from dashboard).
 2. At the top: **Kulutusyhteenveto** — toggle **Viikko | Kuukausi | Vuosi**; bar chart (spending over time) and category donut; totals use **only the user’s split share** (not whole group bills).
 3. Below: **Viimeisimmät tapahtumat** — expenses and settlements involving the user, newest first.
 4. Each row shows amount, description, context (group or person), and link to detail.

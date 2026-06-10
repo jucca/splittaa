@@ -1,6 +1,6 @@
 # Splittaa
 
-Finnish expense-splitting app (Splitwise-style): shared expenses, groups, settlements, and contacts. Made during the summer trainee hackathon.
+Finnish expense-splitting app for shared expenses, groups, settlements, and contacts. Made during the [DNA's](https://www.dna.fi) summer trainee hackathon 2026. 
 
 **Stack:** Next.js 15 · React 19 · Convex · Clerk · Tailwind / shadcn · Inngest
 

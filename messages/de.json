@@ -262,6 +262,7 @@
       "descriptionLabel": "Beschreibung",
       "descriptionPlaceholder": "Mittagessen, Kinokarten usw.",
       "amountLabel": "Betrag",
+      "currencyHint": "Der Ausgabenbetrag wird in der gewählten Währung erfasst.",
       "categoryLabel": "Kategorie",
       "dateLabel": "Datum",
       "datePlaceholder": "Datum auswählen",
@@ -495,7 +496,14 @@
     "messagePlaceholder": "z. B. Bitte zahle deinen Anteil am Wochenendtrip",
     "sendRequest": "Anfrage senden",
     "toastSent": "Zahlungsanfrage an {debtorName} gesendet",
-    "toastSendFailed": "Senden fehlgeschlagen"
+    "toastSendFailed": "Senden fehlgeschlagen",
+    "sendAllButton": "An alle senden ({count})",
+    "bulkDialogTitle": "Zahlungsanfragen an alle senden",
+    "bulkDialogDescription": "Sende eine persönliche Zahlungsanfrage an {count} Personen in deiner Saldoübersicht. Dieselbe Nachricht wird jeder Anfrage beigefügt.",
+    "sendAllConfirm": "An alle senden",
+    "toastBulkSent": "{sent}/{total} Zahlungsanfragen gesendet",
+    "toastBulkSkippedCooldown": "{count} übersprungen — bereits in den letzten 24 Stunden gesendet",
+    "toastBulkNoneSent": "Keine Zahlungsanfragen gesendet"
   },
   "errors": {
     "FORBIDDEN": "Du hast keine Berechtigung für diese Aktion",

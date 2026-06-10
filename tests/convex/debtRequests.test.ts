@@ -94,6 +94,40 @@ describe("debtRequests", () => {
     expect(responded?.canMarkPaid).toBe(false);
   });
 
+  it("sendDebtRequestsBulk sends to all personal debtors", async () => {
+    const { asUser: asA, userId: userA } = await createTestUser(t, "bulk-a");
+    const { asUser: asB, userId: userB } = await createTestUser(t, "bulk-b");
+    const { asUser: asC, userId: userC } = await createTestUser(t, "bulk-c");
+
+    for (const [debtor, amount] of [
+      [userB, 20],
+      [userC, 30],
+    ] as const) {
+      await asA.mutation(api.expenses.createExpense, {
+        description: "Jaettu",
+        amount: amount * 2,
+        date: Date.now(),
+        paidByUserId: userA,
+        splitType: "equal",
+        splits: [
+          { userId: userA, amount, paid: true },
+          { userId: debtor, amount, paid: false },
+        ],
+      });
+    }
+
+    const result = await asA.mutation(api.debtRequests.sendDebtRequestsBulk, {
+      message: "Muistutus",
+    });
+    expect(result.sent).toBe(2);
+    expect(result.skippedCooldown).toBe(0);
+
+    const inboxB = await asB.query(api.notifications.listMyNotifications, {});
+    const inboxC = await asC.query(api.notifications.listMyNotifications, {});
+    expect(inboxB.some((m) => m.type === "debt_request")).toBe(true);
+    expect(inboxC.some((m) => m.type === "debt_request")).toBe(true);
+  });
+
   it("enforces cooldown for repeated requests same day", async () => {
     const { asUser: asA, userId: userA } = await createTestUser(t, "repeat-a");
     const { userId: userB } = await createTestUser(t, "repeat-b");

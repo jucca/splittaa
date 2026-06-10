@@ -93,6 +93,7 @@ Configured in `next.config.ts` (Phase 3):
 | `notifications.markAsRead` | mutation | `requireAuth` | Owner only | |
 | `notifications.markAllAsRead` | mutation | `requireAuth` | Self only | |
 | `debtRequests.sendDebtRequest` | mutation | `requireAuth` | Creditor only; verified open debt | Inbox + email to debtor; 24h cooldown per pair/scope |
+| `debtRequests.sendDebtRequestsBulk` | mutation | `requireAuth` | Creditor only; personal-scope debtors from global balance | Same as single send; skips cooldown/no-debt per person |
 | `debtRequests.respondToDebtRequest` | mutation | `requireAuth` | Debtor only; creates settlement | Marks request handled; notifies creditor |
 | `expenses.getExpensesBetweenUsers` | query | `requireAuth` | Counterparty filter | Rejects self |
 | `expenses.createExpense` | mutation | `requireAuth` | Group member if `groupId` | See participant gap |

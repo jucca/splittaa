@@ -20,7 +20,7 @@ const fi = {
     dashboard: "Etusivu",
     inbox: "Viestit",
     inboxWithCount: "Viestit ({count})",
-    activity: "Toiminta",
+    activity: "Tapahtumat",
     settings: "Asetukset",
     signIn: "Kirjaudu",
     getStarted: "Aloita",
@@ -287,6 +287,7 @@ const fi = {
       descriptionLabel: "Kuvaus",
       descriptionPlaceholder: "Lounas, elokuvaliput jne.",
       amountLabel: "Summa",
+      currencyHint: "Kulun summa kirjataan valitussa valuutassa.",
       categoryLabel: "Kategoria",
       dateLabel: "Päivämäärä",
       datePlaceholder: "Valitse päivämäärä",
@@ -401,13 +402,13 @@ const fi = {
     },
   },
   activity: {
-    pageTitle: "Toiminta",
+    pageTitle: "Tapahtumat",
     pageSubtitle:
       "Kulutusyhteenveto ja viimeisimmät tapahtumat — vain sinun osuutesi kaavioissa.",
     recentEventsTitle: "Viimeisimmät tapahtumat",
-    feedAria: "Viimeaikainen toiminta",
+    feedAria: "Viimeaikaiset tapahtumat",
     feedEmpty:
-      "Ei viimeaikaista toimintaa. Lisää kulu tai tilitys nähdäksesi ne täällä.",
+      "Ei viimeaikaisia tapahtumia. Lisää kulu tai tilitys nähdäksesi ne täällä.",
     charts: {
       title: "Kulutusyhteenveto",
       periodWeek: "Viikko",
@@ -511,6 +512,15 @@ const fi = {
     sendRequest: "Lähetä pyyntö",
     toastSent: "Velkapyyntö lähetetty käyttäjälle {debtorName}",
     toastSendFailed: "Lähetys epäonnistui",
+    sendAllButton: "Lähetä kaikille ({count})",
+    bulkDialogTitle: "Lähetä velkapyynnöt kaikille",
+    bulkDialogDescription:
+      "Lähetät henkilökohtaisen velkapyynnön {count} henkilölle Saldotiedoissa. Sama viesti liitetään jokaiseen pyyntöön.",
+    sendAllConfirm: "Lähetä kaikille",
+    toastBulkSent: "{sent}/{total} velkapyyntöä lähetetty",
+    toastBulkSkippedCooldown:
+      "{count} henkilölle lähetetty jo viimeisen 24 h aikana — ohitettu",
+    toastBulkNoneSent: "Yhtään velkapyyntöä ei lähetetty",
   },
   errors: {
     FORBIDDEN: "Ei oikeutta tähän toimintoon",
@@ -566,7 +576,7 @@ const phraseMap = {
   Etusivu: "Dashboard",
   Viestit: "Inbox",
   "Viestit ({count})": "Inbox ({count})",
-  Toiminta: "Activity",
+  Tapahtumat: "Activity",
   Asetukset: "Settings",
   Kirjaudu: "Sign in",
   Aloita: "Get started",
@@ -832,9 +842,9 @@ const phraseMap = {
   "Kulutusyhteenveto ja viimeisimmät tapahtumat — vain sinun osuutesi kaavioissa.":
     "Spending summary and recent events — only your share in charts.",
   "Viimeisimmät tapahtumat": "Recent events",
-  "Viimeaikainen toiminta": "Recent activity",
-  "Ei viimeaikaista toimintaa. Lisää kulu tai tilitys nähdäksesi ne täällä.":
-    "No recent activity. Add an expense or settlement to see it here.",
+  "Viimeaikaiset tapahtumat": "Recent events",
+  "Ei viimeaikaisia tapahtumia. Lisää kulu tai tilitys nähdäksesi ne täällä.":
+    "No recent events. Add an expense or settlement to see it here.",
   Kulutusyhteenveto: "Spending summary",
   Viikko: "Week",
   Kuukausi: "Month",

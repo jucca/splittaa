@@ -25,6 +25,7 @@ import type * as _lib_moneyDisplay from "../_lib/moneyDisplay.js";
 import type * as _lib_notifications from "../_lib/notifications.js";
 import type * as _lib_personal from "../_lib/personal.js";
 import type * as _lib_reminderSettings from "../_lib/reminderSettings.js";
+import type * as _lib_sendDebtRequest from "../_lib/sendDebtRequest.js";
 import type * as _lib_spending from "../_lib/spending.js";
 import type * as _lib_usernames from "../_lib/usernames.js";
 import type * as activity from "../activity.js";
@@ -70,6 +71,7 @@ declare const fullApi: ApiFromModules<{
   "_lib/notifications": typeof _lib_notifications;
   "_lib/personal": typeof _lib_personal;
   "_lib/reminderSettings": typeof _lib_reminderSettings;
+  "_lib/sendDebtRequest": typeof _lib_sendDebtRequest;
   "_lib/spending": typeof _lib_spending;
   "_lib/usernames": typeof _lib_usernames;
   activity: typeof activity;

@@ -67,7 +67,23 @@
       "subtitle": "共有の支出を追跡し、請求を簡単に分割して、すぐに精算。誰が誰にいくら借りているか心配する必要はありません。",
       "ctaStart": "始める",
       "ctaHowItWorks": "使い方を見る",
-      "heroImageAlt": "Splittaaアプリのプレビュー"
+      "heroImageAlt": "Splittaaアプリのプレビュー",
+      "carousel": {
+        "prevSlide": "前のスライド",
+        "nextSlide": "次のスライド",
+        "goToSlide": "スライドへ移動",
+        "slides": {
+          "capybaras": {
+            "alt": "レストランのカピバラ — もう請求書を取る人にならない"
+          },
+          "kittens": {
+            "alt": "宇宙でピザを分ける子猫たち — Splittaa：分けて、リラックス"
+          },
+          "sloth": {
+            "alt": "ジャングルでSplittaaを使うナマケモノ — 隠れないで、割り勘しよう"
+          }
+        }
+      }
     },
     "featuresSection": {
       "badge": "機能",

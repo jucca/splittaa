@@ -67,7 +67,23 @@
       "subtitle": "Controla los gastos compartidos, divide facturas sin esfuerzo y liquida rápidamente. Deja de preocuparte por quién le debe a quién.",
       "ctaStart": "Empezar",
       "ctaHowItWorks": "Ver cómo funciona",
-      "heroImageAlt": "Vista previa de la app Splittaa"
+      "heroImageAlt": "Vista previa de la app Splittaa",
+      "carousel": {
+        "prevSlide": "Diapositiva anterior",
+        "nextSlide": "Diapositiva siguiente",
+        "goToSlide": "Ir a la diapositiva",
+        "slides": {
+          "capybaras": {
+            "alt": "Capibaras en un restaurante — no seas quien pague la cuenta otra vez"
+          },
+          "kittens": {
+            "alt": "Gatitos en el espacio compartiendo pizza — Splittaa: divídelo y relájate"
+          },
+          "sloth": {
+            "alt": "Perezoso usando Splittaa en el móvil en la jungla — deja de esconderte, divide los gastos"
+          }
+        }
+      }
     },
     "featuresSection": {
       "badge": "Funciones",

@@ -5,9 +5,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import { HeroCarousel } from "@/components/features/landing/hero-carousel";
 import {
   LANDING_FEATURES,
+  LANDING_HERO_SLIDES,
   LANDING_STEPS,
   LANDING_TESTIMONIALS,
 } from "@/lib/landing";
@@ -15,6 +16,10 @@ import {
 export default async function LandingPage() {
   const t = await getTranslations("landing");
   const year = new Date().getFullYear();
+  const heroSlides = LANDING_HERO_SLIDES.map(({ key, src }) => ({
+    src,
+    alt: t(`hero.carousel.slides.${key}.alt`),
+  }));
 
   return (
     <div className="flex flex-col pt-16">
@@ -54,16 +59,13 @@ export default async function LandingPage() {
           </div>
         </div>
 
-        <div className="container mx-auto max-w-5xl overflow-hidden rounded-xl shadow-xl">
-          <div
-            className="gradient p-1 aspect-[16/9] rounded-lg flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-teal-50"
-            role="img"
-            aria-label={t("hero.heroImageAlt")}
-          >
-            <p className="text-center text-muted-foreground px-8 md:text-lg max-w-xl">
-              {t("hero.subtitle")}
-            </p>
-          </div>
+        <div className="container mx-auto max-w-3xl overflow-hidden rounded-xl shadow-xl">
+          <HeroCarousel
+            slides={heroSlides}
+            prevLabel={t("hero.carousel.prevSlide")}
+            nextLabel={t("hero.carousel.nextSlide")}
+            goToSlideLabel={t("hero.carousel.goToSlide")}
+          />
         </div>
       </section>
 

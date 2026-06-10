@@ -67,7 +67,23 @@
       "subtitle": "Suivez les dépenses communes, partagez les factures sans effort et réglez les comptes rapidement. Ne vous souciez plus de savoir qui doit quoi à qui.",
       "ctaStart": "Commencer",
       "ctaHowItWorks": "Voir comment ça marche",
-      "heroImageAlt": "Aperçu de l'application Splittaa"
+      "heroImageAlt": "Aperçu de l'application Splittaa",
+      "carousel": {
+        "prevSlide": "Diapositive précédente",
+        "nextSlide": "Diapositive suivante",
+        "goToSlide": "Aller à la diapositive",
+        "slides": {
+          "capybaras": {
+            "alt": "Capibaras au restaurant — ne soyez plus celui qui paie l'addition"
+          },
+          "kittens": {
+            "alt": "Chatons dans l'espace partageant une pizza — Splittaa : partagez et détendez-vous"
+          },
+          "sloth": {
+            "alt": "Paresseux utilisant Splittaa sur son téléphone dans la jungle — arrêtez de vous cacher, partagez"
+          }
+        }
+      }
     },
     "featuresSection": {
       "badge": "Fonctionnalités",

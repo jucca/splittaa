@@ -9,7 +9,8 @@ import {
   markGuideCompleted,
   saveGuideExperience,
   saveGuideStepId,
-  saveGuideUseCase,
+  saveGuideUseCaseCustom,
+  saveGuideUseCases,
 } from "@/lib/guide/guide-storage";
 
 describe("guide-storage", () => {
@@ -59,10 +60,12 @@ describe("guide-storage", () => {
     saveGuideStepId("dashboard");
     expect(localStore.get(GUIDE_STORAGE_KEYS.step)).toBe("dashboard");
 
-    saveGuideUseCase("matka");
+    saveGuideUseCases(["matka", "kotikulut"]);
+    saveGuideUseCaseCustom("harrastusporukka");
     saveGuideExperience("uusi");
     expect(getGuideChoices()).toEqual({
-      useCase: "matka",
+      useCases: ["matka", "kotikulut"],
+      useCaseCustom: "harrastusporukka",
       experience: "uusi",
     });
 
@@ -71,8 +74,15 @@ describe("guide-storage", () => {
   });
 
   it("clearGuideChoices removes session keys", () => {
-    saveGuideUseCase("kaikki");
+    saveGuideUseCases(["satunnaiset"]);
+    saveGuideUseCaseCustom("oma");
     clearGuideChoices();
-    expect(sessionStore.has(GUIDE_STORAGE_KEYS.useCase)).toBe(false);
+    expect(sessionStore.has(GUIDE_STORAGE_KEYS.useCases)).toBe(false);
+    expect(sessionStore.has(GUIDE_STORAGE_KEYS.useCaseCustom)).toBe(false);
+  });
+
+  it("ignores invalid use case JSON", () => {
+    sessionStore.set(GUIDE_STORAGE_KEYS.useCases, '["invalid"]');
+    expect(getGuideChoices().useCases).toBeUndefined();
   });
 });

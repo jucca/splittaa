@@ -14,17 +14,17 @@ export const GUIDE_STEP_DEFINITIONS: GuideStepDefinition[] = [
   {
     id: "groups",
     type: "info",
-    useCases: ["kotikulut", "matka", "kaikki"],
+    useCases: ["kotikulut", "matka"],
   },
   {
     id: "personal-debt",
     type: "info",
-    useCases: ["satunnaiset", "kaikki"],
+    useCases: ["satunnaiset"],
   },
   {
     id: "multi-currency",
     type: "info",
-    useCases: ["matka", "kaikki"],
+    useCases: ["matka"],
   },
   { id: "finish", type: "finish" },
 ];

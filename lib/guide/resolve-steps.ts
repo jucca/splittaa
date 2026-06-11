@@ -3,17 +3,18 @@ import type {
   GuideChoices,
   GuideExperience,
   GuideStepDefinition,
-  GuideUseCase,
+  GuideUseCaseTag,
 } from "./types";
+import { GUIDE_USE_CASE_TAGS } from "./types";
 
-function matchesUseCase(
-  stepUseCases: GuideUseCase[] | undefined,
-  selected: GuideUseCase
+function matchesAnyUseCase(
+  stepUseCases: GuideUseCaseTag[] | undefined,
+  selected: GuideUseCaseTag[]
 ): boolean {
   if (!stepUseCases || stepUseCases.length === 0) {
     return true;
   }
-  return stepUseCases.includes(selected);
+  return stepUseCases.some((tag) => selected.includes(tag));
 }
 
 function matchesExperience(
@@ -26,14 +27,34 @@ function matchesExperience(
   return selected === stepMinExperience;
 }
 
+export function hasUseCaseSelection(choices: GuideChoices): boolean {
+  const tagCount = choices.useCases?.length ?? 0;
+  const hasCustom = (choices.useCaseCustom?.trim().length ?? 0) > 0;
+  return tagCount > 0 || hasCustom;
+}
+
+/** Tags used for step filtering; custom-only falls back to all base tags. */
+export function getEffectiveUseCaseTags(choices: GuideChoices): GuideUseCaseTag[] {
+  const tags = choices.useCases ?? [];
+  if (tags.length > 0) {
+    return tags;
+  }
+  if ((choices.useCaseCustom?.trim().length ?? 0) > 0) {
+    return [...GUIDE_USE_CASE_TAGS];
+  }
+  return [];
+}
+
 function filterInfoAndFinish(
   steps: GuideStepDefinition[],
-  choices: Required<GuideChoices>
+  choices: GuideChoices & { experience: GuideExperience }
 ): GuideStepDefinition[] {
   if (choices.experience === "kokenut") {
     const finish = steps.find((step) => step.id === "finish");
     return finish ? [finish] : [];
   }
+
+  const effectiveTags = getEffectiveUseCaseTags(choices);
 
   return steps.filter((step) => {
     if (step.type === "choice") {
@@ -43,7 +64,7 @@ function filterInfoAndFinish(
       return true;
     }
     return (
-      matchesUseCase(step.useCases, choices.useCase) &&
+      matchesAnyUseCase(step.useCases, effectiveTags) &&
       matchesExperience(step.minExperience, choices.experience)
     );
   });
@@ -59,7 +80,7 @@ export function resolveSteps(
 ): GuideStepDefinition[] {
   const choiceSteps = steps.filter((step) => step.type === "choice");
 
-  if (!choices.useCase) {
+  if (!hasUseCaseSelection(choices)) {
     return [choiceSteps[0]!];
   }
 
@@ -68,7 +89,7 @@ export function resolveSteps(
   }
 
   const infoAndFinish = filterInfoAndFinish(steps, {
-    useCase: choices.useCase,
+    ...choices,
     experience: choices.experience,
   });
 
@@ -79,7 +100,7 @@ export function getProgressTotal(
   steps: GuideStepDefinition[],
   choices: GuideChoices
 ): number {
-  if (!choices.useCase || !choices.experience) {
+  if (!hasUseCaseSelection(choices) || !choices.experience) {
     return choiceStepsCount(steps);
   }
   return resolveSteps(steps, choices).length;

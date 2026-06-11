@@ -29,25 +29,26 @@ import {
   markGuideCompleted,
   saveGuideExperience,
   saveGuideStepId,
-  saveGuideUseCase,
+  saveGuideUseCaseCustom,
+  saveGuideUseCases,
 } from "@/lib/guide/guide-storage";
 import { getProgressTotal, resolveSteps } from "@/lib/guide/resolve-steps";
 import type {
   GuideExperience,
   GuideStepDefinition,
   GuideStepId,
-  GuideUseCase,
+  GuideUseCaseTag,
 } from "@/lib/guide/types";
 import {
   GUIDE_EXPERIENCES,
-  GUIDE_USE_CASES,
+  GUIDE_USE_CASE_CUSTOM_MAX_LENGTH,
+  GUIDE_USE_CASE_TAGS,
 } from "@/lib/guide/types";
 
-const USE_CASE_ICONS: Record<GuideUseCase, LucideIcon> = {
+const USE_CASE_ICONS: Record<GuideUseCaseTag, LucideIcon> = {
   kotikulut: Home,
   matka: Plane,
   satunnaiset: Wallet,
-  kaikki: Sparkles,
 };
 
 const EXPERIENCE_ICONS: Record<GuideExperience, LucideIcon> = {
@@ -76,11 +77,24 @@ function findStepIndex(steps: GuideStepDefinition[], stepId: GuideStepId): numbe
   return index >= 0 ? index : 0;
 }
 
+function arraysEqual(a: GuideUseCaseTag[], b: GuideUseCaseTag[]): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+  const sortedA = [...a].sort();
+  const sortedB = [...b].sort();
+  return sortedA.every((tag, index) => tag === sortedB[index]);
+}
+
 export function GuideOverlay({ open, onOpenChange }: GuideOverlayProps) {
   const t = useTranslations("guide");
   const [choices, setChoices] = useState(getGuideChoices);
   const [stepIndex, setStepIndex] = useState(0);
-  const [pendingChoice, setPendingChoice] = useState<string | undefined>();
+  const [pendingUseCases, setPendingUseCases] = useState<GuideUseCaseTag[]>([]);
+  const [pendingCustom, setPendingCustom] = useState("");
+  const [pendingExperience, setPendingExperience] = useState<
+    GuideExperience | undefined
+  >();
 
   const resolvedSteps = useMemo(
     () => resolveSteps(GUIDE_STEP_DEFINITIONS, choices),
@@ -90,6 +104,11 @@ export function GuideOverlay({ open, onOpenChange }: GuideOverlayProps) {
   const currentStep = resolvedSteps[stepIndex];
   const progressTotal = getProgressTotal(GUIDE_STEP_DEFINITIONS, choices);
   const progressCurrent = stepIndex + 1;
+
+  const allTagsSelected = useMemo(
+    () => arraysEqual(pendingUseCases, [...GUIDE_USE_CASE_TAGS]),
+    [pendingUseCases]
+  );
 
   const resetFromStorage = useCallback(() => {
     const storedChoices = getGuideChoices();
@@ -101,7 +120,9 @@ export function GuideOverlay({ open, onOpenChange }: GuideOverlayProps) {
 
     setChoices(storedChoices);
     setStepIndex(initialIndex);
-    setPendingChoice(undefined);
+    setPendingUseCases(storedChoices.useCases ?? []);
+    setPendingCustom(storedChoices.useCaseCustom ?? "");
+    setPendingExperience(storedChoices.experience);
   }, []);
 
   const handleDismiss = useCallback(() => {
@@ -138,14 +159,21 @@ export function GuideOverlay({ open, onOpenChange }: GuideOverlayProps) {
     if (!currentStep) {
       return;
     }
-    if (currentStep.type === "choice" && currentStep.choiceKey) {
-      const existing =
-        currentStep.choiceKey === "useCase" ? choices.useCase : choices.experience;
-      setPendingChoice(existing);
-    } else {
-      setPendingChoice(undefined);
+    if (currentStep.type === "choice" && currentStep.choiceKey === "useCase") {
+      setPendingUseCases(choices.useCases ?? []);
+      setPendingCustom(choices.useCaseCustom ?? "");
+    } else if (
+      currentStep.type === "choice" &&
+      currentStep.choiceKey === "experience"
+    ) {
+      setPendingExperience(choices.experience);
     }
-  }, [currentStep, choices.useCase, choices.experience]);
+  }, [
+    currentStep,
+    choices.useCases,
+    choices.useCaseCustom,
+    choices.experience,
+  ]);
 
   const handleSkip = useCallback(() => {
     markGuideCompleted();
@@ -166,24 +194,50 @@ export function GuideOverlay({ open, onOpenChange }: GuideOverlayProps) {
     setStepIndex((index) => Math.max(0, index - 1));
   }, [handleDismiss, stepIndex]);
 
+  const toggleUseCaseTag = useCallback((tag: GuideUseCaseTag) => {
+    setPendingUseCases((current) =>
+      current.includes(tag)
+        ? current.filter((item) => item !== tag)
+        : [...current, tag]
+    );
+  }, []);
+
+  const toggleAllUseCases = useCallback(() => {
+    setPendingUseCases((current) =>
+      arraysEqual(current, [...GUIDE_USE_CASE_TAGS])
+        ? []
+        : [...GUIDE_USE_CASE_TAGS]
+    );
+  }, []);
+
   const handleContinue = useCallback(() => {
     if (!currentStep) {
       return;
     }
 
-    if (currentStep.type === "choice" && currentStep.choiceKey) {
-      if (!pendingChoice) {
+    if (currentStep.type === "choice" && currentStep.choiceKey === "useCase") {
+      const trimmedCustom = pendingCustom.trim();
+      if (pendingUseCases.length === 0 && !trimmedCustom) {
         return;
       }
-      if (currentStep.choiceKey === "useCase") {
-        const useCase = pendingChoice as GuideUseCase;
-        saveGuideUseCase(useCase);
-        setChoices((prev) => ({ ...prev, useCase }));
-        setStepIndex(1);
-        setPendingChoice(choices.experience);
+      saveGuideUseCases(pendingUseCases);
+      saveGuideUseCaseCustom(trimmedCustom);
+      const nextChoices = {
+        ...choices,
+        useCases: pendingUseCases.length > 0 ? pendingUseCases : undefined,
+        useCaseCustom: trimmedCustom || undefined,
+      };
+      setChoices(nextChoices);
+      setStepIndex(1);
+      setPendingExperience(nextChoices.experience);
+      return;
+    }
+
+    if (currentStep.type === "choice" && currentStep.choiceKey === "experience") {
+      if (!pendingExperience) {
         return;
       }
-      const experience = pendingChoice as GuideExperience;
+      const experience = pendingExperience;
       saveGuideExperience(experience);
       const nextChoices = { ...choices, experience };
       setChoices(nextChoices);
@@ -202,7 +256,9 @@ export function GuideOverlay({ open, onOpenChange }: GuideOverlayProps) {
   }, [
     choices,
     currentStep,
-    pendingChoice,
+    pendingCustom,
+    pendingExperience,
+    pendingUseCases,
     resolvedSteps.length,
     stepIndex,
   ]);
@@ -211,11 +267,16 @@ export function GuideOverlay({ open, onOpenChange }: GuideOverlayProps) {
     if (!currentStep) {
       return false;
     }
-    if (currentStep.type === "choice") {
-      return Boolean(pendingChoice);
+    if (currentStep.type === "choice" && currentStep.choiceKey === "useCase") {
+      return (
+        pendingUseCases.length > 0 || pendingCustom.trim().length > 0
+      );
+    }
+    if (currentStep.type === "choice" && currentStep.choiceKey === "experience") {
+      return Boolean(pendingExperience);
     }
     return true;
-  }, [currentStep, pendingChoice]);
+  }, [currentStep, pendingCustom, pendingExperience, pendingUseCases]);
 
   if (!open || !currentStep) {
     return null;
@@ -264,24 +325,71 @@ export function GuideOverlay({ open, onOpenChange }: GuideOverlayProps) {
             ) : null}
           </div>
 
-          {currentStep.type === "choice" ? (
+          {currentStep.type === "choice" && currentStep.choiceKey === "useCase" ? (
             <div className="flex flex-col gap-3">
-              {(currentStep.choiceKey === "useCase"
-                ? GUIDE_USE_CASES
-                : GUIDE_EXPERIENCES
-              ).map((option) => {
-                const Icon =
-                  currentStep.choiceKey === "useCase"
-                    ? USE_CASE_ICONS[option as GuideUseCase]
-                    : EXPERIENCE_ICONS[option as GuideExperience];
+              {GUIDE_USE_CASE_TAGS.map((option) => {
+                const Icon = USE_CASE_ICONS[option];
                 return (
                   <GuideChoiceCard
                     key={option}
                     label={t(`steps.${stepKey}.options.${option}.label`)}
                     description={t(`steps.${stepKey}.options.${option}.description`)}
                     icon={<Icon className="h-5 w-5 text-green-600" />}
-                    selected={pendingChoice === option}
-                    onSelect={() => setPendingChoice(option)}
+                    selected={pendingUseCases.includes(option)}
+                    onSelect={() => toggleUseCaseTag(option)}
+                    testId={`guide-choice-${option}`}
+                    multiSelect
+                  />
+                );
+              })}
+              <GuideChoiceCard
+                label={t(`steps.${stepKey}.options.kaikki.label`)}
+                description={t(`steps.${stepKey}.options.kaikki.description`)}
+                icon={<Sparkles className="h-5 w-5 text-green-600" />}
+                selected={allTagsSelected}
+                onSelect={toggleAllUseCases}
+                testId="guide-choice-kaikki"
+                multiSelect
+              />
+              <div className="space-y-2 pt-1">
+                <label
+                  htmlFor="guide-use-case-custom-input"
+                  className="text-sm font-medium"
+                >
+                  {t("steps.use_case.custom_label")}
+                </label>
+                <textarea
+                  id="guide-use-case-custom-input"
+                  data-testid="guide-use-case-custom-input"
+                  value={pendingCustom}
+                  onChange={(event) =>
+                    setPendingCustom(
+                      event.target.value.slice(0, GUIDE_USE_CASE_CUSTOM_MAX_LENGTH)
+                    )
+                  }
+                  placeholder={t("steps.use_case.custom_placeholder")}
+                  rows={2}
+                  className="w-full resize-none rounded-xl border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                />
+                {t.has("steps.use_case.custom_hint") ? (
+                  <p className="text-xs text-muted-foreground">
+                    {t("steps.use_case.custom_hint")}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          ) : currentStep.type === "choice" ? (
+            <div className="flex flex-col gap-3">
+              {GUIDE_EXPERIENCES.map((option) => {
+                const Icon = EXPERIENCE_ICONS[option];
+                return (
+                  <GuideChoiceCard
+                    key={option}
+                    label={t(`steps.${stepKey}.options.${option}.label`)}
+                    description={t(`steps.${stepKey}.options.${option}.description`)}
+                    icon={<Icon className="h-5 w-5 text-green-600" />}
+                    selected={pendingExperience === option}
+                    onSelect={() => setPendingExperience(option)}
                     testId={`guide-choice-${option}`}
                   />
                 );

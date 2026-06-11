@@ -11,6 +11,8 @@ type GuideChoiceCardProps = {
   selected: boolean;
   onSelect: () => void;
   testId?: string;
+  /** Checkbox-style indicator when true; radio-style when false (default). */
+  multiSelect?: boolean;
 };
 
 export function GuideChoiceCard({
@@ -20,6 +22,7 @@ export function GuideChoiceCard({
   selected,
   onSelect,
   testId,
+  multiSelect = false,
 }: GuideChoiceCardProps) {
   return (
     <button
@@ -46,7 +49,8 @@ export function GuideChoiceCard({
       </span>
       <span
         className={cn(
-          "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2",
+          "flex h-6 w-6 shrink-0 items-center justify-center border-2",
+          multiSelect ? "rounded-md" : "rounded-full",
           selected ? "border-green-600 bg-green-600 text-white" : "border-muted-foreground/30"
         )}
         aria-hidden

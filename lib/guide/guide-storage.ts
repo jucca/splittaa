@@ -1,10 +1,12 @@
-import type { GuideExperience, GuideStepId, GuideUseCase } from "./types";
+import type { GuideExperience, GuideStepId, GuideUseCaseTag } from "./types";
+import { GUIDE_USE_CASE_TAGS } from "./types";
 
 export const GUIDE_STORAGE_KEYS = {
   completed: "splittaa-guide-completed",
   step: "splittaa-guide-step",
   autoOpened: "splittaa-guide-auto-opened",
-  useCase: "splittaa-guide-use-case",
+  useCases: "splittaa-guide-use-cases",
+  useCaseCustom: "splittaa-guide-use-case-custom",
   experience: "splittaa-guide-experience",
 } as const;
 
@@ -15,6 +17,29 @@ function getStorage(kind: "local" | "session"): Storage | null {
     return null;
   }
   return storage;
+}
+
+function isGuideUseCaseTag(value: string): value is GuideUseCaseTag {
+  return (GUIDE_USE_CASE_TAGS as string[]).includes(value);
+}
+
+function parseUseCases(raw: string | null): GuideUseCaseTag[] | undefined {
+  if (!raw) {
+    return undefined;
+  }
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      return undefined;
+    }
+    const tags = parsed.filter(
+      (item): item is GuideUseCaseTag =>
+        typeof item === "string" && isGuideUseCaseTag(item)
+    );
+    return tags.length > 0 ? tags : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export function isGuideCompleted(): boolean {
@@ -49,24 +74,49 @@ export function markGuideAutoOpened(): void {
 }
 
 export function getGuideChoices(): {
-  useCase?: GuideUseCase;
+  useCases?: GuideUseCaseTag[];
+  useCaseCustom?: string;
   experience?: GuideExperience;
 } {
   const storage = getStorage("session");
-  const useCase = storage?.getItem(GUIDE_STORAGE_KEYS.useCase) as
-    | GuideUseCase
-    | null;
+  const useCases = parseUseCases(
+    storage?.getItem(GUIDE_STORAGE_KEYS.useCases) ?? null
+  );
+  const customRaw = storage?.getItem(GUIDE_STORAGE_KEYS.useCaseCustom);
+  const useCaseCustom = customRaw?.trim() ? customRaw.trim() : undefined;
   const experience = storage?.getItem(GUIDE_STORAGE_KEYS.experience) as
     | GuideExperience
     | null;
   return {
-    useCase: useCase ?? undefined,
+    useCases,
+    useCaseCustom,
     experience: experience ?? undefined,
   };
 }
 
-export function saveGuideUseCase(useCase: GuideUseCase): void {
-  getStorage("session")?.setItem(GUIDE_STORAGE_KEYS.useCase, useCase);
+export function saveGuideUseCases(useCases: GuideUseCaseTag[]): void {
+  const storage = getStorage("session");
+  if (!storage) {
+    return;
+  }
+  if (useCases.length === 0) {
+    storage.removeItem(GUIDE_STORAGE_KEYS.useCases);
+    return;
+  }
+  storage.setItem(GUIDE_STORAGE_KEYS.useCases, JSON.stringify(useCases));
+}
+
+export function saveGuideUseCaseCustom(text: string): void {
+  const storage = getStorage("session");
+  if (!storage) {
+    return;
+  }
+  const trimmed = text.trim();
+  if (!trimmed) {
+    storage.removeItem(GUIDE_STORAGE_KEYS.useCaseCustom);
+    return;
+  }
+  storage.setItem(GUIDE_STORAGE_KEYS.useCaseCustom, trimmed);
 }
 
 export function saveGuideExperience(experience: GuideExperience): void {
@@ -75,6 +125,7 @@ export function saveGuideExperience(experience: GuideExperience): void {
 
 export function clearGuideChoices(): void {
   const storage = getStorage("session");
-  storage?.removeItem(GUIDE_STORAGE_KEYS.useCase);
+  storage?.removeItem(GUIDE_STORAGE_KEYS.useCases);
+  storage?.removeItem(GUIDE_STORAGE_KEYS.useCaseCustom);
   storage?.removeItem(GUIDE_STORAGE_KEYS.experience);
 }

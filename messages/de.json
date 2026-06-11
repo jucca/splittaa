@@ -533,7 +533,10 @@
     "steps": {
       "use_case": {
         "title": "Wofür nutzt du Splittaa?",
-        "subtitle": "Wähle deinen Hauptzweck — wir passen die Anleitung an.",
+        "subtitle": "Wähle eine oder mehrere Optionen — wir passen die Anleitung an deine Auswahl an.",
+        "custom_label": "Eigene Idee (optional)",
+        "custom_placeholder": "z. B. Hobbygruppe, Dienstreisen…",
+        "custom_hint": "Du kannst Voreinstellungen wählen, eine eigene Idee eingeben oder beides.",
         "options": {
           "kotikulut": {
             "label": "Haushalt",

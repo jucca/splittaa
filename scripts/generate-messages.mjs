@@ -553,7 +553,10 @@ const fi = {
     steps: {
       use_case: {
         title: "Mihin käytät Splittaata?",
-        subtitle: "Valitse tärkein käyttötarkoitus — räätälöimme oppaan sen mukaan.",
+        subtitle: "Valitse yksi tai useampi — räätälöimme oppaan valintojesi mukaan.",
+        custom_label: "Oma idea (valinnainen)",
+        custom_placeholder: "Esim. harrastusporukka, työmatkat…",
+        custom_hint: "Voit valita valmiita vaihtoehtoja, kirjoittaa oman ideasi tai molemmat.",
         options: {
           kotikulut: {
             label: "Kotikulut",

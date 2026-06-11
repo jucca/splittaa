@@ -510,7 +510,10 @@
     "steps": {
       "use_case": {
         "title": "What will you use Splittaa for?",
-        "subtitle": "Pick your main use case — we'll tailor the guide.",
+        "subtitle": "Pick one or more — we'll tailor the guide to your choices.",
+        "custom_label": "Your own idea (optional)",
+        "custom_placeholder": "E.g. hobby group, work trips…",
+        "custom_hint": "You can pick presets, write your own idea, or both.",
         "options": {
           "kotikulut": {
             "label": "Household",

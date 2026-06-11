@@ -522,6 +522,85 @@
     "toastBulkSkippedNoDebt": "{count}件スキップ — 未払いの借金なし",
     "toastBulkNoneSent": "借金リクエストは送信されませんでした"
   },
+  "guide": {
+    "openAria": "ガイドを開く",
+    "openHint": "アプリガイド",
+    "continue": "続ける",
+    "skip": "ガイドをスキップ",
+    "back": "戻る",
+    "close": "閉じる",
+    "finishCta": "最初の支出を追加",
+    "steps": {
+      "use_case": {
+        "title": "Splittaaを何に使いますか？",
+        "subtitle": "主な用途を選んでください — ガイドを調整します。",
+        "options": {
+          "kotikulut": {
+            "label": "家庭",
+            "description": "家賃、食費、共同の支出"
+          },
+          "matka": {
+            "label": "旅行",
+            "description": "旅行と共有の旅費"
+          },
+          "satunnaiset": {
+            "label": "たまの借り",
+            "description": "食事や一度きりの割り勘"
+          },
+          "kaikki": {
+            "label": "すべて",
+            "description": "全体像を見たい"
+          }
+        }
+      },
+      "experience": {
+        "title": "割り勘アプリの経験は？",
+        "subtitle": "ヘッダーからいつでもガイドを開けます。",
+        "options": {
+          "uusi": {
+            "label": "初めて",
+            "description": "似たアプリを使ったことがない"
+          },
+          "perusteet": {
+            "label": "基本はわかる",
+            "description": "割り勘の考え方は理解している"
+          },
+          "kokenut": {
+            "label": "経験あり",
+            "description": "さっと概要だけ見たい"
+          }
+        }
+      },
+      "balance_basics": {
+        "title": "残高とは？",
+        "body": "Splittaaは誰が誰にいくら借りているかを表示します。ダッシュボードの残高は借りをまとめます — 緑は受け取り、赤は支払いです。"
+      },
+      "dashboard": {
+        "title": "ダッシュボードで状況を把握",
+        "body": "合計残高、支出サマリー、グループが見えます。残高詳細から個人別の表示へ。"
+      },
+      "new_expense": {
+        "title": "新しい支出を追加",
+        "body": "説明、金額、参加者を入力。均等、割合、または正確な金額で分割。支払者を別途指定。"
+      },
+      "groups": {
+        "title": "グループで共同支出を簡単に",
+        "body": "連絡先からグループを作成するかコードで参加。グループ支出では参加者が自動入力されます。"
+      },
+      "personal_debt": {
+        "title": "個人間の借りとリクエスト",
+        "body": "グループなしで二人の借りを追跡。メッセージで借金リクエストや支払済みの記録ができます。"
+      },
+      "multi_currency": {
+        "title": "旅行での複数通貨",
+        "body": "追加時に通貨を選択。Splittaaは選んだ通貨で金額を表示します。"
+      },
+      "finish": {
+        "title": "準備完了！",
+        "body": "次は最初の支出を追加しましょう。ガイドはヘッダーからいつでも開けます。"
+      }
+    }
+  },
   "errors": {
     "FORBIDDEN": "この操作の権限がありません",
     "NOT_FOUND": "見つかりません",

@@ -522,6 +522,85 @@
     "toastBulkSkippedNoDebt": "{count} ignorées — plus de dette ouverte",
     "toastBulkNoneSent": "Aucune demande de paiement envoyée"
   },
+  "guide": {
+    "openAria": "Ouvrir le guide",
+    "openHint": "Guide de l'application",
+    "continue": "Continuer",
+    "skip": "Ignorer le guide",
+    "back": "Retour",
+    "close": "Fermer",
+    "finishCta": "Ajouter votre première dépense",
+    "steps": {
+      "use_case": {
+        "title": "Pour quoi utiliserez-vous Splittaa ?",
+        "subtitle": "Choisissez votre usage principal — nous adaptons le guide.",
+        "options": {
+          "kotikulut": {
+            "label": "Dépenses du foyer",
+            "description": "Loyer, courses et charges partagées"
+          },
+          "matka": {
+            "label": "Voyage",
+            "description": "Voyages et frais partagés"
+          },
+          "satunnaiset": {
+            "label": "Dettes occasionnelles",
+            "description": "Restaurants et partages ponctuels"
+          },
+          "kaikki": {
+            "label": "Tout ce qui précède",
+            "description": "Je veux une vue d'ensemble"
+          }
+        }
+      },
+      "experience": {
+        "title": "Quelle est votre expérience du partage de dépenses ?",
+        "subtitle": "Vous pouvez rouvrir le guide depuis l'en-tête à tout moment.",
+        "options": {
+          "uusi": {
+            "label": "Je débute",
+            "description": "Je n'ai pas utilisé d'apps similaires"
+          },
+          "perusteet": {
+            "label": "Je connais les bases",
+            "description": "Je comprends le principe du partage"
+          },
+          "kokenut": {
+            "label": "Je suis expérimenté",
+            "description": "Je veux juste un aperçu rapide"
+          }
+        }
+      },
+      "balance_basics": {
+        "title": "Qu'est-ce qu'un solde ?",
+        "body": "Splittaa indique qui doit quoi à qui. Les soldes du tableau de bord regroupent les dettes — vert signifie qu'on vous doit, rouge que vous devez."
+      },
+      "dashboard": {
+        "title": "Le tableau de bord résume la situation",
+        "body": "Vous y voyez le solde total, le résumé des dépenses et les groupes. Ouvrez les détails de solde pour une vue par personne."
+      },
+      "new_expense": {
+        "title": "Ajouter une dépense",
+        "body": "Saisissez description, montant et participants. Partagez également, en pourcentage ou en montants exacts. Indiquez qui a payé."
+      },
+      "groups": {
+        "title": "Les groupes simplifient les dépenses communes",
+        "body": "Créez un groupe depuis vos contacts ou rejoignez avec un code. Les participants sont préremplis pour les dépenses de groupe."
+      },
+      "personal_debt": {
+        "title": "Dettes personnelles et demandes",
+        "body": "Suivez une dette entre deux personnes sans groupe. Dans Messages, envoyez une demande ou marquez une dette comme payée."
+      },
+      "multi_currency": {
+        "title": "Multi-devises en voyage",
+        "body": "Choisissez la devise lors de l'ajout. Splittaa affiche les montants dans la devise choisie."
+      },
+      "finish": {
+        "title": "Vous êtes prêt !",
+        "body": "Ajoutez votre première dépense. Le guide reste accessible dans l'en-tête si vous en avez besoin."
+      }
+    }
+  },
   "errors": {
     "FORBIDDEN": "Vous n'avez pas la permission pour cette action",
     "NOT_FOUND": "Introuvable",

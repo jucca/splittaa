@@ -522,6 +522,85 @@
     "toastBulkSkippedNoDebt": "{count} hoppades över — ingen öppen skuld kvar",
     "toastBulkNoneSent": "Inga betalningsbegäran skickades"
   },
+  "guide": {
+    "openAria": "Öppna guiden",
+    "openHint": "Appguide",
+    "continue": "Fortsätt",
+    "skip": "Hoppa över guiden",
+    "back": "Tillbaka",
+    "close": "Stäng",
+    "finishCta": "Lägg till din första utgift",
+    "steps": {
+      "use_case": {
+        "title": "Vad ska du använda Splittaa till?",
+        "subtitle": "Välj ditt huvudsakliga syfte — vi anpassar guiden.",
+        "options": {
+          "kotikulut": {
+            "label": "Hushåll",
+            "description": "Hyra, mat och gemensamma kostnader"
+          },
+          "matka": {
+            "label": "Resa",
+            "description": "Resor och delade resekostnader"
+          },
+          "satunnaiset": {
+            "label": "Tillfälliga skulder",
+            "description": "Middagar och engångsdelningar"
+          },
+          "kaikki": {
+            "label": "Allt ovan",
+            "description": "Jag vill se helheten"
+          }
+        }
+      },
+      "experience": {
+        "title": "Hur van är du vid att dela utgifter?",
+        "subtitle": "Du kan alltid öppna guiden igen från headern.",
+        "options": {
+          "uusi": {
+            "label": "Jag är ny",
+            "description": "Jag har inte använt liknande appar"
+          },
+          "perusteet": {
+            "label": "Grunderna klara",
+            "description": "Jag förstår grundidén med delning"
+          },
+          "kokenut": {
+            "label": "Jag är erfaren",
+            "description": "Jag vill bara en snabb överblick"
+          }
+        }
+      },
+      "balance_basics": {
+        "title": "Vad är ett saldo?",
+        "body": "Splittaa visar vem som är skyldig vem. Saldon på startsidan sammanfattar skulder — grönt betyder att du ska få, rött att du är skyldig."
+      },
+      "dashboard": {
+        "title": "Startsidan visar läget",
+        "body": "Du ser totalsaldo, utgiftsöversikt och grupper. Öppna saldo detaljer för personvyer."
+      },
+      "new_expense": {
+        "title": "Lägg till en ny utgift",
+        "body": "Ange beskrivning, belopp och deltagare. Dela lika, i procent eller exakta belopp. Markera vem som betalade."
+      },
+      "groups": {
+        "title": "Grupper förenklar gemensamma utgifter",
+        "body": "Skapa en grupp från kontakter eller gå med med kod. Deltagare fylls i automatiskt för grupputgifter."
+      },
+      "personal_debt": {
+        "title": "Personliga skulder och begäran",
+        "body": "Följ skuld mellan två utan grupp. I Meddelanden kan du skicka betalningsbegäran eller markera skuld som betald."
+      },
+      "multi_currency": {
+        "title": "Flera valutor på resa",
+        "body": "Välj valuta när du lägger till. Splittaa visar belopp i vald valuta."
+      },
+      "finish": {
+        "title": "Du är redo!",
+        "body": "Lägg till din första utgift härnäst. Guiden finns alltid i headern om du behöver en påminnelse."
+      }
+    }
+  },
   "errors": {
     "FORBIDDEN": "Du har inte behörighet för den här åtgärden",
     "NOT_FOUND": "Hittades inte",

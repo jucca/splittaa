@@ -271,7 +271,7 @@
   },
   "expenses": {
     "newPageTitle": "Lisää uusi kulu",
-    "newPageSubtitle": "Kirjaa kulu itsellesi tai jaa se muiden kanssa",
+    "newPageSubtitle": "Kirjaa uusi kulu ja jaa se muiden kanssa",
     "tabIndividual": "Henkilökohtainen kulu",
     "tabGroup": "Ryhmäkulu",
     "form": {
@@ -284,7 +284,8 @@
       "datePlaceholder": "Valitse päivämäärä",
       "groupLabel": "Ryhmä",
       "participantsLabel": "Osallistujat",
-      "participantsOptionalHint": "Voit tallentaa kulun vain itsellesi tai lisätä muita osallistujia alla.",
+      "participantsOptionalHint": "Voit tallentaa kulun vain itsellesi tai lisätä osallistujia alla.",
+      "addParticipantMin": "Lisää vähintään yksi muu osallistuja",
       "payerLabel": "Maksaja",
       "payerPlaceholder": "Valitse maksaja",
       "splitTypeLabel": "Jakotapa",
@@ -443,33 +444,9 @@
       "toastRecordFailed": "Kirjaus epäonnistui"
     }
   },
-  "profile": {
-    "onboardingTitle": "Luo profiili",
-    "onboardingSubtitle": "Valitse näyttönimi ja käyttäjänimi. Muiden on helpompi löytää sinut kuluissa.",
-    "displayNameLabel": "Näyttönimi",
-    "usernameLabel": "Käyttäjänimi",
-    "usernameHint": "3–20 merkkiä: pienet kirjaimet, numerot ja alaviiva",
-    "usernameChecking": "Tarkistetaan saatavuutta…",
-    "usernameAvailable": "Käyttäjänimi on vapaana",
-    "usernameTaken": "Käyttäjänimi on jo käytössä",
-    "usernameCooldown": "Käyttäjänimen voi vaihtaa uudelleen {date} jälkeen",
-    "completeProfile": "Valmis",
-    "settingsCardTitle": "Profiili",
-    "toastProfileSaved": "Profiili tallennettu",
-    "toastNoChanges": "Ei muutoksia tallennettavaksi"
-  },
   "settings": {
     "title": "Asetukset",
-    "subtitle": "Hallitse profiilia, kieltä, valuuttaa, saldotietoja ja sähköpostimuistutuksia.",
-    "languageCardTitle": "Kieli",
-    "languageLabel": "Käyttöliittymän kieli",
-    "languageHint": "Valitse Splittaan näyttökieli. Voit vaihtaa kielen myös headerin lipusta.",
-    "currencyCardTitle": "Valuutta",
-    "currencyLabel": "Oletusvaluutta",
-    "currencyHint": "Kaikki summat ja saldot näytetään tässä valuutassa. Uudet kulut kirjataan myös tällä valuutalla.",
-    "balanceCardTitle": "Saldotiedot",
-    "autoNetBalancesLabel": "Kulut vähentävät velkoja automaattisesti",
-    "autoNetBalancesHint": "Kun päällä, jaetut kulut (myös ryhmässä) voivat pienentää samaa henkilöä kohtaan näkyvää velkaa. Kun pois, vain suorat velat ja tilitykset näkyvät — maksamasi jaetut kulut eivät vähennä velkaa automaattisesti.",
+    "subtitle": "Säädä sähköpostimuistutuksia avoimista saldoista.",
     "remindersCardTitle": "Saldomuistutukset",
     "remindersEnabled": "Muistutukset käytössä",
     "remindersEnabledHint": "Lähetämme sähköpostia vain valituin välein, jos saldo on edelleen auki.",
@@ -521,6 +498,85 @@
     "toastBulkSkippedCooldown": "{count} henkilölle lähetetty jo viimeisen 24 h aikana — ohitettu",
     "toastBulkSkippedNoDebt": "{count} henkilöllä ei ollut enää avointa velkaa — ohitettu",
     "toastBulkNoneSent": "Yhtään velkapyyntöä ei lähetetty"
+  },
+  "guide": {
+    "openAria": "Avaa apuri",
+    "openHint": "Sovellusopas",
+    "continue": "Jatka",
+    "skip": "Ohita opas",
+    "back": "Takaisin",
+    "close": "Sulje",
+    "finishCta": "Lisää ensimmäinen kulutus",
+    "steps": {
+      "use_case": {
+        "title": "Mihin käytät Splittaata?",
+        "subtitle": "Valitse tärkein käyttötarkoitus — räätälöimme oppaan sen mukaan.",
+        "options": {
+          "kotikulut": {
+            "label": "Kotikulut",
+            "description": "Vuokra, ruoka ja muut yhteiset menot"
+          },
+          "matka": {
+            "label": "Matka",
+            "description": "Reissut ja yhteiset matkakulut"
+          },
+          "satunnaiset": {
+            "label": "Satunnaiset velat",
+            "description": "Illalliset ja kertaluontoiset jaot"
+          },
+          "kaikki": {
+            "label": "Kaikki edellä",
+            "description": "Haluan nähdä koko kuvan"
+          }
+        }
+      },
+      "experience": {
+        "title": "Kuinka tuttu olet kulujen jakamiseen?",
+        "subtitle": "Voit aina avata oppaan uudelleen headerista.",
+        "options": {
+          "uusi": {
+            "label": "Olen uusi",
+            "description": "En ole käyttänyt vastaavia sovelluksia"
+          },
+          "perusteet": {
+            "label": "Perusteet hallussa",
+            "description": "Tunnen jaon perusidean"
+          },
+          "kokenut": {
+            "label": "Olen kokenut",
+            "description": "Haluan vain nopean katsauksen"
+          }
+        }
+      },
+      "balance_basics": {
+        "title": "Mikä on saldo?",
+        "body": "Splittaa näyttää kuka kenelle on velkaa. Etusivun Saldotiedot kokoavat velat yhteen — vihreä tarkoittaa että sinulle ollaan velkaa, punainen että olet velkaa."
+      },
+      "dashboard": {
+        "title": "Etusivu kertoo tilanteen",
+        "body": "Etusivulla näet kokonaissaldon, kulutusyhteenvedon ja ryhmät. Saldotiedot-listasta pääset henkilökohtaisiin tarkasteluihin."
+      },
+      "new_expense": {
+        "title": "Lisää uusi kulutus",
+        "body": "Kirjaa kuvaus, summa ja osallistujat. Jaa kulu tasan, prosentteina tai tarkoilla summilla. Maksaja merkitään erikseen."
+      },
+      "groups": {
+        "title": "Ryhmät helpottavat yhteisiä kuluja",
+        "body": "Luo ryhmä yhteystiedoista tai liity koodilla. Ryhmäkuluissa osallistujat täyttyvät automaattisesti jäsenistä."
+      },
+      "personal_debt": {
+        "title": "Henkilövelat ja velkapyynnöt",
+        "body": "Voit seurata velkaa kahden kesken ilman ryhmää. Viestit-näkymässä voit lähettää velkapyynnön tai merkitä velan maksetuksi."
+      },
+      "multi_currency": {
+        "title": "Monivaluutta matkalla",
+        "body": "Valitse kulutuksen valuutta lisäysnäkymässä. Splittaa näyttää summat valitsemassasi valuutassa."
+      },
+      "finish": {
+        "title": "Olet valmis!",
+        "body": "Seuraavaksi voit lisätä ensimmäisen kulutuksen. Apuri löytyy aina headerista, jos tarvitset muistutuksen."
+      }
+    }
   },
   "errors": {
     "FORBIDDEN": "Ei oikeutta tähän toimintoon",

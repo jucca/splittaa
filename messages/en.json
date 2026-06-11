@@ -69,18 +69,18 @@
       "ctaHowItWorks": "See how it works",
       "heroImageAlt": "Splittaa app preview",
       "carousel": {
-        "prevSlide": "Previous slide",
-        "nextSlide": "Next slide",
-        "goToSlide": "Go to slide",
+        "prevSlide": "Edellinen kuva",
+        "nextSlide": "Seuraava kuva",
+        "goToSlide": "Siirry kuvaan",
         "slides": {
           "capybaras": {
-            "alt": "Capybaras at a restaurant — never be the one who grabs the bill again"
+            "alt": "Kapibarat ravintolassa — älä ole se, joka tarttuu laskuun"
           },
           "kittens": {
-            "alt": "Kittens in space sharing pizza — Splittaa: split it, chill"
+            "alt": "Kissat avaruudessa jakavat pizzan — Splittaa: jaa se. rentoudu."
           },
           "sloth": {
-            "alt": "Sloth using Splittaa on a phone in the jungle — stop hiding, just split it"
+            "alt": "Laiskuri käyttää Splittaa-puhelinta viidakossa — lopeta piiloutuminen, jaa kulut"
           }
         }
       }
@@ -271,20 +271,21 @@
   },
   "expenses": {
     "newPageTitle": "Add new expense",
-    "newPageSubtitle": "Record an expense for yourself or share it with others",
+    "newPageSubtitle": "Record a new expense and share it with others",
     "tabIndividual": "Personal expense",
     "tabGroup": "Group expense",
     "form": {
       "descriptionLabel": "Description",
       "descriptionPlaceholder": "Lunch, movie tickets, etc.",
       "amountLabel": "Amount",
-      "currencyHint": "The expense amount is recorded in the selected currency.",
+      "currencyHint": "Kulun summa kirjataan valitussa valuutassa.",
       "categoryLabel": "Category",
       "dateLabel": "Date",
       "datePlaceholder": "Select date",
       "groupLabel": "Group",
       "participantsLabel": "Participants",
-      "participantsOptionalHint": "Save the expense for yourself only, or add other participants below.",
+      "participantsOptionalHint": "Save the expense just for yourself or add more participants below.",
+      "addParticipantMin": "Add at least one other participant",
       "payerLabel": "Payer",
       "payerPlaceholder": "Select payer",
       "splitTypeLabel": "Split method",
@@ -393,8 +394,8 @@
     "pageTitle": "Activity",
     "pageSubtitle": "Spending summary and recent events — only your share in charts.",
     "recentEventsTitle": "Recent events",
-    "feedAria": "Recent activity",
-    "feedEmpty": "No recent activity. Add an expense or settlement to see it here.",
+    "feedAria": "Recent events",
+    "feedEmpty": "No recent events. Add an expense or settlement to see it here.",
     "charts": {
       "title": "Spending summary",
       "periodWeek": "Week",
@@ -443,33 +444,9 @@
       "toastRecordFailed": "Recording failed"
     }
   },
-  "profile": {
-    "onboardingTitle": "Create your profile",
-    "onboardingSubtitle": "Choose a display name and username so others can find you in shared expenses.",
-    "displayNameLabel": "Display name",
-    "usernameLabel": "Username",
-    "usernameHint": "3–20 characters: lowercase letters, numbers, and underscore",
-    "usernameChecking": "Checking availability…",
-    "usernameAvailable": "Username is available",
-    "usernameTaken": "Username is already taken",
-    "usernameCooldown": "You can change your username again after {date}",
-    "completeProfile": "Done",
-    "settingsCardTitle": "Profile",
-    "toastProfileSaved": "Profile saved",
-    "toastNoChanges": "No changes to save"
-  },
   "settings": {
     "title": "Settings",
-    "subtitle": "Manage your profile, language, and email reminders.",
-    "languageCardTitle": "Language",
-    "languageLabel": "Interface language",
-    "languageHint": "Choose Splittaa display language. You can also switch from the flag in the header.",
-    "currencyCardTitle": "Currency",
-    "currencyLabel": "Default currency",
-    "currencyHint": "All amounts and balances are shown in this currency. New expenses are also recorded in this currency.",
-    "balanceCardTitle": "Balance details",
-    "autoNetBalancesLabel": "Expenses automatically reduce debts",
-    "autoNetBalancesHint": "When on, shared expenses (including in groups) can lower what you owe someone on the dashboard. When off, only direct debts and settlements count — expenses you pay for others do not automatically reduce debt.",
+    "subtitle": "Adjust email reminders for open balances.",
     "remindersCardTitle": "Balance reminders",
     "remindersEnabled": "Reminders enabled",
     "remindersEnabledHint": "We email only at the chosen interval while a balance remains open.",
@@ -513,14 +490,93 @@
     "sendRequest": "Send request",
     "toastSent": "Debt request sent to {debtorName}",
     "toastSendFailed": "Send failed",
-    "sendAllButton": "Send to all ({count})",
-    "bulkDialogTitle": "Send debt requests to all",
-    "bulkDialogDescription": "Send a personal debt request to {count} people in your balance summary. The same message is attached to each request.",
-    "sendAllConfirm": "Send to all",
-    "toastBulkSent": "{sent}/{total} debt requests sent",
-    "toastBulkSkippedCooldown": "Skipped {count} — already sent in the last 24 hours",
-    "toastBulkSkippedNoDebt": "Skipped {count} — no open debt remaining",
-    "toastBulkNoneSent": "No debt requests were sent"
+    "sendAllButton": "Lähetä kaikille ({count})",
+    "bulkDialogTitle": "Lähetä velkapyynnöt kaikille",
+    "bulkDialogDescription": "Lähetät henkilökohtaisen velkapyynnön {count} henkilölle Saldotiedoissa. Sama viesti liitetään jokaiseen pyyntöön.",
+    "sendAllConfirm": "Lähetä kaikille",
+    "toastBulkSent": "{sent}/{total} velkapyyntöä lähetetty",
+    "toastBulkSkippedCooldown": "{count} henkilölle lähetetty jo viimeisen 24 h aikana — ohitettu",
+    "toastBulkSkippedNoDebt": "{count} henkilöllä ei ollut enää avointa velkaa — ohitettu",
+    "toastBulkNoneSent": "Yhtään velkapyyntöä ei lähetetty"
+  },
+  "guide": {
+    "openAria": "Open guide",
+    "openHint": "App guide",
+    "continue": "Continue",
+    "skip": "Skip guide",
+    "back": "Back",
+    "close": "Close",
+    "finishCta": "Add your first expense",
+    "steps": {
+      "use_case": {
+        "title": "What will you use Splittaa for?",
+        "subtitle": "Pick your main use case — we'll tailor the guide.",
+        "options": {
+          "kotikulut": {
+            "label": "Household",
+            "description": "Rent, groceries, and shared bills"
+          },
+          "matka": {
+            "label": "Travel",
+            "description": "Trips and shared travel costs"
+          },
+          "satunnaiset": {
+            "label": "Occasional debts",
+            "description": "Dinners and one-off splits"
+          },
+          "kaikki": {
+            "label": "All of the above",
+            "description": "I want the full overview"
+          }
+        }
+      },
+      "experience": {
+        "title": "How familiar are you with splitting expenses?",
+        "subtitle": "You can always reopen the guide from the header.",
+        "options": {
+          "uusi": {
+            "label": "I'm new",
+            "description": "I haven't used similar apps before"
+          },
+          "perusteet": {
+            "label": "I know the basics",
+            "description": "I understand how splitting works"
+          },
+          "kokenut": {
+            "label": "I'm experienced",
+            "description": "I just want a quick overview"
+          }
+        }
+      },
+      "balance_basics": {
+        "title": "What is a balance?",
+        "body": "Splittaa shows who owes whom. Dashboard balances sum debts — green means you're owed, red means you owe."
+      },
+      "dashboard": {
+        "title": "The dashboard shows your situation",
+        "body": "On the dashboard you see total balance, spending summary, and groups. Open balance details for person-level views."
+      },
+      "new_expense": {
+        "title": "Add a new expense",
+        "body": "Enter description, amount, and participants. Split equally, by percentage, or exact amounts. Mark who paid separately."
+      },
+      "groups": {
+        "title": "Groups simplify shared expenses",
+        "body": "Create a group from contacts or join with a code. Group expenses pre-fill participants from members."
+      },
+      "personal_debt": {
+        "title": "Personal debts and debt requests",
+        "body": "Track debts between two people without a group. In Inbox you can send debt requests or mark debts paid."
+      },
+      "multi_currency": {
+        "title": "Multi-currency on trips",
+        "body": "Pick the expense currency when adding. Splittaa displays amounts in your chosen currency."
+      },
+      "finish": {
+        "title": "You're all set!",
+        "body": "Next, add your first expense. The guide is always in the header if you need a reminder."
+      }
+    }
   },
   "errors": {
     "FORBIDDEN": "You do not have permission for this action",

@@ -28,6 +28,7 @@ import type * as _lib_reminderSettings from "../_lib/reminderSettings.js";
 import type * as _lib_sendDebtRequest from "../_lib/sendDebtRequest.js";
 import type * as _lib_spending from "../_lib/spending.js";
 import type * as _lib_usernames from "../_lib/usernames.js";
+import type * as _lib_workspaces from "../_lib/workspaces.js";
 import type * as activity from "../activity.js";
 import type * as balances from "../balances.js";
 import type * as contacts from "../contacts.js";
@@ -46,6 +47,8 @@ import type * as seedTest from "../seedTest.js";
 import type * as settings from "../settings.js";
 import type * as settlements from "../settlements.js";
 import type * as users from "../users.js";
+import type * as workspaceInvites from "../workspaceInvites.js";
+import type * as workspaces from "../workspaces.js";
 
 import type {
   ApiFromModules,
@@ -74,6 +77,7 @@ declare const fullApi: ApiFromModules<{
   "_lib/sendDebtRequest": typeof _lib_sendDebtRequest;
   "_lib/spending": typeof _lib_spending;
   "_lib/usernames": typeof _lib_usernames;
+  "_lib/workspaces": typeof _lib_workspaces;
   activity: typeof activity;
   balances: typeof balances;
   contacts: typeof contacts;
@@ -92,6 +96,8 @@ declare const fullApi: ApiFromModules<{
   settings: typeof settings;
   settlements: typeof settlements;
   users: typeof users;
+  workspaceInvites: typeof workspaceInvites;
+  workspaces: typeof workspaces;
 }>;
 
 /**

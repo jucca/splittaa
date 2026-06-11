@@ -19,8 +19,10 @@ type BalanceItem = {
 
 export function BalanceSummary({
   balances,
+  showDebtActions = true,
 }: {
   balances: UserBalances | null | undefined;
+  showDebtActions?: boolean;
 }) {
   const t = useTranslations("dashboard");
   const { format } = useMoney();
@@ -46,13 +48,15 @@ export function BalanceSummary({
               <ArrowUpCircle className="h-4 w-4 text-green-500 mr-2" />
               {t("balanceOwedToYou")}
             </h3>
-            <SendAllDebtRequestsButton
-              debtors={oweDetails.youAreOwedBy.map((item) => ({
-                name: item.name,
-                amount: item.amount,
-              }))}
-              className="w-full sm:w-auto shrink-0"
-            />
+            {showDebtActions && (
+              <SendAllDebtRequestsButton
+                debtors={oweDetails.youAreOwedBy.map((item) => ({
+                  name: item.name,
+                  amount: item.amount,
+                }))}
+                className="w-full sm:w-auto shrink-0"
+              />
+            )}
           </div>
           <div className="space-y-3">
             {oweDetails.youAreOwedBy.map((item: BalanceItem) => (
@@ -75,12 +79,14 @@ export function BalanceSummary({
                     {format(item.amount)}
                   </span>
                 </Link>
-                <SendDebtRequestButton
-                  debtorUserId={item.userId as Id<"users">}
-                  debtorName={item.name}
-                  amount={item.amount}
-                  className="w-full sm:w-auto shrink-0"
-                />
+                {showDebtActions && (
+                  <SendDebtRequestButton
+                    debtorUserId={item.userId as Id<"users">}
+                    debtorName={item.name}
+                    amount={item.amount}
+                    className="w-full sm:w-auto shrink-0"
+                  />
+                )}
               </div>
             ))}
           </div>

@@ -112,6 +112,19 @@ Configured in `next.config.ts` (Phase 3):
 | `groupInvites.declineInvite` | mutation | `requireAuth` | Direct invitee only | |
 | `groupInvites.joinByCode` | mutation | `requireAuth` | Open invite code | |
 | `groupInvites.revokeInvite` | mutation | `requireAuth` | Group admin | |
+| `workspaces.create` | mutation | `requireAuth` | Creator becomes admin | Isolated from global dashboard |
+| `workspaces.listMine` | query | `requireAuth` | Self-scoped memberships | |
+| `workspaces.get` | query | `requireAuth` | Workspace member | |
+| `workspaces.getMembers` | query | `requireAuth` | Workspace member | |
+| `workspaces.getGoals` | query | `requireAuth` | Workspace member | |
+| `workspaces.getBalances` | query | `requireAuth` | Workspace member | Workspace scope only |
+| `workspaces.getTotalSpent` | query | `requireAuth` | Workspace member | |
+| `workspaces.getMonthlySpending` | query | `requireAuth` | Workspace member | |
+| `workspaces.recordDeposit` | mutation | `requireAuth` | Workspace member | Savings goals only |
+| `workspaceInvites.joinByDisplayCode` | mutation | `requireAuth` | Open invite code | |
+| `workspaceInvites.getOpenInviteForWorkspace` | query | `requireAuth` | Workspace admin | |
+| `workspaceInvites.ensureOpenInvite` | mutation | `requireAuth` | Workspace admin | |
+| `workspaceInvites.acceptInviteByToken` | mutation | `requireAuth` | Valid token | |
 | `users.me` | query | `requireAuth` | Self only | Safe DTO incl. `profileCompleted`, `username` |
 | `users.store` | mutation | Clerk identity | Self provision | First-login upsert; does not overwrite display name after profile complete |
 | `users.completeProfile` | mutation | `requireAuth` | Self only; once | Sets display name + unique username |

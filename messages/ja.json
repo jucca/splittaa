@@ -303,7 +303,8 @@
       "validationAmountPositive": "金額は正の数である必要があります",
       "validationPayerRequired": "支払者は必須です",
       "toastCreated": "支出を作成しました！",
-      "toastCreateFailed": "支出の作成に失敗しました: {message}"
+      "toastCreateFailed": "支出の作成に失敗しました: {message}",
+      "workspaceParticipantsHint": "The expense is split among workspace members."
     },
     "list": {
       "empty": "支出が見つかりません",
@@ -325,7 +326,8 @@
     "categorySelector": {
       "noCategories": "利用可能なカテゴリがありません",
       "placeholder": "カテゴリを選択"
-    }
+    },
+    "newWorkspaceSubtitle": "Record an expense for this workspace"
   },
   "categories": {
     "foodDrink": "食事・飲み物",
@@ -629,5 +631,58 @@
       "title": "借金支払済み",
       "body": "{debtorName}が借金を支払済みにしました（{amount}）"
     }
+  },
+  "workspaces": {
+    "globalHome": "Global home",
+    "sidebarTitle": "Workspaces",
+    "sidebarEmpty": "No workspaces yet",
+    "loading": "Loading…",
+    "createWorkspace": "Create workspace",
+    "listTitle": "Workspaces",
+    "listEmpty": "Create your first topic-based workspace.",
+    "memberCount": "{count} members",
+    "createTitle": "New workspace",
+    "createSubtitle": "Pick a theme and add goals for your topic.",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. Trip to France",
+    "themeLabel": "Theme",
+    "themes": {
+      "matka": "Travel",
+      "saastaminen": "Savings",
+      "koti": "Home",
+      "yleinen": "General"
+    },
+    "goalsLabel": "Goals",
+    "goalsHint": "Add at least one budget cap or savings target.",
+    "addGoal": "Add goal",
+    "removeGoal": "Remove goal",
+    "goalNameLabel": "Goal name",
+    "goalNamePlaceholder": "e.g. Trip budget",
+    "goalTypeLabel": "Type",
+    "goalTypeBudget": "Budget cap",
+    "goalTypeSavings": "Savings target",
+    "goalAmountLabel": "Target amount",
+    "validationGoalRequired": "Add at least one valid goal",
+    "toastCreated": "Workspace created",
+    "notFound": "Workspace not found",
+    "membersTitle": "Members",
+    "membersEmpty": "No members",
+    "joinByCodeTitle": "Join workspace with code",
+    "joinCodeLabel": "Join code",
+    "joinCodePlaceholder": "e.g. ABCD2345",
+    "joinButton": "Join",
+    "toastAlreadyMember": "You are already a member",
+    "toastJoined": "You joined the workspace",
+    "budgetRemaining": "{amount} left",
+    "savingsRemaining": "{amount} to go",
+    "recordDepositTitle": "Record savings",
+    "depositGoalLabel": "Goal",
+    "depositAmountLabel": "Amount",
+    "recordDeposit": "Record",
+    "toastDepositRecorded": "Savings recorded",
+    "inviteShareTitle": "Invite members",
+    "inviteShareHint": "Share this code so others can join the workspace.",
+    "toastCodeCopied": "Code copied",
+    "createInviteCode": "Create join code"
   }
 }

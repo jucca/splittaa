@@ -3,6 +3,10 @@ import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
 import { assertGroupMember } from "./_lib/authorize";
+import {
+  assertWorkspaceMember,
+  assertWorkspaceMembers,
+} from "./_lib/workspaces";
 import { validateSplits } from "./_lib/money";
 import { isSupportedCurrency, resolveCurrency } from "./_lib/currencies";
 import { applyExpenseToBalances } from "./_lib/balances";
@@ -27,11 +31,24 @@ export const createExpense = mutation({
       })
     ),
     groupId: v.optional(v.id("groups")),
+    workspaceId: v.optional(v.id("workspaces")),
     currency: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     // Use centralized getCurrentUser function
     const user = await requireAuth(ctx);
+
+    if (args.groupId && args.workspaceId) {
+      throw new Error("Kulu ei voi kuulua sekä ryhmälle että työpöydälle");
+    }
+
+    if (args.workspaceId) {
+      await assertWorkspaceMember(ctx, args.workspaceId, user._id);
+      const participantIds = [
+        ...new Set([...args.splits.map((s) => s.userId), args.paidByUserId]),
+      ];
+      await assertWorkspaceMembers(ctx, args.workspaceId, participantIds);
+    }
 
     if (args.groupId) {
       await assertGroupMember(ctx, args.groupId, user._id);
@@ -60,6 +77,7 @@ export const createExpense = mutation({
       splitType: args.splitType,
       splits: args.splits,
       groupId: args.groupId,
+      workspaceId: args.workspaceId,
       createdBy: user._id,
     });
 
@@ -68,6 +86,7 @@ export const createExpense = mutation({
       {
         paidByUserId: args.paidByUserId,
         groupId: args.groupId,
+        workspaceId: args.workspaceId,
         currency,
         splits: args.splits,
       },

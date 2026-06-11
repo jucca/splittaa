@@ -49,3 +49,11 @@ export type MonthlySpendingItem = {
 export type DashboardGroup = NonNullable<
   FunctionReturnType<typeof api.dashboard.getUserGroups>
 >[number];
+
+export type WorkspaceListItem = NonNullable<
+  FunctionReturnType<typeof api.workspaces.listMine>
+>[number];
+
+export type WorkspaceGoalView = NonNullable<
+  FunctionReturnType<typeof api.workspaces.getGoals>
+>[number];

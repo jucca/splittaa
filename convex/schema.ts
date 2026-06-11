@@ -62,9 +62,11 @@ export default defineSchema({
       })
     ),
     groupId: v.optional(v.id("groups")), // null for one-on-one expenses
+    workspaceId: v.optional(v.id("workspaces")),
     createdBy: v.id("users"), // Reference to users table
   })
     .index("by_group", ["groupId"])
+    .index("by_workspace", ["workspaceId"])
     .index("by_user_and_group", ["paidByUserId", "groupId"])
     .index("by_date", ["date"]),
 
@@ -77,34 +79,109 @@ export default defineSchema({
     paidByUserId: v.id("users"), // Reference to users table
     receivedByUserId: v.id("users"), // Reference to users table
     groupId: v.optional(v.id("groups")), // null for one-on-one settlements
+    workspaceId: v.optional(v.id("workspaces")),
     relatedExpenseIds: v.optional(v.array(v.id("expenses"))), // Which expenses this settlement covers
     createdBy: v.id("users"), // Reference to users table
   })
     .index("by_group", ["groupId"])
+    .index("by_workspace", ["workspaceId"])
     .index("by_user_and_group", ["paidByUserId", "groupId"])
     .index("by_receiver_and_group", ["receivedByUserId", "groupId"])
     .index("by_date", ["date"]),
 
   // Balance snapshots (materialized from expenses + settlements)
   balances: defineTable({
-    scopeType: v.union(v.literal("personal"), v.literal("group")),
+    scopeType: v.union(
+      v.literal("personal"),
+      v.literal("group"),
+      v.literal("workspace")
+    ),
     scopeGroupId: v.optional(v.id("groups")),
+    scopeWorkspaceId: v.optional(v.id("workspaces")),
     userId: v.id("users"),
     counterpartyUserId: v.id("users"),
     amount: v.number(), // userId owes counterpartyUserId when > 0
     currency: v.optional(v.string()),
     updatedAt: v.number(),
   })
-    .index("by_scope_pair", ["scopeType", "scopeGroupId", "userId", "counterpartyUserId"])
+    .index("by_scope_pair", [
+      "scopeType",
+      "scopeGroupId",
+      "scopeWorkspaceId",
+      "userId",
+      "counterpartyUserId",
+    ])
     .index("by_scope_pair_currency", [
       "scopeType",
       "scopeGroupId",
+      "scopeWorkspaceId",
       "userId",
       "counterpartyUserId",
       "currency",
     ])
-    .index("by_user_scope", ["userId", "scopeType", "scopeGroupId"])
-    .index("by_scope", ["scopeType", "scopeGroupId"]),
+    .index("by_user_scope", [
+      "userId",
+      "scopeType",
+      "scopeGroupId",
+      "scopeWorkspaceId",
+    ])
+    .index("by_scope", ["scopeType", "scopeGroupId", "scopeWorkspaceId"]),
+
+  workspaces: defineTable({
+    name: v.string(),
+    themeId: v.string(),
+    createdBy: v.id("users"),
+    members: v.array(
+      v.object({
+        userId: v.id("users"),
+        role: v.union(v.literal("admin"), v.literal("member")),
+        joinedAt: v.number(),
+      })
+    ),
+  }),
+
+  workspaceGoals: defineTable({
+    workspaceId: v.id("workspaces"),
+    type: v.union(v.literal("budget_cap"), v.literal("savings_target")),
+    label: v.string(),
+    targetAmount: v.number(),
+    currency: v.string(),
+    sortOrder: v.number(),
+  }).index("by_workspace", ["workspaceId"]),
+
+  workspaceDeposits: defineTable({
+    workspaceId: v.id("workspaces"),
+    goalId: v.id("workspaceGoals"),
+    amount: v.number(),
+    currency: v.string(),
+    note: v.optional(v.string()),
+    date: v.number(),
+    createdBy: v.id("users"),
+  })
+    .index("by_workspace", ["workspaceId"])
+    .index("by_goal", ["goalId"]),
+
+  workspaceInvites: defineTable({
+    workspaceId: v.id("workspaces"),
+    invitedBy: v.id("users"),
+    invitedUserId: v.optional(v.id("users")),
+    token: v.string(),
+    displayCode: v.optional(v.string()),
+    kind: v.union(v.literal("direct"), v.literal("open")),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("accepted"),
+      v.literal("declined"),
+      v.literal("expired"),
+      v.literal("revoked")
+    ),
+    expiresAt: v.number(),
+    createdAt: v.number(),
+  })
+    .index("by_token", ["token"])
+    .index("by_display_code", ["displayCode"])
+    .index("by_workspace_and_status", ["workspaceId", "status"])
+    .index("by_invited_user_and_status", ["invitedUserId", "status"]),
 
   // Groups
   groups: defineTable({

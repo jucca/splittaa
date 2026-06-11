@@ -126,7 +126,10 @@ export const getGroupExpenses = query({
     const snapshotRows = await ctx.db
       .query("balances")
       .withIndex("by_scope", (q) =>
-        q.eq("scopeType", "group").eq("scopeGroupId", groupId)
+        q
+          .eq("scopeType", "group")
+          .eq("scopeGroupId", groupId)
+          .eq("scopeWorkspaceId", undefined)
       )
       .collect();
 

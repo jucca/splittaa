@@ -52,10 +52,12 @@ type ExpenseFormValues = {
 
 export function ExpenseForm({
   type = "individual",
+  workspaceId,
   onSuccess,
 }: {
-  type?: "individual" | "group";
-  onSuccess?: (id?: Id<"users"> | Id<"groups">) => void;
+  type?: "individual" | "group" | "workspace";
+  workspaceId?: Id<"workspaces">;
+  onSuccess?: (id?: Id<"users"> | Id<"groups"> | Id<"workspaces">) => void;
 }) {
   const t = useTranslations("expenses.form");
   const tGroups = useTranslations("groups");
@@ -92,6 +94,10 @@ export function ExpenseForm({
   const [splits, setSplits] = useState<SplitRow[]>([]);
 
   const { data: currentUser } = useConvexQuery(api.users.me);
+  const { data: workspaceMembers } = useConvexQuery(
+    api.workspaces.getMembers,
+    type === "workspace" && workspaceId ? { workspaceId } : "skip"
+  );
   const currencyInitializedRef = useRef(false);
 
   const createExpense = useConvexMutation(api.expenses.createExpense);
@@ -143,6 +149,17 @@ export function ExpenseForm({
   }, [currentUser, setValue]);
 
   useEffect(() => {
+    if (type === "workspace" && workspaceMembers?.length) {
+      setParticipants(
+        workspaceMembers.map((m: { userId: Id<"users">; name: string; imageUrl?: string | null }) => ({
+          id: m.userId,
+          name: m.name,
+          imageUrl: m.imageUrl,
+        }))
+      );
+      return;
+    }
+
     if (participants.length === 0 && currentUser) {
       setParticipants([
         {
@@ -152,7 +169,7 @@ export function ExpenseForm({
         },
       ]);
     }
-  }, [currentUser, participants]);
+  }, [currentUser, participants, type, workspaceMembers]);
 
   const onSubmit = async (data: ExpenseFormValues) => {
     try {
@@ -187,19 +204,20 @@ export function ExpenseForm({
       }
 
       const groupId =
-        type === "individual"
-          ? undefined
-          : (data.groupId as Id<"groups"> | undefined);
+        type === "group"
+          ? (data.groupId as Id<"groups"> | undefined)
+          : undefined;
 
       await createExpense.mutate({
         description: data.description,
         amount: amount,
         category: data.category || "other",
         date: data.date.getTime(),
-        paidByUserId: data.paidByUserId,
+        paidByUserId: data.paidByUserId as Id<"users">,
         splitType: data.splitType,
         splits: formattedSplits,
         groupId,
+        workspaceId: type === "workspace" ? workspaceId : undefined,
         currency: selectedCurrency,
       });
 
@@ -216,6 +234,8 @@ export function ExpenseForm({
           onSuccess(otherUserId);
         } else if (type === "group" && groupId) {
           onSuccess(groupId);
+        } else if (type === "workspace" && workspaceId) {
+          onSuccess(workspaceId);
         }
       }
     } catch (error) {
@@ -364,6 +384,20 @@ export function ExpenseForm({
                 {t("participantsOptionalHint")}
               </p>
             )}
+          </div>
+        )}
+
+        {type === "workspace" && (
+          <div className="space-y-2">
+            <Label>{t("participantsLabel")}</Label>
+            <p className="text-sm text-muted-foreground">
+              {t("workspaceParticipantsHint")}
+            </p>
+            <ul className="text-sm space-y-1 rounded-md border p-3">
+              {participants.map((p) => (
+                <li key={p.id}>{p.name}</li>
+              ))}
+            </ul>
           </div>
         )}
 

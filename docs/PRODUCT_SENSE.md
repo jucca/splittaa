@@ -138,6 +138,20 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 
 ---
 
+## 9. Topic workspaces (työpöydät)
+
+**Actor:** Signed-in user  
+**Goal:** Track expenses and goals for a specific topic (trip, savings, home) in a shared workspace separate from the global dashboard.
+
+1. Sidebar lists **Työpöydät**; global home remains `/dashboard`.
+2. **Luo työpöytä** (`/tyopoydat/uusi`) — name, preset theme (`matka`, `säästäminen`, `koti`, `yleinen`), one or more goals (budget cap and/or savings target).
+3. **Työpöydän etusivu** (`/tyopoyta/[id]`) — goal progress cards, balance cards, expense summary, member list, join-by-code (admin creates open invite).
+4. **Lisää kulu** from workspace → `/expenses/new?workspaceId=...` — participants are workspace members; balances stay in workspace scope.
+5. **Säästötavoite** — record deposits manually; **budjettikatto** tracks total workspace expenses automatically.
+6. Workspace data does **not** appear on the global dashboard.
+
+---
+
 ## 9. Apuri (in-app guide)
 
 **Actor:** Signed-in user (especially first-time after profile)  

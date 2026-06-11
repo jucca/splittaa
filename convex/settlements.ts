@@ -3,6 +3,7 @@ import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { requireAuth } from "./_lib/auth";
 import { assertGroupMember, assertGroupMembers } from "./_lib/authorize";
+import { assertWorkspaceMembers } from "./_lib/workspaces";
 import {
   applySettlementToBalances,
   listBalancesBetweenUsers,
@@ -24,6 +25,7 @@ export const createSettlement = mutation({
     paidByUserId: v.id("users"),
     receivedByUserId: v.id("users"),
     groupId: v.optional(v.id("groups")), // null when settling one‑to‑one
+    workspaceId: v.optional(v.id("workspaces")),
     relatedExpenseIds: v.optional(v.array(v.id("expenses"))),
   },
   handler: async (ctx, args) => {
@@ -42,9 +44,20 @@ export const createSettlement = mutation({
       throw new Error("Sinun on oltava joko maksaja tai vastaanottaja");
     }
 
+    if (args.groupId && args.workspaceId) {
+      throw new Error("Tilitys ei voi kuulua sekä ryhmälle että työpöydälle");
+    }
+
     /* ── group check (if provided) ───────────────────────────────────────── */
     if (args.groupId) {
       await assertGroupMembers(ctx, args.groupId, [
+        args.paidByUserId,
+        args.receivedByUserId,
+      ]);
+    }
+
+    if (args.workspaceId) {
+      await assertWorkspaceMembers(ctx, args.workspaceId, [
         args.paidByUserId,
         args.receivedByUserId,
       ]);
@@ -62,6 +75,7 @@ export const createSettlement = mutation({
       paidByUserId: args.paidByUserId,
       receivedByUserId: args.receivedByUserId,
       groupId: args.groupId,
+      workspaceId: args.workspaceId,
       relatedExpenseIds: args.relatedExpenseIds,
       createdBy: caller._id,
     });
@@ -74,6 +88,7 @@ export const createSettlement = mutation({
         amount: args.amount,
         currency: settlementCurrency,
         groupId: args.groupId,
+        workspaceId: args.workspaceId,
       },
       1
     );

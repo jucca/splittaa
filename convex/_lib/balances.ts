@@ -4,10 +4,18 @@ import type { SupportedCurrencyCode } from "./currencies";
 import { DEFAULT_CURRENCY } from "./currencies";
 import { balanceCurrency, convertWithStoredRates } from "./exchange";
 
-type Scope = {
-  scopeType: "personal" | "group";
-  scopeGroupId?: Id<"groups">;
-};
+type Scope =
+  | { scopeType: "personal" }
+  | { scopeType: "group"; scopeGroupId: Id<"groups"> }
+  | { scopeType: "workspace"; scopeWorkspaceId: Id<"workspaces"> };
+
+function scopeGroupIdForIndex(scope: Scope): Id<"groups"> | undefined {
+  return scope.scopeType === "group" ? scope.scopeGroupId : undefined;
+}
+
+function scopeWorkspaceIdForIndex(scope: Scope): Id<"workspaces"> | undefined {
+  return scope.scopeType === "workspace" ? scope.scopeWorkspaceId : undefined;
+}
 
 type BalanceReader = Pick<QueryCtx, "db"> | Pick<MutationCtx, "db">;
 type BalanceWriter = Pick<MutationCtx, "db">;
@@ -34,7 +42,8 @@ async function findBalanceRow(
     .withIndex("by_scope_pair_currency", (q) =>
       q
         .eq("scopeType", scope.scopeType)
-        .eq("scopeGroupId", scope.scopeGroupId)
+        .eq("scopeGroupId", scopeGroupIdForIndex(scope))
+        .eq("scopeWorkspaceId", scopeWorkspaceIdForIndex(scope))
         .eq("userId", userId)
         .eq("counterpartyUserId", counterpartyUserId)
         .eq("currency", currency)
@@ -49,7 +58,8 @@ async function findBalanceRow(
       .withIndex("by_scope_pair", (q) =>
         q
           .eq("scopeType", scope.scopeType)
-          .eq("scopeGroupId", scope.scopeGroupId)
+          .eq("scopeGroupId", scopeGroupIdForIndex(scope))
+          .eq("scopeWorkspaceId", scopeWorkspaceIdForIndex(scope))
           .eq("userId", userId)
           .eq("counterpartyUserId", counterpartyUserId)
       )
@@ -96,7 +106,8 @@ async function upsertCanonicalBalance(
 
   await ctx.db.insert("balances", {
     scopeType: scope.scopeType,
-    scopeGroupId: scope.scopeGroupId,
+    scopeGroupId: scopeGroupIdForIndex(scope),
+    scopeWorkspaceId: scopeWorkspaceIdForIndex(scope),
     userId,
     counterpartyUserId,
     ...payload,
@@ -136,19 +147,31 @@ export async function applyPairDelta(
   );
 }
 
+function resolveExpenseScope(expense: {
+  groupId?: Id<"groups">;
+  workspaceId?: Id<"workspaces">;
+}): Scope {
+  if (expense.workspaceId) {
+    return { scopeType: "workspace", scopeWorkspaceId: expense.workspaceId };
+  }
+  if (expense.groupId) {
+    return { scopeType: "group", scopeGroupId: expense.groupId };
+  }
+  return { scopeType: "personal" };
+}
+
 export async function applyExpenseToBalances(
   ctx: BalanceWriter,
   expense: {
     paidByUserId: Id<"users">;
     groupId?: Id<"groups">;
+    workspaceId?: Id<"workspaces">;
     currency: SupportedCurrencyCode;
     splits: { userId: Id<"users">; amount: number; paid: boolean }[];
   },
   factor: 1 | -1
 ) {
-  const scope: Scope = expense.groupId
-    ? { scopeType: "group", scopeGroupId: expense.groupId }
-    : { scopeType: "personal" };
+  const scope = resolveExpenseScope(expense);
 
   for (const split of expense.splits) {
     if (split.paid || split.userId === expense.paidByUserId) continue;
@@ -196,7 +219,8 @@ async function applySettlementToScope(
     .withIndex("by_scope_pair", (q) =>
       q
         .eq("scopeType", scope.scopeType)
-        .eq("scopeGroupId", scope.scopeGroupId)
+        .eq("scopeGroupId", scopeGroupIdForIndex(scope))
+        .eq("scopeWorkspaceId", scopeWorkspaceIdForIndex(scope))
         .eq("userId", canonical.userId)
         .eq("counterpartyUserId", canonical.counterpartyUserId)
     )
@@ -243,6 +267,19 @@ async function applySettlementToScope(
   }
 }
 
+function resolveSettlementScope(settlement: {
+  groupId?: Id<"groups">;
+  workspaceId?: Id<"workspaces">;
+}): Scope {
+  if (settlement.workspaceId) {
+    return { scopeType: "workspace", scopeWorkspaceId: settlement.workspaceId };
+  }
+  if (settlement.groupId) {
+    return { scopeType: "group", scopeGroupId: settlement.groupId };
+  }
+  return { scopeType: "personal" };
+}
+
 export async function applySettlementToBalances(
   ctx: BalanceWriter,
   settlement: {
@@ -251,13 +288,11 @@ export async function applySettlementToBalances(
     amount: number;
     currency: SupportedCurrencyCode;
     groupId?: Id<"groups">;
+    workspaceId?: Id<"workspaces">;
   },
   factor: 1 | -1
 ) {
-  const scope: Scope = settlement.groupId
-    ? { scopeType: "group", scopeGroupId: settlement.groupId }
-    : { scopeType: "personal" };
-
+  const scope = resolveSettlementScope(settlement);
   await applySettlementToScope(ctx, scope, settlement, factor);
 }
 
@@ -325,7 +360,10 @@ export async function collectGlobalBalanceRowsForUser(
   const personalRows = await ctx.db
     .query("balances")
     .withIndex("by_scope", (q) =>
-      q.eq("scopeType", "personal").eq("scopeGroupId", undefined)
+      q
+        .eq("scopeType", "personal")
+        .eq("scopeGroupId", undefined)
+        .eq("scopeWorkspaceId", undefined)
     )
     .collect();
 
@@ -335,7 +373,10 @@ export async function collectGlobalBalanceRowsForUser(
     const rows = await ctx.db
       .query("balances")
       .withIndex("by_scope", (q) =>
-        q.eq("scopeType", "group").eq("scopeGroupId", groupId)
+        q
+          .eq("scopeType", "group")
+          .eq("scopeGroupId", groupId)
+          .eq("scopeWorkspaceId", undefined)
       )
       .collect();
     groupRows.push(...rows);
@@ -358,7 +399,8 @@ export async function listBalancesBetweenUsers(
     .withIndex("by_scope_pair", (q) =>
       q
         .eq("scopeType", scope.scopeType)
-        .eq("scopeGroupId", scope.scopeGroupId)
+        .eq("scopeGroupId", scopeGroupIdForIndex(scope))
+        .eq("scopeWorkspaceId", scopeWorkspaceIdForIndex(scope))
         .eq("userId", canonical.userId)
         .eq("counterpartyUserId", canonical.counterpartyUserId)
     )
@@ -372,6 +414,26 @@ export async function listBalancesBetweenUsers(
         canonical.userId === meId ? -r.amount : r.amount;
       return { currency, amount: signed };
     });
+}
+
+export async function listWorkspaceBalancesForUser(
+  ctx: BalanceReader,
+  workspaceId: Id<"workspaces">,
+  userId: Id<"users">
+): Promise<Doc<"balances">[]> {
+  const rows = await ctx.db
+    .query("balances")
+    .withIndex("by_scope", (q) =>
+      q
+        .eq("scopeType", "workspace")
+        .eq("scopeGroupId", undefined)
+        .eq("scopeWorkspaceId", workspaceId)
+    )
+    .collect();
+
+  return rows.filter(
+    (r) => r.userId === userId || r.counterpartyUserId === userId
+  );
 }
 
 export async function getNetBalanceBetweenUsers(

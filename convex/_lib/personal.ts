@@ -20,12 +20,14 @@ export async function getPersonalExpensesForUser(
       .collect()
   ).filter(
     (e) =>
+      !e.workspaceId &&
       e.paidByUserId !== userId &&
       e.splits.some((s) => s.userId === userId)
   );
 
   const byId = new Map<Id<"expenses">, Doc<"expenses">>();
   for (const expense of [...expensesYouPaid, ...expensesNotPaidByYou]) {
+    if (expense.workspaceId) continue;
     byId.set(expense._id, expense);
   }
   return [...byId.values()];

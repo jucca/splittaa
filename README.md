@@ -2,7 +2,9 @@
 
 Finnish expense-splitting app for shared expenses, groups, settlements, and contacts. Made during the [DNA's](https://www.dna.fi) summer trainee hackathon 2026. 
 
-**Stack:** Next.js 15 · React 19 · Convex · Clerk · Tailwind / shadcn · Inngest
+Public version of the hackathon outcome is running here: [splittaa](https://splittaa.vercel.app/)
+
+**Stack:** Next.js 16 · React 19 · Convex · Clerk · Tailwind / shadcn · Inngest
 
 ---
 

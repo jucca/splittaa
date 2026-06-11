@@ -86,7 +86,7 @@ Playwright tests (Phase 4) need stable selectors. Add **`data-testid`** on:
 | Group / contacts | `group-create`, `contact-search` |
 | Activity spending (`/toiminta`) | `spending-period-week`, `spending-period-month`, `spending-period-year`, `spending-total`, `spending-chart-time`, `spending-chart-category` |
 | Dashboard expense summary | `expense-summary-chart`, `expense-summary-legend` |
-| Apuri (guide) | `guide-trigger`, `guide-progress`, `guide-continue`, `guide-back`, `guide-skip`, `guide-finish-cta` |
+| Apuri (guide) | `guide-trigger`, `guide-progress`, `guide-continue`, `guide-back`, `guide-skip`, `guide-finish-cta`, `guide-choice-kaikki`, `guide-use-case-custom-input` |
 
 Convention: kebab-case, prefix with feature (`expense-`, `settlement-`). Do not rely on visible Finnish text alone (copy may change).
 

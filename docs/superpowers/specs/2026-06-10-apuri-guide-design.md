@@ -19,9 +19,12 @@ Valinnainen Duolingo-tyylinen sovellusopas (**Apuri**) autentikoituneille käytt
 
 ## Haarautuva polku
 
-- **Käyttötarkoitus** (`useCases`-tagit): kotikulut / matka / satunnaiset / kaikki
+- **Käyttötarkoitus** (monivalinta): kotikulut / matka / satunnaiset — useita valittavissa (union-logiikka)
+- **Kaikki edellä** — UI-pikavalinta, valitsee/poistaa kaikki kolme tagia kerralla (ei tallenneta erillisenä tagina)
+- **Oma idea** — vapaaehtoinen tekstikenttä (max 120 merkkiä); ei vaikuta polkuun jos tageja valittu; pelkkä teksti → laaja opaspolku (kaikki info-vaiheet)
+- **Jatka** aktivoituu kun vähintään yksi tagi tai oma teksti
 - **Kokemustaso:** uusi (kaikki info) / perusteet (ei saldo-perusinfoa) / kokenut (suoraan lopetukseen)
-- `resolveSteps(steps, choices)` — puhdas funktio + 12 kombinaation yksikkötestit
+- `resolveSteps(steps, choices)` — puhdas funktio; info-vaihe näytetään jos mikä tahansa valituista tageista täyttää `step.useCases`-ehdon
 
 ## Tila (localStorage)
 
@@ -31,7 +34,7 @@ Valinnainen Duolingo-tyylinen sovellusopas (**Apuri**) autentikoituneille käytt
 | `splittaa-guide-step` | Kesken jäänyt askel-id (jatko) |
 | `splittaa-guide-auto-opened` | Auto-open tapahtunut kerran ikinä |
 
-Valinnat: `sessionStorage` oppaan ajan (`splittaa-guide-use-case`, `splittaa-guide-experience`).
+Valinnat: `sessionStorage` oppaan ajan (`splittaa-guide-use-cases` JSON-array, `splittaa-guide-use-case-custom`, `splittaa-guide-experience`).
 
 ## Terminologia
 

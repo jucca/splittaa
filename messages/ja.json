@@ -533,7 +533,10 @@
     "steps": {
       "use_case": {
         "title": "Splittaaを何に使いますか？",
-        "subtitle": "主な用途を選んでください — ガイドを調整します。",
+        "subtitle": "1つ以上選んでください — 選択に合わせてガイドを調整します。",
+        "custom_label": "自分のアイデア（任意）",
+        "custom_placeholder": "例：趣味のグループ、出張…",
+        "custom_hint": "プリセットを選ぶ、自分で書く、または両方できます。",
         "options": {
           "kotikulut": {
             "label": "家庭",

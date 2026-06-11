@@ -533,7 +533,10 @@
     "steps": {
       "use_case": {
         "title": "Vad ska du använda Splittaa till?",
-        "subtitle": "Välj ditt huvudsakliga syfte — vi anpassar guiden.",
+        "subtitle": "Välj ett eller flera alternativ — vi anpassar guiden efter dina val.",
+        "custom_label": "Egen idé (valfritt)",
+        "custom_placeholder": "t.ex. hobbygrupp, tjänsteresor…",
+        "custom_hint": "Du kan välja förinställda alternativ, skriva din egen idé eller båda.",
         "options": {
           "kotikulut": {
             "label": "Hushåll",

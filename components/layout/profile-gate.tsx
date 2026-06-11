@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
-import { BarLoader } from "react-spinners";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ALLOWED_PREFIXES = ["/profiili/luo", "/join/"];
 
@@ -27,8 +27,8 @@ export function ProfileGate({ children }: { children: React.ReactNode }) {
 
   if (!allowed && (isLoading || (me && !me.profileCompleted))) {
     return (
-      <div className="flex justify-center py-24">
-        <BarLoader width={160} color="hsl(var(--primary))" />
+      <div className="flex justify-center py-24" aria-busy="true">
+        <Skeleton className="h-8 w-40" />
       </div>
     );
   }

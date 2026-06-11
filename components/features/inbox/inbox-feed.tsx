@@ -8,7 +8,8 @@ import { useConvexMutation, useConvexQuery } from "@/hooks/use-convex-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BarLoader } from "react-spinners";
+import { InboxFeedSkeleton } from "@/components/features/inbox/inbox-feed-skeleton";
+import { AnimatedList, AnimatedListItem } from "@/components/ui/animated-list";
 import { Bell, CheckCircle2, Mail, Send, Wallet } from "lucide-react";
 import { DebtRequestActions } from "@/components/features/inbox/debt-request-actions";
 import { toast } from "sonner";
@@ -159,11 +160,7 @@ export function InboxFeed() {
   };
 
   if (isLoading) {
-    return (
-      <div className="w-full py-12 flex justify-center">
-        <BarLoader width="100%" color="#36d7b7" />
-      </div>
-    );
+    return <InboxFeedSkeleton />;
   }
 
   if (!messages?.length) {
@@ -193,7 +190,7 @@ export function InboxFeed() {
         </div>
       )}
 
-      <ul className="space-y-3" data-testid="inbox-feed">
+      <AnimatedList as="ul" className="space-y-3" data-testid="inbox-feed">
         {messages.map((message: InboxMessage) => {
           const { title, body } = getNotificationDisplay(
             message,
@@ -202,7 +199,7 @@ export function InboxFeed() {
           );
 
           return (
-            <li key={message.id}>
+            <AnimatedListItem as="li" id={message.id} key={message.id}>
               <Card
                 className={
                   message.isRead
@@ -279,10 +276,10 @@ export function InboxFeed() {
                   </div>
                 </CardContent>
               </Card>
-            </li>
+            </AnimatedListItem>
           );
         })}
-      </ul>
+      </AnimatedList>
     </div>
   );
 }

@@ -10,7 +10,6 @@ import { GuideAssistant } from "@/components/features/guide/guide-assistant";
 import Link from "next/link";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { useStoreUser } from "@/hooks/use-store-user";
-import { BarLoader } from "react-spinners";
 import { Authenticated, Unauthenticated } from "convex/react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -28,26 +27,28 @@ function NavIconLink({
   label: string;
 }) {
   return (
-    <Link href={href}>
+    <Link href={href} className="inline-flex items-center">
       <Button
         variant="outline"
-        className="hidden md:inline-flex items-center gap-2 hover:text-green-600 hover:border-green-600 transition"
+        className="hidden md:inline-flex h-10 items-center gap-2 hover:text-green-600 hover:border-green-600 transition"
       >
         <Icon className="h-4 w-4" />
         {label}
       </Button>
-      <HoverHint label={label} side="bottom">
-        <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
-          <Icon className="h-4 w-4" />
-          <span className="sr-only">{label}</span>
-        </Button>
-      </HoverHint>
+      <span className="md:hidden inline-flex items-center">
+        <HoverHint label={label} side="bottom">
+          <Button variant="ghost" className="w-10 h-10 p-0">
+            <Icon className="h-4 w-4" />
+            <span className="sr-only">{label}</span>
+          </Button>
+        </HoverHint>
+      </span>
     </Link>
   );
 }
 
 export default function Header() {
-  const { isLoading } = useStoreUser();
+  useStoreUser();
   const path = usePathname();
   const t = useTranslations("nav");
 
@@ -140,7 +141,6 @@ export default function Header() {
           </Unauthenticated>
         </div>
       </nav>
-      {isLoading && <BarLoader width={"100%"} color="#36d7b7" />}
     </header>
   );
 }

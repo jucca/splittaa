@@ -47,6 +47,7 @@ New UI should use semantic HTML and Radix primitives already in `components/ui/`
 ## Visual system
 
 - **Tailwind 4** + shadcn-style components; theme via `next-themes` where used.
+- **List motion:** Opacity-only fades via Motion on reactive lists; `prefers-reduced-motion` respected globally via `MotionConfig`.
 - **Density:** Comfortable for mobile-first; main flows usable on narrow viewports.
 - **Charts:** Recharts on dashboard — provide text summary or table fallback where possible.
 

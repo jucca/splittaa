@@ -2,7 +2,7 @@
 
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
-import { BarLoader } from "react-spinners";
+import { DashboardSkeleton } from "@/components/features/dashboard/dashboard-skeleton";
 import {
   Card,
   CardContent,
@@ -48,13 +48,11 @@ export default function Dashboard() {
     monthlySpendingLoading;
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="container mx-auto py-6">
       {isLoading ? (
-        <div className="w-full py-12 flex justify-center">
-          <BarLoader width={"100%"} color="#36d7b7" />
-        </div>
+        <DashboardSkeleton />
       ) : (
-        <>
+        <div className="animate-in fade-in duration-200 space-y-6">
           <PendingGroupInvites />
 
           <div className="flex  justify-between flex-col sm:flex-row sm:items-center gap-4">
@@ -203,7 +201,7 @@ export default function Dashboard() {
               </Card>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

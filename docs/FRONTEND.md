@@ -74,6 +74,15 @@ Consolidate `app/**/components/*` into `components/features/*` during Phase 3.
 
 ---
 
+## Motion & loading
+
+- **Loading:** Use shadcn `Skeleton` with layout matching the final UI — not spinners.
+- **List updates:** Use `AnimatedList` / `AnimatedListItem` from `components/ui/animated-list.tsx` for Convex-driven lists (opacity fade ≤150ms). Feature code must not import `motion/react`.
+- **Provider:** `MotionProvider` in `components/layout/motion-provider.tsx` (`LazyMotion` + `reducedMotion="user"`), mounted inside `ConvexClientProvider`.
+- **Out of scope for Motion:** dialogs/tooltips (Radix), route transitions, balance counters, chart data transitions.
+
+---
+
 ## E2E stability (planned)
 
 Playwright tests (Phase 4) need stable selectors. Add **`data-testid`** on:

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
-import { BarLoader } from "react-spinners";
+import { ContactsPageSkeleton } from "@/components/features/contacts/contacts-page-skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -44,11 +44,7 @@ export default function ContactsPage() {
   }, [searchParams, router]);
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-12">
-        <BarLoader width={"100%"} color="#36d7b7" />
-      </div>
-    );
+    return <ContactsPageSkeleton />;
   }
 
   const { users, groups } = data || { users: [], groups: [] };

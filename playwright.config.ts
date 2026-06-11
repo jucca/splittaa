@@ -12,6 +12,9 @@ export default defineConfig({
   use: {
     baseURL,
     trace: "on-first-retry",
+    contextOptions: {
+      reducedMotion: "reduce",
+    },
   },
   projects: [
     {

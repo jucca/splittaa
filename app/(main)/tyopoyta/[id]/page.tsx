@@ -5,7 +5,7 @@ import Link from "next/link";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useConvexQuery } from "@/hooks/use-convex-query";
-import { BarLoader } from "react-spinners";
+import { DashboardSkeleton } from "@/components/features/dashboard/dashboard-skeleton";
 import {
   Card,
   CardContent,
@@ -82,9 +82,7 @@ export default function WorkspaceDashboardPage({
       )}
     >
       {isLoading ? (
-        <div className="w-full py-12 flex justify-center">
-          <BarLoader width="100%" color="#36d7b7" />
-        </div>
+        <DashboardSkeleton />
       ) : workspace ? (
         <>
           <div className="flex justify-between flex-col sm:flex-row sm:items-center gap-4">

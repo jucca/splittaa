@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
-import { BarLoader } from "react-spinners";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Users } from "lucide-react";
 import {
   Select,
@@ -47,7 +47,7 @@ export function GroupSelector({
   };
 
   if (isLoading) {
-    return <BarLoader width={"100%"} color="#36d7b7" />;
+    return <Skeleton className="h-9 w-full" aria-busy="true" />;
   }
 
   if (!data?.groups || data.groups.length === 0) {
@@ -83,9 +83,7 @@ export function GroupSelector({
       </Select>
 
       {isLoading && selectedGroupId && (
-        <div className="mt-2">
-          <BarLoader width={"100%"} color="#36d7b7" />
-        </div>
+        <Skeleton className="mt-2 h-9 w-full" aria-busy="true" />
       )}
     </div>
   );

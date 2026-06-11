@@ -16,6 +16,7 @@ import {
   YAxis,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMoney } from "@/components/providers/money-format-provider";
 import { useTranslations } from "next-intl";
@@ -96,7 +97,7 @@ export function SpendingCharts() {
           <CardTitle>{t("title")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">{tShared("loading")}</p>
+          <Skeleton className="h-[300px] w-full rounded-lg" aria-busy="true" />
         </CardContent>
       </Card>
     );

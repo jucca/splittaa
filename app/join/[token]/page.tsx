@@ -7,7 +7,7 @@ import { useAuth, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useConvexMutation } from "@/hooks/use-convex-query";
-import { BarLoader } from "react-spinners";
+import { JoinPageSkeleton } from "@/components/features/groups/join-page-skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
@@ -65,11 +65,7 @@ export default function JoinGroupPage() {
   }
 
   if (previewLoading || !isLoaded) {
-    return (
-      <div className="container mx-auto py-12">
-        <BarLoader width="100%" color="#36d7b7" />
-      </div>
-    );
+    return <JoinPageSkeleton />;
   }
 
   if (!preview) {

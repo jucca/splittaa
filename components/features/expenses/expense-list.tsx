@@ -16,6 +16,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
 import { getCategoryLabel } from "@/lib/i18n/category-label";
 import { getConvexErrorFromUnknown } from "@/lib/i18n/convex-errors";
+import { AnimatedList, AnimatedListItem } from "@/components/ui/animated-list";
 import { resolveLocale } from "@/lib/i18n/locales";
 
 type ExpenseSplitRow = {
@@ -104,7 +105,7 @@ export function ExpenseList({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <AnimatedList className="flex flex-col gap-4">
       {expenses.map((expense: ExpenseListItem) => {
         const payer = getUserDetails(expense.paidByUserId);
         const isCurrentUserPayer = expense.paidByUserId === currentUser?.id;
@@ -113,10 +114,8 @@ export function ExpenseList({
         const showDeleteOption = canDeleteExpense(expense);
 
         return (
-          <Card
-            className="hover:bg-muted/30 transition-colors"
-            key={expense._id}
-          >
+          <AnimatedListItem id={expense._id} key={expense._id}>
+            <Card className="hover:bg-muted/30 transition-colors">
             <CardContent className="py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -201,8 +200,9 @@ export function ExpenseList({
               </div>
             </CardContent>
           </Card>
+          </AnimatedListItem>
         );
       })}
-    </div>
+    </AnimatedList>
   );
 }

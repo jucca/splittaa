@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Inbox } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { HoverHint } from "@/components/ui/hover-hint";
+import { cn } from "@/lib/utils";
 
 export function InboxNavLink({ className }: { className?: string }) {
   const { data: unreadCount } = useConvexQuery(api.notifications.getUnreadCount);
@@ -18,10 +19,10 @@ export function InboxNavLink({ className }: { className?: string }) {
     : t("inbox");
 
   return (
-    <Link href="/viestit" className={className}>
+    <Link href="/viestit" className={cn("inline-flex items-center", className)}>
       <Button
         variant="outline"
-        className="hidden md:inline-flex items-center gap-2 hover:text-green-600 hover:border-green-600 transition relative"
+        className="hidden md:inline-flex h-10 items-center gap-2 hover:text-green-600 hover:border-green-600 transition relative"
       >
         <Inbox className="h-4 w-4" />
         {label}
@@ -35,20 +36,22 @@ export function InboxNavLink({ className }: { className?: string }) {
           </Badge>
         ) : null}
       </Button>
-      <HoverHint label={label} side="bottom">
-        <Button variant="ghost" className="md:hidden w-10 h-10 p-0 relative">
-          <Inbox className="h-4 w-4" />
-          {unreadCount ? (
-            <span
-              className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-medium text-white"
-              data-testid="inbox-unread-badge"
-            >
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          ) : null}
-          <span className="sr-only">{label}</span>
-        </Button>
-      </HoverHint>
+      <span className="md:hidden inline-flex items-center">
+        <HoverHint label={label} side="bottom">
+          <Button variant="ghost" className="w-10 h-10 p-0 relative">
+            <Inbox className="h-4 w-4" />
+            {unreadCount ? (
+              <span
+                className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-medium text-white"
+                data-testid="inbox-unread-badge"
+              >
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            ) : null}
+            <span className="sr-only">{label}</span>
+          </Button>
+        </HoverHint>
+      </span>
     </Link>
   );
 }

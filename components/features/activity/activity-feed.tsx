@@ -14,6 +14,8 @@ import {
   User,
   ChevronRight,
 } from "lucide-react";
+import { ActivityFeedSkeleton } from "@/components/features/activity/activity-feed-skeleton";
+import { AnimatedList, AnimatedListItem } from "@/components/ui/animated-list";
 import type { FunctionReturnType } from "convex/server";
 import { useTranslations } from "next-intl";
 import { useDateFnsLocale } from "@/lib/i18n/use-date-fns-locale";
@@ -24,7 +26,6 @@ type ActivityEntry = FunctionReturnType<
 
 export function ActivityFeed() {
   const t = useTranslations("activity");
-  const tShared = useTranslations("shared");
   const dateFnsLocale = useDateFnsLocale();
   const { data: items, isLoading } = useConvexQuery(
     api.activity.getRecentActivity,
@@ -32,11 +33,7 @@ export function ActivityFeed() {
   );
 
   if (isLoading) {
-    return (
-      <p className="text-center text-muted-foreground py-12">
-        {tShared("loading")}
-      </p>
-    );
+    return <ActivityFeedSkeleton />;
   }
 
   if (!items?.length) {
@@ -50,13 +47,17 @@ export function ActivityFeed() {
   }
 
   return (
-    <ul className="flex flex-col gap-3" aria-label={t("feedAria")}>
+    <AnimatedList
+      as="ul"
+      className="flex flex-col gap-3"
+      aria-label={t("feedAria")}
+    >
       {items.map((item: ActivityEntry) => (
-        <li key={item.id}>
+        <AnimatedListItem as="li" id={item.id} key={item.id}>
           <ActivityRow item={item} dateFnsLocale={dateFnsLocale} />
-        </li>
+        </AnimatedListItem>
       ))}
-    </ul>
+    </AnimatedList>
   );
 }
 

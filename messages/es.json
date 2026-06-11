@@ -522,6 +522,85 @@
     "toastBulkSkippedNoDebt": "{count} omitidos — ya no tenían deuda pendiente",
     "toastBulkNoneSent": "No se envió ninguna solicitud de pago"
   },
+  "guide": {
+    "openAria": "Abrir guía",
+    "openHint": "Guía de la app",
+    "continue": "Continuar",
+    "skip": "Omitir guía",
+    "back": "Atrás",
+    "close": "Cerrar",
+    "finishCta": "Añadir tu primer gasto",
+    "steps": {
+      "use_case": {
+        "title": "¿Para qué usarás Splittaa?",
+        "subtitle": "Elige tu uso principal — adaptamos la guía.",
+        "options": {
+          "kotikulut": {
+            "label": "Hogar",
+            "description": "Alquiler, comida y gastos compartidos"
+          },
+          "matka": {
+            "label": "Viaje",
+            "description": "Viajes y gastos compartidos"
+          },
+          "satunnaiset": {
+            "label": "Deudas ocasionales",
+            "description": "Cenas y repartos puntuales"
+          },
+          "kaikki": {
+            "label": "Todo lo anterior",
+            "description": "Quiero la visión completa"
+          }
+        }
+      },
+      "experience": {
+        "title": "¿Qué tan familiarizado estás con dividir gastos?",
+        "subtitle": "Puedes reabrir la guía desde la cabecera en cualquier momento.",
+        "options": {
+          "uusi": {
+            "label": "Soy nuevo",
+            "description": "No he usado apps similares"
+          },
+          "perusteet": {
+            "label": "Conozco lo básico",
+            "description": "Entiendo la idea de dividir"
+          },
+          "kokenut": {
+            "label": "Soy experimentado",
+            "description": "Solo quiero un vistazo rápido"
+          }
+        }
+      },
+      "balance_basics": {
+        "title": "¿Qué es un saldo?",
+        "body": "Splittaa muestra quién debe a quién. Los saldos del panel resumen las deudas — verde significa que te deben, rojo que debes."
+      },
+      "dashboard": {
+        "title": "El panel muestra la situación",
+        "body": "Ves saldo total, resumen de gastos y grupos. Abre detalles de saldo para vistas por persona."
+      },
+      "new_expense": {
+        "title": "Añadir un nuevo gasto",
+        "body": "Introduce descripción, importe y participantes. Divide a partes iguales, por porcentaje o importes exactos. Indica quién pagó."
+      },
+      "groups": {
+        "title": "Los grupos simplifican gastos compartidos",
+        "body": "Crea un grupo desde contactos o únete con código. En gastos de grupo los participantes se rellenan automáticamente."
+      },
+      "personal_debt": {
+        "title": "Deudas personales y solicitudes",
+        "body": "Sigue deudas entre dos sin grupo. En Mensajes puedes enviar solicitudes o marcar deudas como pagadas."
+      },
+      "multi_currency": {
+        "title": "Multimoneda en viajes",
+        "body": "Elige la moneda al añadir. Splittaa muestra importes en la moneda elegida."
+      },
+      "finish": {
+        "title": "¡Estás listo!",
+        "body": "A continuación añade tu primer gasto. La guía está siempre en la cabecera si la necesitas."
+      }
+    }
+  },
   "errors": {
     "FORBIDDEN": "No tienes permiso para esta acción",
     "NOT_FOUND": "No encontrado",

@@ -6,6 +6,7 @@ import { History, LayoutDashboard, Settings } from "lucide-react";
 import { InboxNavLink } from "@/components/layout/inbox-nav-link";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { GuideAssistant } from "@/components/features/guide/guide-assistant";
 import Link from "next/link";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { useStoreUser } from "@/hooks/use-store-user";
@@ -115,6 +116,7 @@ export default function Header() {
                   afterSignOutUrl="/"
                 />
                 <ThemeToggle />
+                <GuideAssistant />
                 <LanguageSwitcher />
               </div>
             </div>

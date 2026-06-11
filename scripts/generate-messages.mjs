@@ -309,6 +309,8 @@ const fi = {
       datePlaceholder: "Valitse päivämäärä",
       groupLabel: "Ryhmä",
       participantsLabel: "Osallistujat",
+      participantsOptionalHint:
+        "Voit tallentaa kulun vain itsellesi tai lisätä osallistujia alla.",
       addParticipantMin: "Lisää vähintään yksi muu osallistuja",
       payerLabel: "Maksaja",
       payerPlaceholder: "Valitse maksaja",
@@ -540,6 +542,85 @@ const fi = {
       "{count} henkilöllä ei ollut enää avointa velkaa — ohitettu",
     toastBulkNoneSent: "Yhtään velkapyyntöä ei lähetetty",
   },
+  guide: {
+    openAria: "Avaa apuri",
+    openHint: "Sovellusopas",
+    continue: "Jatka",
+    skip: "Ohita opas",
+    back: "Takaisin",
+    close: "Sulje",
+    finishCta: "Lisää ensimmäinen kulutus",
+    steps: {
+      use_case: {
+        title: "Mihin käytät Splittaata?",
+        subtitle: "Valitse tärkein käyttötarkoitus — räätälöimme oppaan sen mukaan.",
+        options: {
+          kotikulut: {
+            label: "Kotikulut",
+            description: "Vuokra, ruoka ja muut yhteiset menot",
+          },
+          matka: {
+            label: "Matka",
+            description: "Reissut ja yhteiset matkakulut",
+          },
+          satunnaiset: {
+            label: "Satunnaiset velat",
+            description: "Illalliset ja kertaluontoiset jaot",
+          },
+          kaikki: {
+            label: "Kaikki edellä",
+            description: "Haluan nähdä koko kuvan",
+          },
+        },
+      },
+      experience: {
+        title: "Kuinka tuttu olet kulujen jakamiseen?",
+        subtitle: "Voit aina avata oppaan uudelleen headerista.",
+        options: {
+          uusi: {
+            label: "Olen uusi",
+            description: "En ole käyttänyt vastaavia sovelluksia",
+          },
+          perusteet: {
+            label: "Perusteet hallussa",
+            description: "Tunnen jaon perusidean",
+          },
+          kokenut: {
+            label: "Olen kokenut",
+            description: "Haluan vain nopean katsauksen",
+          },
+        },
+      },
+      balance_basics: {
+        title: "Mikä on saldo?",
+        body: "Splittaa näyttää kuka kenelle on velkaa. Etusivun Saldotiedot kokoavat velat yhteen — vihreä tarkoittaa että sinulle ollaan velkaa, punainen että olet velkaa.",
+      },
+      dashboard: {
+        title: "Etusivu kertoo tilanteen",
+        body: "Etusivulla näet kokonaissaldon, kulutusyhteenvedon ja ryhmät. Saldotiedot-listasta pääset henkilökohtaisiin tarkasteluihin.",
+      },
+      new_expense: {
+        title: "Lisää uusi kulutus",
+        body: "Kirjaa kuvaus, summa ja osallistujat. Jaa kulu tasan, prosentteina tai tarkoilla summilla. Maksaja merkitään erikseen.",
+      },
+      groups: {
+        title: "Ryhmät helpottavat yhteisiä kuluja",
+        body: "Luo ryhmä yhteystiedoista tai liity koodilla. Ryhmäkuluissa osallistujat täyttyvät automaattisesti jäsenistä.",
+      },
+      personal_debt: {
+        title: "Henkilövelat ja velkapyynnöt",
+        body: "Voit seurata velkaa kahden kesken ilman ryhmää. Viestit-näkymässä voit lähettää velkapyynnön tai merkitä velan maksetuksi.",
+      },
+      multi_currency: {
+        title: "Monivaluutta matkalla",
+        body: "Valitse kulutuksen valuutta lisäysnäkymässä. Splittaa näyttää summat valitsemassasi valuutassa.",
+      },
+      finish: {
+        title: "Olet valmis!",
+        body: "Seuraavaksi voit lisätä ensimmäisen kulutuksen. Apuri löytyy aina headerista, jos tarvitset muistutuksen.",
+      },
+    },
+  },
   errors: {
     FORBIDDEN: "Ei oikeutta tähän toimintoon",
     NOT_FOUND: "Ei löytynyt",
@@ -765,6 +846,8 @@ const phraseMap = {
   Päivämäärä: "Date",
   "Valitse päivämäärä": "Select date",
   Osallistujat: "Participants",
+  "Voit tallentaa kulun vain itsellesi tai lisätä osallistujia alla.":
+    "Save the expense just for yourself or add more participants below.",
   "Lisää vähintään yksi muu osallistuja":
     "Add at least one other participant",
   Maksaja: "Payer",
@@ -984,6 +1067,55 @@ const phraseMap = {
   "Hyväksy kutsu": "Accept invite",
   "Hylkää kutsu": "Decline invite",
   "Kutsu hylätty": "Invite declined",
+  "Avaa apuri": "Open guide",
+  "Sovellusopas": "App guide",
+  Jatka: "Continue",
+  "Ohita opas": "Skip guide",
+  Sulje: "Close",
+  "Lisää ensimmäinen kulutus": "Add your first expense",
+  "Mihin käytät Splittaata?": "What will you use Splittaa for?",
+  "Valitse tärkein käyttötarkoitus — räätälöimme oppaan sen mukaan.":
+    "Pick your main use case — we'll tailor the guide.",
+  Kotikulut: "Household",
+  "Vuokra, ruoka ja muut yhteiset menot": "Rent, groceries, and shared bills",
+  Matka: "Travel",
+  "Reissut ja yhteiset matkakulut": "Trips and shared travel costs",
+  "Satunnaiset velat": "Occasional debts",
+  "Illalliset ja kertaluontoiset jaot": "Dinners and one-off splits",
+  "Kaikki edellä": "All of the above",
+  "Haluan nähdä koko kuvan": "I want the full overview",
+  "Kuinka tuttu olet kulujen jakamiseen?":
+    "How familiar are you with splitting expenses?",
+  "Voit aina avata oppaan uudelleen headerista.":
+    "You can always reopen the guide from the header.",
+  "Olen uusi": "I'm new",
+  "En ole käyttänyt vastaavia sovelluksia":
+    "I haven't used similar apps before",
+  "Perusteet hallussa": "I know the basics",
+  "Tunnen jaon perusidean": "I understand how splitting works",
+  "Olen kokenut": "I'm experienced",
+  "Haluan vain nopean katsauksen": "I just want a quick overview",
+  "Mikä on saldo?": "What is a balance?",
+  "Splittaa näyttää kuka kenelle on velkaa. Etusivun Saldotiedot kokoavat velat yhteen — vihreä tarkoittaa että sinulle ollaan velkaa, punainen että olet velkaa.":
+    "Splittaa shows who owes whom. Dashboard balances sum debts — green means you're owed, red means you owe.",
+  "Etusivu kertoo tilanteen": "The dashboard shows your situation",
+  "Etusivulla näet kokonaissaldon, kulutusyhteenvedon ja ryhmät. Saldotiedot-listasta pääset henkilökohtaisiin tarkasteluihin.":
+    "On the dashboard you see total balance, spending summary, and groups. Open balance details for person-level views.",
+  "Lisää uusi kulutus": "Add a new expense",
+  "Kirjaa kuvaus, summa ja osallistujat. Jaa kulu tasan, prosentteina tai tarkoilla summilla. Maksaja merkitään erikseen.":
+    "Enter description, amount, and participants. Split equally, by percentage, or exact amounts. Mark who paid separately.",
+  "Ryhmät helpottavat yhteisiä kuluja": "Groups simplify shared expenses",
+  "Luo ryhmä yhteystiedoista tai liity koodilla. Ryhmäkuluissa osallistujat täyttyvät automaattisesti jäsenistä.":
+    "Create a group from contacts or join with a code. Group expenses pre-fill participants from members.",
+  "Henkilövelat ja velkapyynnöt": "Personal debts and debt requests",
+  "Voit seurata velkaa kahden kesken ilman ryhmää. Viestit-näkymässä voit lähettää velkapyynnön tai merkitä velan maksetuksi.":
+    "Track debts between two people without a group. In Inbox you can send debt requests or mark debts paid.",
+  "Monivaluutta matkalla": "Multi-currency on trips",
+  "Valitse kulutuksen valuutta lisäysnäkymässä. Splittaa näyttää summat valitsemassasi valuutassa.":
+    "Pick the expense currency when adding. Splittaa displays amounts in your chosen currency.",
+  "Olet valmis!": "You're all set!",
+  "Seuraavaksi voit lisätä ensimmäisen kulutuksen. Apuri löytyy aina headerista, jos tarvitset muistutuksen.":
+    "Next, add your first expense. The guide is always in the header if you need a reminder.",
   tammi: "Jan",
   helmi: "Feb",
   maalis: "Mar",

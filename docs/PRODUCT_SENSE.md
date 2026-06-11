@@ -138,6 +138,21 @@ Short flows agents should understand before changing Splittaa behavior. Finnish 
 
 ---
 
+## 9. Apuri (in-app guide)
+
+**Actor:** Signed-in user (especially first-time after profile)  
+**Goal:** Learn where features live and how to add an expense.
+
+1. Open **Apuri** from the header (help icon, left of language switcher) — or it opens once automatically on **Etusivu** after profile is complete.
+2. Step through: use case → experience level → dashboard overview → new expense → groups → finish.
+3. **Jatka** advances; **Ohita** dismisses and marks complete.
+4. Finish step links to **Lisää uusi kulu** (`/expenses/new`).
+
+**Success:** User can find dashboard balances, add an expense, and knows groups/contacts exist.  
+**Not:** Profile onboarding (`/profiili/luo`) — that remains mandatory first.
+
+---
+
 ## Domain glossary (Finnish → concept)
 
 | UI (fi) | Meaning |

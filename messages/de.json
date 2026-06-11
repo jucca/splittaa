@@ -522,6 +522,85 @@
     "toastBulkSkippedNoDebt": "{count} übersprungen — keine offene Schuld mehr",
     "toastBulkNoneSent": "Keine Zahlungsanfragen gesendet"
   },
+  "guide": {
+    "openAria": "Assistent öffnen",
+    "openHint": "App-Anleitung",
+    "continue": "Weiter",
+    "skip": "Anleitung überspringen",
+    "back": "Zurück",
+    "close": "Schließen",
+    "finishCta": "Erste Ausgabe hinzufügen",
+    "steps": {
+      "use_case": {
+        "title": "Wofür nutzt du Splittaa?",
+        "subtitle": "Wähle deinen Hauptzweck — wir passen die Anleitung an.",
+        "options": {
+          "kotikulut": {
+            "label": "Haushalt",
+            "description": "Miete, Lebensmittel und gemeinsame Kosten"
+          },
+          "matka": {
+            "label": "Reise",
+            "description": "Reisen und geteilte Reisekosten"
+          },
+          "satunnaiset": {
+            "label": "Gelegentliche Schulden",
+            "description": "Essen gehen und einmalige Aufteilungen"
+          },
+          "kaikki": {
+            "label": "Alles davon",
+            "description": "Ich möchte den vollen Überblick"
+          }
+        }
+      },
+      "experience": {
+        "title": "Wie vertraut bist du mit Ausgabenteilung?",
+        "subtitle": "Du kannst die Anleitung jederzeit in der Kopfzeile öffnen.",
+        "options": {
+          "uusi": {
+            "label": "Ich bin neu",
+            "description": "Ich habe noch keine ähnlichen Apps genutzt"
+          },
+          "perusteet": {
+            "label": "Grundlagen klar",
+            "description": "Ich kenne das Prinzip der Aufteilung"
+          },
+          "kokenut": {
+            "label": "Ich bin erfahren",
+            "description": "Ich will nur einen schnellen Überblick"
+          }
+        }
+      },
+      "balance_basics": {
+        "title": "Was ist ein Saldo?",
+        "body": "Splittaa zeigt, wer wem was schuldet. Die Salden auf dem Dashboard fassen Schulden zusammen — grün bedeutet dir schuldet man, rot dass du schuldest."
+      },
+      "dashboard": {
+        "title": "Das Dashboard zeigt die Lage",
+        "body": "Du siehst Gesamtsaldo, Ausgabenübersicht und Gruppen. In den Saldodetails gelangst du zu Einzelansichten."
+      },
+      "new_expense": {
+        "title": "Neue Ausgabe hinzufügen",
+        "body": "Gib Beschreibung, Betrag und Teilnehmer ein. Teile gleichmäßig, prozentual oder mit exakten Beträgen. Markiere separat, wer bezahlt hat."
+      },
+      "groups": {
+        "title": "Gruppen erleichtern gemeinsame Ausgaben",
+        "body": "Erstelle eine Gruppe aus Kontakten oder tritt mit einem Code bei. Bei Gruppenausgaben werden Teilnehmer automatisch ausgefüllt."
+      },
+      "personal_debt": {
+        "title": "Persönliche Schulden und Anfragen",
+        "body": "Verfolge Schulden zu zweit ohne Gruppe. In Nachrichten kannst du Zahlungsanfragen senden oder Schulden als bezahlt markieren."
+      },
+      "multi_currency": {
+        "title": "Mehrere Währungen auf Reisen",
+        "body": "Wähle die Währung beim Hinzufügen. Splittaa zeigt Beträge in der gewählten Währung."
+      },
+      "finish": {
+        "title": "Du bist startklar!",
+        "body": "Als Nächstes kannst du deine erste Ausgabe hinzufügen. Die Anleitung findest du jederzeit in der Kopfzeile."
+      }
+    }
+  },
   "errors": {
     "FORBIDDEN": "Du hast keine Berechtigung für diese Aktion",
     "NOT_FOUND": "Nicht gefunden",

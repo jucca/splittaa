@@ -23,3 +23,12 @@ Group expenses write only to `group` scope; global views aggregate group + perso
 |------|---------|
 | **Henkilökohtainen kulu** | Expense with no `groupId`. Visible on person view between participants. |
 | **Ryhmäkulu** | Expense with `groupId`. Listed on group page; pairwise effect also reflected in global saldo. |
+
+---
+
+## Onboarding vs guide
+
+| Term | Meaning |
+|------|---------|
+| **Profiilin onboarding** | Mandatory display name + username at `/profiili/luo` (`profileCompletedAt`). |
+| **Apuri** | Optional in-app guide (`guide` i18n namespace). Duolingo-style step overlay; header trigger; auto-open once on dashboard after profile is complete. Not the same as profile onboarding. |

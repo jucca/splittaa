@@ -1,0 +1,343 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import {
+  ChevronLeft,
+  Globe,
+  Home,
+  LayoutDashboard,
+  Plane,
+  Receipt,
+  Scale,
+  Sparkles,
+  Users,
+  Wallet,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { GuideChoiceCard } from "./guide-choice-card";
+import { GuideProgress } from "./guide-progress";
+import { GUIDE_STEP_DEFINITIONS } from "@/lib/guide/guide-steps";
+import {
+  clearSavedGuideStepId,
+  getGuideChoices,
+  getSavedGuideStepId,
+  markGuideCompleted,
+  saveGuideExperience,
+  saveGuideStepId,
+  saveGuideUseCase,
+} from "@/lib/guide/guide-storage";
+import { getProgressTotal, resolveSteps } from "@/lib/guide/resolve-steps";
+import type {
+  GuideExperience,
+  GuideStepDefinition,
+  GuideStepId,
+  GuideUseCase,
+} from "@/lib/guide/types";
+import {
+  GUIDE_EXPERIENCES,
+  GUIDE_USE_CASES,
+} from "@/lib/guide/types";
+
+const USE_CASE_ICONS: Record<GuideUseCase, LucideIcon> = {
+  kotikulut: Home,
+  matka: Plane,
+  satunnaiset: Wallet,
+  kaikki: Sparkles,
+};
+
+const EXPERIENCE_ICONS: Record<GuideExperience, LucideIcon> = {
+  uusi: Sparkles,
+  perusteet: Scale,
+  kokenut: Receipt,
+};
+
+const INFO_ICONS: Partial<Record<GuideStepId, LucideIcon>> = {
+  "balance-basics": Scale,
+  dashboard: LayoutDashboard,
+  "new-expense": Receipt,
+  groups: Users,
+  "personal-debt": Wallet,
+  "multi-currency": Globe,
+  finish: Sparkles,
+};
+
+type GuideOverlayProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+function findStepIndex(steps: GuideStepDefinition[], stepId: GuideStepId): number {
+  const index = steps.findIndex((step) => step.id === stepId);
+  return index >= 0 ? index : 0;
+}
+
+export function GuideOverlay({ open, onOpenChange }: GuideOverlayProps) {
+  const t = useTranslations("guide");
+  const [choices, setChoices] = useState(getGuideChoices);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [pendingChoice, setPendingChoice] = useState<string | undefined>();
+
+  const resolvedSteps = useMemo(
+    () => resolveSteps(GUIDE_STEP_DEFINITIONS, choices),
+    [choices]
+  );
+
+  const currentStep = resolvedSteps[stepIndex];
+  const progressTotal = getProgressTotal(GUIDE_STEP_DEFINITIONS, choices);
+  const progressCurrent = stepIndex + 1;
+
+  const resetFromStorage = useCallback(() => {
+    const storedChoices = getGuideChoices();
+    const storedSteps = resolveSteps(GUIDE_STEP_DEFINITIONS, storedChoices);
+    const savedStepId = getSavedGuideStepId();
+    const initialIndex = savedStepId
+      ? findStepIndex(storedSteps, savedStepId)
+      : 0;
+
+    setChoices(storedChoices);
+    setStepIndex(initialIndex);
+    setPendingChoice(undefined);
+  }, []);
+
+  const handleDismiss = useCallback(() => {
+    if (currentStep) {
+      saveGuideStepId(currentStep.id);
+    }
+    onOpenChange(false);
+  }, [currentStep, onOpenChange]);
+
+  useEffect(() => {
+    if (open) {
+      resetFromStorage();
+    }
+  }, [open, resetFromStorage]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleDismiss();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [open, handleDismiss]);
+
+  useEffect(() => {
+    if (!currentStep) {
+      return;
+    }
+    if (currentStep.type === "choice" && currentStep.choiceKey) {
+      const existing =
+        currentStep.choiceKey === "useCase" ? choices.useCase : choices.experience;
+      setPendingChoice(existing);
+    } else {
+      setPendingChoice(undefined);
+    }
+  }, [currentStep, choices.useCase, choices.experience]);
+
+  const handleSkip = useCallback(() => {
+    markGuideCompleted();
+    onOpenChange(false);
+  }, [onOpenChange]);
+
+  const handleFinish = useCallback(() => {
+    markGuideCompleted();
+    clearSavedGuideStepId();
+    onOpenChange(false);
+  }, [onOpenChange]);
+
+  const handleBack = useCallback(() => {
+    if (stepIndex === 0) {
+      handleDismiss();
+      return;
+    }
+    setStepIndex((index) => Math.max(0, index - 1));
+  }, [handleDismiss, stepIndex]);
+
+  const handleContinue = useCallback(() => {
+    if (!currentStep) {
+      return;
+    }
+
+    if (currentStep.type === "choice" && currentStep.choiceKey) {
+      if (!pendingChoice) {
+        return;
+      }
+      if (currentStep.choiceKey === "useCase") {
+        const useCase = pendingChoice as GuideUseCase;
+        saveGuideUseCase(useCase);
+        setChoices((prev) => ({ ...prev, useCase }));
+        setStepIndex(1);
+        setPendingChoice(choices.experience);
+        return;
+      }
+      const experience = pendingChoice as GuideExperience;
+      saveGuideExperience(experience);
+      const nextChoices = { ...choices, experience };
+      setChoices(nextChoices);
+      const nextSteps = resolveSteps(GUIDE_STEP_DEFINITIONS, nextChoices);
+      if (experience === "kokenut") {
+        setStepIndex(nextSteps.length - 1);
+      } else {
+        setStepIndex(2);
+      }
+      return;
+    }
+
+    if (stepIndex < resolvedSteps.length - 1) {
+      setStepIndex((index) => index + 1);
+    }
+  }, [
+    choices,
+    currentStep,
+    pendingChoice,
+    resolvedSteps.length,
+    stepIndex,
+  ]);
+
+  const canContinue = useMemo(() => {
+    if (!currentStep) {
+      return false;
+    }
+    if (currentStep.type === "choice") {
+      return Boolean(pendingChoice);
+    }
+    return true;
+  }, [currentStep, pendingChoice]);
+
+  if (!open || !currentStep) {
+    return null;
+  }
+
+  const stepKey = currentStep.id.replace(/-/g, "_");
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[60] flex flex-col bg-background"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="guide-step-title"
+    >
+      <div className="mx-auto flex h-full min-h-0 w-full max-w-lg flex-col px-4 pb-6 pt-4">
+        <div className="mb-6 flex items-center gap-3">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={handleBack}
+            aria-label={t("back")}
+            data-testid="guide-back"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <GuideProgress current={progressCurrent} total={progressTotal} />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={handleDismiss}
+            aria-label={t("close")}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto">
+          <div className="space-y-2">
+            <h2 id="guide-step-title" className="text-2xl font-bold leading-tight">
+              {t(`steps.${stepKey}.title`)}
+            </h2>
+            {t.has(`steps.${stepKey}.subtitle`) ? (
+              <p className="text-muted-foreground">{t(`steps.${stepKey}.subtitle`)}</p>
+            ) : null}
+          </div>
+
+          {currentStep.type === "choice" ? (
+            <div className="flex flex-col gap-3">
+              {(currentStep.choiceKey === "useCase"
+                ? GUIDE_USE_CASES
+                : GUIDE_EXPERIENCES
+              ).map((option) => {
+                const Icon =
+                  currentStep.choiceKey === "useCase"
+                    ? USE_CASE_ICONS[option as GuideUseCase]
+                    : EXPERIENCE_ICONS[option as GuideExperience];
+                return (
+                  <GuideChoiceCard
+                    key={option}
+                    label={t(`steps.${stepKey}.options.${option}.label`)}
+                    description={t(`steps.${stepKey}.options.${option}.description`)}
+                    icon={<Icon className="h-5 w-5 text-green-600" />}
+                    selected={pendingChoice === option}
+                    onSelect={() => setPendingChoice(option)}
+                    testId={`guide-choice-${option}`}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-4 rounded-xl border bg-muted/30 px-6 py-8 text-center">
+              {INFO_ICONS[currentStep.id] ? (
+                (() => {
+                  const Icon = INFO_ICONS[currentStep.id]!;
+                  return (
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-600/10">
+                      <Icon className="h-8 w-8 text-green-600" />
+                    </div>
+                  );
+                })()
+              ) : null}
+              <p className="text-base leading-relaxed text-muted-foreground">
+                {t(`steps.${stepKey}.body`)}
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-6 space-y-3">
+          {currentStep.type === "finish" ? (
+            <Button
+              asChild
+              className="h-12 w-full bg-green-600 text-base hover:bg-green-700"
+            >
+              <Link href="/expenses/new" data-testid="guide-finish-cta" onClick={handleFinish}>
+                {t("finishCta")}
+              </Link>
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              className="h-12 w-full bg-green-600 text-base hover:bg-green-700"
+              disabled={!canContinue}
+              onClick={handleContinue}
+              data-testid="guide-continue"
+            >
+              {t("continue")}
+            </Button>
+          )}
+          <button
+            type="button"
+            className="w-full text-sm text-muted-foreground underline-offset-4 hover:underline"
+            onClick={handleSkip}
+            data-testid="guide-skip"
+          >
+            {t("skip")}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}

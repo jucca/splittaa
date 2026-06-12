@@ -105,7 +105,7 @@ export default function Header() {
                 label={t("settings")}
               />
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 shrink-0">
                 <UserButton
                   appearance={{
                     elements: {
@@ -117,8 +117,10 @@ export default function Header() {
                   afterSignOutUrl="/"
                 />
                 <ThemeToggle />
-                <GuideAssistant />
-                <LanguageSwitcher />
+                <div className="flex items-center gap-1 shrink-0">
+                  <GuideAssistant />
+                  <LanguageSwitcher />
+                </div>
               </div>
             </div>
           </Authenticated>

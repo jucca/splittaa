@@ -46,6 +46,7 @@ export function CurrencySettings() {
           <HoverHint
             label={`${t("currencyLabel")} — ${t("currencyHint")}`}
             side="top"
+            fullWidth
           >
             <SelectTrigger
               id="currency-select"

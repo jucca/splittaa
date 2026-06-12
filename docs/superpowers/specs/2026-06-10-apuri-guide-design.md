@@ -10,7 +10,8 @@ Valinnainen Duolingo-tyylinen sovellusopas (**Apuri**) autentikoituneille käytt
 
 ## UX
 
-- Header: `HelpCircle`-ikoni kielivalitsimen vasemmalla puolella
+- Header: `HelpCircle`-ikoni kielivalitsimen vasemmalla puolella; Apuri ja kieli tiiviissä utility-ryhmässä (`gap-1`) teemakytkimestä erillään
+- Headerin `HoverHint` käyttää kompaktia wrapperia (`shrink-0`); täysleveys vain asetussivun Select-kentissä
 - Täyskoko overlay (mobiili koko näyttö; desktop `max-w-lg` keskitetty)
 - Segmentoitu edistymispalkki; kokonaismäärä lasketaan uudelleen valintojen jälkeen
 - 2 valintavaihetta (personoi polun) + info-vaiheet + lopetus CTA

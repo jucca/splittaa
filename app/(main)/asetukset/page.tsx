@@ -177,7 +177,7 @@ export default function SettingsPage() {
                   }}
                   disabled={!enabled}
                 >
-                  <HoverHint label={t("remindMeLabel")} side="top">
+                  <HoverHint label={t("remindMeLabel")} side="top" fullWidth>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -205,6 +205,7 @@ export default function SettingsPage() {
                   <HoverHint
                     label={`${t("minAgeLabel")} — ${t("minAgeHint")}`}
                     side="top"
+                    fullWidth
                   >
                     <SelectTrigger>
                       <SelectValue />

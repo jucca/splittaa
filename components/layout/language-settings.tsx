@@ -55,6 +55,7 @@ export function LanguageSettings() {
           <HoverHint
             label={`${t("languageLabel")} — ${t("languageHint")}`}
             side="top"
+            fullWidth
           >
             <SelectTrigger
               id="language-select"
